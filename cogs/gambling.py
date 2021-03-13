@@ -5,7 +5,6 @@ import discord
 from discord.ext import commands
 import random
 import json
-from customjson import load, update
 import userdata as ud
 
 

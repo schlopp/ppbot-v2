@@ -9,7 +9,6 @@ import io
 import json
 import aiohttp
 import re
-from customjson import load, update
 import userdata as ud
 from decimal import Decimal
 
@@ -184,28 +183,6 @@ Which permission type do you want to change the role **\"{role.name}\"** with th
     @commands.is_owner()
     async def egrs(self, ctx):
         await ctx.send(files=[discord.File("./ppstorage.json"),discord.File("./levels.json")])
-
-    
-    @commands.command()
-    @commands.is_owner()
-    async def data(self, ctx, action:str, user:str, ammount:int=None):
-        if ctx.author.id != 393305855929483264:
-            return
-        data = load()
-        embed = discord.Embed(colour=discord.Colour(random.choice([0x008000, 0xffa500, 0xffff00])))
-        if user not in data.keys():
-            embed.description = f"{ctx.author.mention}, user got no pp lmao cringe"
-            return await ctx.send(embed=embed)
-        
-        
-        if action == "set":
-            data[user]["size"] = ammount
-        elif action == "del":
-            data.pop(user, None)
-        update(data)
-        
-        embed.description = f'Donezo, babey.'
-        return await ctx.send(embed=embed)
 
     @commands.command()
     @commands.is_owner()
