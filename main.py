@@ -33,7 +33,7 @@ async def on_guild_join(guild):
         break
 @bot.event
 async def on_guild_remove(guild):
-    ppchannel = bot.get_channel(735967331192275015)
+    ppchannel = bot.get_channel(816767268217290752)
     await ppchannel.send(f"Bot left server: {guild.name}")
     
 @commands.command()
