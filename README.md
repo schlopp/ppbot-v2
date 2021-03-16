@@ -1,2 +1,3 @@
 # ppbot
-a discord bot for growing dick and balls
+A discord bot for growing a pp
+(everyone can grow one, EQUALITY!)
