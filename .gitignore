@@ -1,3 +1,2 @@
 __pycache__/
-userdata.py
-main.py
+*.toml
