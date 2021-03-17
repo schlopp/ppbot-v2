@@ -1,7 +1,7 @@
 import asyncpg
 import toml
 
-with open("../config.toml") as f:
+with open("./config.toml") as f:
     config = toml.loads(f.read())
 
 

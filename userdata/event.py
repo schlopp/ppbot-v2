@@ -1,7 +1,7 @@
 import asyncpg
 import toml
 
-with open("../config.toml") as f:
+with open("./config.toml") as f:
     config = toml.loads(f.read())
 
 
@@ -55,8 +55,8 @@ class Event:
             DELETE FROM userdata.events WHERE channel_id = $1 AND answer = $2;
         ''',self.channel_id,self.answer)
         return await conn.close()
-
-      
+    
+    
     async def unplayable(self, user_id:int):
         conn = await asyncpg.connect(config['admin']['PSQL'])
         fetched = await conn.fetch(self.getevent,self.channel_id,self.answer)
@@ -67,7 +67,7 @@ class Event:
             if i == user_id:
                 return 1
 
-              
+    
     async def setplace(self, user_id:int):
         conn = await asyncpg.connect(config['admin']['PSQL'])
         fetched = await conn.fetch(self.getevent,self.channel_id,self.answer)

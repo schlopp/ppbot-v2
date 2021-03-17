@@ -18,7 +18,7 @@ class animals(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.reddit = praw.Reddit(client_id="6BHhUI735hQNaA",client_secret="hi6RSWw_JFHWePcJsrpJ9hd4-wJlzA",user_agent="pp_bot:%s:1.0"%"hi6RSWw_JFHWePcJsrpJ9hd4-wJlzA")
-        
+        self.cute_message = ['very cute', '10/10', ]
         
     @commands.command()
     @commands.bot_has_permissions(send_messages=True)
@@ -27,7 +27,7 @@ class animals(commands.Cog):
             async with session.get('http://aws.random.cat/meow') as r:
                 if r.status == 200:
                     js = await r.json()
-                    e = discord.Embed(title=random.choice(['very cute', '10/10', 'meow']))
+                    e = discord.Embed(title=random.choice(self.cute_message.append(['meow', ])))
                     e.set_image(url=js['file'])
                     await ctx.send(embed=e)
     @commands.command()
@@ -37,7 +37,7 @@ class animals(commands.Cog):
             async with session.get('https://dog.ceo/api/breeds/image/random') as r:
                 if r.status == 200:
                     js = await r.json()
-                    e = discord.Embed(title=random.choice(['good boi', '10/10', 'woof']))
+                    e = discord.Embed(title=random.choice(self.cute_message.append(['woof!', 'good boy', ])))
                     e.set_image(url=js['message'])
                     await ctx.send(embed=e)
     @commands.command()
@@ -47,7 +47,7 @@ class animals(commands.Cog):
             async with session.get('https://randomfox.ca/floof/') as r:
                 if r.status == 200:
                     js = await r.json()
-                    e = discord.Embed(title=random.choice(['good boi', '10/10', 'so cute']))
+                    e = discord.Embed(title=random.choice(self.cute_message.append(['sneaky boy', 'good boy', ])))
                     e.set_image(url=js['image'])
                     await ctx.send(embed=e)
     @commands.command()
@@ -57,7 +57,7 @@ class animals(commands.Cog):
             async with session.get('https://some-random-api.ml/img/panda/') as r:
                 if r.status == 200:
                     js = await r.json()
-                    e = discord.Embed(title=random.choice(['BIG ROUND', '10/10', 'so cute']))
+                    e = discord.Embed(title=random.choice(self.cute_message.append(['GIANT AND ROUND.', ])))
                     e.set_image(url=js['link'])
                     await ctx.send(embed=e)
     @commands.command()
@@ -67,7 +67,7 @@ class animals(commands.Cog):
             async with session.get('https://some-random-api.ml/img/red_panda/') as r:
                 if r.status == 200:
                     js = await r.json()
-                    e = discord.Embed(title=random.choice(['I LOVE', '10/10', 'so cute']))
+                    e = discord.Embed(title=random.choice(self.cute_message))
                     e.set_image(url=js['link'])
                     await ctx.send(embed=e)
     @commands.command()

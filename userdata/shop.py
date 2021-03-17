@@ -1,7 +1,7 @@
 import asyncpg
 import toml
 
-with open("../config.toml") as f:
+with open("./config.toml") as f:
     config = toml.loads(f.read())
 
 
@@ -9,8 +9,8 @@ class Shop:
     def __init__(self):
         """Init isn't needed lmao this is more like a group don't judge""" 
         pass
-      
-     
+    
+    
     async def items(self):
         conn = await asyncpg.connect(config['admin']['PSQL'])
         fetched = await conn.fetch('''SELECT item_name FROM userdata.shopItems''')

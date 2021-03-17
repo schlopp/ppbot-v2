@@ -1,9 +1,11 @@
 import asyncpg
 import discord
 import toml
+import random
+from userdata import Pp, Inv
 from discord.ext import commands
 
-with open("../config.toml") as f:
+with open("./config.toml") as f:
     config = toml.loads(f.read())
 
 class SQLMethodError(Exception):
@@ -79,7 +81,7 @@ async def create_embed(ctx:commands.Context, **kwargs):
         embed.add_field(name="TIP:",value=random.choice([
             "Tools in the shop unlock commands!",
             "There's a small chance of an event happening upon using a command!",
-            #"You can see the leaderboard by using the 'pp leaderboard' command!",
+            "You can see the leaderboard by using the 'pp leaderboard' command!",
             "There are a ton of fun commands! Have you tried them yet?",
             "Invite my friend's bot! discord.ly/ghigeon",
             "Join the official pp bot server! use `pp support`",

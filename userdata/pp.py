@@ -1,7 +1,7 @@
 import asyncpg
 import toml
 
-with open("../config.toml") as f:
+with open("./config.toml") as f:
     config = toml.loads(f.read())
 
 class Pp:
@@ -28,7 +28,7 @@ class Pp:
         fetched = await conn.fetch('''SELECT multiplier FROM userdata.pp WHERE user_id = $1''',self.user_id)
         await conn.close()
         return dict(fetched[0])["multiplier"] if fetched else None
-     
+    
 
     async def check(self):
         conn = await asyncpg.connect(config['admin']['PSQL'])
