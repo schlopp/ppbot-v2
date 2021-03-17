@@ -1,0 +1,5 @@
+[admin]
+
+
+TOKEN = '' #discord bot token
+PSQL = '' #postgreSQL login
