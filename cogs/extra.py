@@ -52,73 +52,60 @@ class extra(commands.Cog):
                 embed.description = f"{ctx.author.mention}, you need a pp first! Get one using `pp new`!"
                 return await ctx.send(embed=embed)
         #yes pp
-        name = random.choice([
-            'obama',
-            'roblox noob',
-            'dick roberts',
-            'johnny from johnny johnny yes papa',
-            'shrek',
-            'caleb',
-            'bob',
-            'walter',
-            'napoleon bonaparte',
-            'bob ross',
-            'coco',
-            'thanos',
-            'don vito',
-            'bill cosby',
-            'ur step-sis',
-            'pp god',
-            'random guy',
-            'genie',
-            'the guy u accidentally made eye contact with at the urinal',
-            'joe mom',
-            'ur daughter',
-            'Big Man Tyrone'
+        quote = random.choice([
+            'ew poor',
+            'don\'t touch my pp',
+            'my wife has a bigger pp than you',
+            'broke ass bitch',
+            'cringe poor',
+            'beg harder',
+            'poor people make me scared',
+            'dont touch me poor person',
+            'get a job',
+            'im offended',
+            'no u',
+            'i dont speak poor',
+            'you should take a shower',
+            'i love my wife... i love my wife... i love my wife..',
+            'drink some water',
+            'begone beggar',
+            'No.',
+            'no wtf?',
         ])
-        
+        combo = {
+            'obama':quote,
+            'roblox noob':quote,
+            'dick roberts':quote,
+            'johnny from johnny johnny yes papa':quote,
+            'shrek':quote,
+            'caleb':quote,
+            'bob':quote,
+            'walter':quote,
+            'napoleon bonaparte':quote,
+            'bob ross':quote,
+            'coco':quote,
+            'thanos':random.choice([
+                'begone before i snap you',
+                'i\'ll snap ur pp out of existence'
+                ]),
+            'don vito':quote,
+            'bill cosby':random.choice(['dude im a registered sex offender what do you want from me', 'im too busy touching people']),
+            'your step-sis':'i cant give any inches right now, im stuck',
+            'pp god':'begone mortal',
+            'random guy':quote,
+            'genie':'rub me harder next time 😩',
+            'the guy u accidentally made eye contact with at the urinal':'eyes on your own pp man',
+            'your mom':random.choice(['you want WHAT?', 'im saving my pp for your dad']),
+            'ur daughter':quote,
+            'Big Man Tyrone':'Every 60 seconds in Africa a minute passes.',
+        }
+        responce = random.choice(list(combo.items()))
         if random.randrange(0, 5)!=1:
             donation_amount = random.randrange(1, 10)*await pp.multiplier()
             await pp.size_add(donation_amount)
-            embed.description = f'**{name}** donated {donation_amount} inches to {ctx.author.mention}'
+            embed.description = f'**{responce[0]}** donated {donation_amount} inches to {ctx.author.mention}'
         else:
-            quote = random.choice([
-                'ew poor',
-                'don\'t touch my pp',
-                'my wife has a bigger pp than you',
-                'broke ass bitch',
-                'cringe poor',
-                'beg harder',
-                'poor people make me scared',
-                'dont touch me poor person',
-                'get a job',
-                'im offended',
-                'no u',
-                'i dont speak poor',
-                'you should take a shower',
-                'i love my wife... i love my wife... i love my wife..',
-                'drink some water',
-                'begone beggar',
-                'No.',
-                'no wtf?'
-            ])
-            if name == 'thanos':
-                quote = random.choice(['begone before i snap you', 'i\'ll snap ur pp out of existence'])
-            elif name == 'bill cosby' or name == 'don vito':
-                quote = random.choice(['dude im a registered sex offender what do you want from me', 'im too busy touching people'])
-            elif name == 'ur step-sis':
-                quote = 'i cant give any inches right now, im stuck'
-            elif name == 'pp god':
-                quote = 'begone mortal'
-            elif name == 'genie':
-                quote = 'rub me harder next time 😩'
-            elif name == 'the guy u accidentally made eye contact with at the urinal':
-                quote = 'eyes on your own pp man'
-            elif name == 'joe mom':
-                quote = random.choice(['you want WHAT?', 'im saving my pp for your dad'])
-            elif name == 'Big Man Tyrone':
-                quote = 'Every 60 seconds in Africa a minute passes.'
-            embed.description = f'**{name}:** {quote}'
+            embed.description = f'**{responce[0]}:** {responce[1]}'
         await ctx.send(embed=embed)
 
 
