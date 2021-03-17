@@ -79,7 +79,6 @@ class important(commands.Cog):
     async def db_shop_set(self, ctx, item_name:str, column:str, *, arg):
         async with ctx.typing():
             await asyncio.sleep(.1)
-        item = ud.Shop.Item(item_name)
         await ud.runsql('execute',f"""UPDATE userdata.shopItems set {column} = '{arg}' WHERE item_name = '{item_name}'""")
     
     @shop.command(name="delete")
@@ -87,7 +86,6 @@ class important(commands.Cog):
     async def db_shop_delete(self, ctx, *, item_name:str):
         async with ctx.typing():
             await asyncio.sleep(.1)
-        item = ud.Shop.Item(item_name)
         await ud.runsql('execute',f"""DELETE FROM userdata.shopItems WHERE item_name = '{item_name}'""")
 
 
