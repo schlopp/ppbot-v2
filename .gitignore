@@ -1,2 +1,3 @@
 __pycache__/
-*.toml
+config.toml
+testing.py
