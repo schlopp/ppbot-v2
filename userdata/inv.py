@@ -1,7 +1,5 @@
 import asyncpg
-import discord
 import toml
-from discord.ext import commands
 
 with open("../config.toml") as f:
     config = toml.loads(f.read())
