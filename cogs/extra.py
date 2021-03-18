@@ -45,67 +45,65 @@ class extra(commands.Cog):
     @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.bot_has_permissions(send_messages=True)
     async def beg(self, ctx):
-        embed = discord.Embed(colour=discord.Colour(random.choice([0x008000, 0xffa500, 0xffff00])))
-        pp = ud.Pp(ctx.author.id)
-        #no pp
-        if not await pp.check():
-                embed.description = f"{ctx.author.mention}, you need a pp first! Get one using `pp new`!"
-                return await ctx.send(embed=embed)
-        #yes pp
-        quote = random.choice([
-            'ew poor',
-            'don\'t touch my pp',
-            'my wife has a bigger pp than you',
-            'broke ass bitch',
-            'cringe poor',
-            'beg harder',
-            'poor people make me scared',
-            'dont touch me poor person',
-            'get a job',
-            'im offended',
-            'no u',
-            'i dont speak poor',
-            'you should take a shower',
-            'i love my wife... i love my wife... i love my wife..',
-            'drink some water',
-            'begone beggar',
-            'No.',
-            'no wtf?',
-        ])
-        combo = {
-            'obama':quote,
-            'roblox noob':quote,
-            'dick roberts':quote,
-            'johnny from johnny johnny yes papa':quote,
-            'shrek':quote,
-            'caleb':quote,
-            'bob':quote,
-            'walter':quote,
-            'napoleon bonaparte':quote,
-            'bob ross':quote,
-            'coco':quote,
-            'thanos':random.choice([
-                'begone before i snap you',
-                'i\'ll snap ur pp out of existence'
-                ]),
-            'don vito':quote,
-            'bill cosby':random.choice(['dude im a registered sex offender what do you want from me', 'im too busy touching people']),
-            'your step-sis':'i cant give any inches right now, im stuck',
-            'pp god':'begone mortal',
-            'random guy':quote,
-            'genie':'rub me harder next time 😩',
-            'the guy u accidentally made eye contact with at the urinal':'eyes on your own pp man',
-            'your mom':random.choice(['you want WHAT?', 'im saving my pp for your dad']),
-            'ur daughter':quote,
-            'Big Man Tyrone':'Every 60 seconds in Africa a minute passes.',
-        }
-        responce = random.choice(list(combo.items()))
-        if random.randrange(0, 5)!=1:
-            donation_amount = random.randrange(1, 10)*await pp.multiplier()
-            await pp.size_add(donation_amount)
-            embed.description = f'**{responce[0]}** donated {donation_amount} inches to {ctx.author.mention}'
-        else:
-            embed.description = f'**{responce[0]}:** {responce[1]}'
+        async with ctx.typing():
+            embed,pp,exception = await ud.create_embed(ctx)
+            if exception:
+                return await ud.handle_exception(ctx,exception)
+            #yes pp
+            quote = random.choice([
+                'ew poor',
+                'don\'t touch my pp',
+                'my wife has a bigger pp than you',
+                'broke ass bitch',
+                'cringe poor',
+                'beg harder',
+                'poor people make me scared',
+                'dont touch me poor person',
+                'get a job',
+                'im offended',
+                'no u',
+                'i dont speak poor',
+                'you should take a shower',
+                'i love my wife... i love my wife... i love my wife..',
+                'drink some water',
+                'begone beggar',
+                'No.',
+                'no wtf?',
+            ])
+            combo = {
+                'obama':quote,
+                'roblox noob':quote,
+                'dick roberts':quote,
+                'johnny from johnny johnny yes papa':quote,
+                'shrek':quote,
+                'caleb':quote,
+                'bob':quote,
+                'walter':quote,
+                'napoleon bonaparte':quote,
+                'bob ross':quote,
+                'coco':quote,
+                'thanos':random.choice([
+                    'begone before i snap you',
+                    'i\'ll snap ur pp out of existence'
+                    ]),
+                'don vito':quote,
+                'bill cosby':random.choice(['dude im a registered sex offender what do you want from me', 'im too busy touching people']),
+                'your step-sis':'i cant give any inches right now, im stuck',
+                'pp god':'begone mortal',
+                'random guy':quote,
+                'genie':'rub me harder next time 😩',
+                'the guy u accidentally made eye contact with at the urinal':'eyes on your own pp man',
+                'your mom':random.choice(['you want WHAT?', 'im saving my pp for your dad']),
+                'ur daughter':quote,
+                'Big Man Tyrone':'Every 60 seconds in Africa a minute passes.',
+            }
+            responce = random.choice(list(combo.items()))
+            if random.randrange(0, 5)!=1:
+                donation_amount = random.randrange(1, 10)*await pp.multiplier()
+                await pp.size_add(donation_amount)
+                embed.description = f'**{responce[0]}** donated {donation_amount} inches to {ctx.author.mention}'
+            else:
+                embed.description = f'**{responce[0]}:** {responce[1]}'
         await ctx.send(embed=embed)
 
 
