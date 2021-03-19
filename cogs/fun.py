@@ -27,7 +27,7 @@ class animals(commands.Cog):
             async with session.get('http://aws.random.cat/meow') as r:
                 if r.status == 200:
                     js = await r.json()
-                    e = discord.Embed(title=random.choice(self.cute_message.append(['meow', ])))
+                    e = discord.Embed(title=random.choice(self.cute_message+['meow', ]))
                     e.set_image(url=js['file'])
                     await ctx.send(embed=e)
     @commands.command()
@@ -37,7 +37,7 @@ class animals(commands.Cog):
             async with session.get('https://dog.ceo/api/breeds/image/random') as r:
                 if r.status == 200:
                     js = await r.json()
-                    e = discord.Embed(title=random.choice(self.cute_message.append(['woof!', 'good boy', ])))
+                    e = discord.Embed(title=random.choice(self.cute_message+['woof!', 'good boy', ]))
                     e.set_image(url=js['message'])
                     await ctx.send(embed=e)
     @commands.command()
@@ -47,7 +47,7 @@ class animals(commands.Cog):
             async with session.get('https://randomfox.ca/floof/') as r:
                 if r.status == 200:
                     js = await r.json()
-                    e = discord.Embed(title=random.choice(self.cute_message.append(['sneaky boy', 'good boy', ])))
+                    e = discord.Embed(title=random.choice(self.cute_message+['sneaky boy', 'good boy', ]))
                     e.set_image(url=js['image'])
                     await ctx.send(embed=e)
     @commands.command()
@@ -57,7 +57,7 @@ class animals(commands.Cog):
             async with session.get('https://some-random-api.ml/img/panda/') as r:
                 if r.status == 200:
                     js = await r.json()
-                    e = discord.Embed(title=random.choice(self.cute_message.append(['GIANT AND ROUND.', ])))
+                    e = discord.Embed(title=random.choice(self.cute_message+['GIANT AND ROUND.', ]))
                     e.set_image(url=js['link'])
                     await ctx.send(embed=e)
     @commands.command()
