@@ -29,7 +29,7 @@ async def on_guild_join(guild):
     await ppchannel.send(f"Bot joined new server: {guild.name}")
     for channel in guild.text_channels:
         if channel.permissions_for(guild.me).send_messages:
-            await channel.send(embed=discord.Embed(title="> pp bot has joined the game",description="Sup guys its me, pp bot. **Type** `pp help` **to get a nice lil list of commands. Type** `pp new` **to create a pp.** Have fun!\n\n**[Invite the pp bot](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=104713793)**\n**[Join the pp bot server](https://discord.gg/VnSyg3J)**"))
+            await channel.send(embed=discord.Embed(title="pp bot has joined the game",description="Sup guys its me, pp bot. **Type** `pp help` **to get a nice lil list of commands. Type** `pp new` **to create a pp.** Have fun!\n\n**[Invite the pp bot](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=104713793)**\n**[Join the pp bot server](https://discord.gg/VnSyg3J)**"))
         break
 @bot.event
 async def on_guild_remove(guild):
