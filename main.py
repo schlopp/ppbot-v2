@@ -99,9 +99,15 @@ async def status(ctx, *, informationthatineed):
 @bot.command()
 async def ping(ctx):
     await ctx.send(f'🏓 pong! Latency: `{round(bot.latency, 8)}ms`')
+    
 @bot.command()
 async def invite(ctx):
     await ctx.send(embed=discord.Embed(description='**[Invite the pp bot](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=104713793)**'))
+    
+@bot.command(aliases=['github'])
+async def git(ctx):
+    await ctx.send(embed=discord.Embed(description='**[pp bot github](https://github.com/schlopp/ppbot)**'))
+    
 @bot.command(aliases=['server'])
 async def support(ctx):
     await ctx.send('https://discord.gg/VnSyg3J')
