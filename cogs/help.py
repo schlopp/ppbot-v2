@@ -61,7 +61,7 @@ class helping(commands.Cog):
         embed.add_field(
             name   = "**Extra economy commands**",
             value  = """
-`hospital, fish, hunt, beg`
+`hospital, fish, hunt, beg, daily`
             """,
         inline = True
         )

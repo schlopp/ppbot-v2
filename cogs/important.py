@@ -55,7 +55,7 @@ class important(commands.Cog):
                 return await ud.handle_exception(ctx,exception)
             growsize = random.randrange(1, 5)*await pp.multiplier()
             await pp.size_add(growsize)
-            embed.description = f'{ctx.author.mention}, your pp grew {growsize} inches! It is now {await pp.pp_size()} inches. You can view your pp with the `pp show` command!'
+            embed.description = f'{ctx.author.mention}, your pp grew **{growsize} inches!** It is now {await pp.pp_size()} inches. You can view your pp with the `pp show` command!'
         return await ctx.send(embed=embed)
 
 
@@ -84,7 +84,6 @@ class important(commands.Cog):
         except asyncio.TimeoutError:
             async with ctx.typing():
                 return await ctx.send(f"{ctx.author.mention}, time's up for changing name! Type faster next time")
-
 
 
 def setup(bot):
