@@ -17,6 +17,7 @@ class important(commands.Cog):
             await asyncio.sleep(.1)
             await ctx.send('Invite ghigeon! https://discord.ly/ghigeon')
     
+    
     @commands.command(aliases=['top','lb'])
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def leaderboard(self, ctx, user:discord.Member=None):
@@ -41,7 +42,6 @@ class important(commands.Cog):
                 position+=1
             try:
                 position = [i["user_id"] for i in fetched].index(pp.user_id)+1
-
                 if position == 1:
                     lead = f"in first place!"
                 else:
@@ -52,7 +52,20 @@ class important(commands.Cog):
             except ValueError:
                 pass
         return await ctx.send(embed=embed)
-
+    
+    
+    @commands.command(aliases=['suggestion',])
+    @commands.cooldown(1, 30, commands.BucketType.user)
+    async def suggest(self, ctx, *, suggestion:str):
+        async with ctx.typing():
+            channel = self.bot.get_channel(816777533089513490)
+            embed = discord.Embed()
+            embed.description = suggestion
+            embed.set_footer(text=f'Suggestion from {ctx.author} ({ctx.author.id})')
+            message = await channel.send(embed=embed)
+            await message.add_reaction('👍')
+            await message.add_reaction('👎')
+        await ctx.send('Thank you for your suggestion.')
 
 
 def setup(bot):
