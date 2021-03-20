@@ -81,9 +81,9 @@ async def create_embed(ctx:commands.Context, **kwargs):
         embed.add_field(name="TIP:",value=random.choice([
             "Tools in the shop unlock commands!",
             "There's a small chance of an event happening upon using a command!",
-            "You can see the leaderboard by using the 'pp leaderboard' command!",
+            "You can see the leaderboard by using the `pp leaderboard` command!",
             "There are a ton of fun commands! Have you tried them yet?",
-            "Invite my friend's bot! discord.ly/ghigeon",
+            "[Invite my friend's pigeon pet bot!](https://top.gg/bot/753013667460546560)",
             "Join the official pp bot server! use `pp support`",
             "Add pp bot to your server! use `pp invite`"
         ]))
