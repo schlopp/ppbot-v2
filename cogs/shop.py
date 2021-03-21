@@ -13,21 +13,26 @@ class shop(commands.Cog):
     
     @commands.command(aliases=['store'])
     @commands.bot_has_permissions(send_messages=True)
-    @commands.cooldown(1, 15, commands.BucketType.user)
-    async def shop(self, ctx):
+    @commands.cooldown(1, 5, commands.BucketType.user)
+    async def shop(self, ctx, page:int=1):
         async with ctx.typing():
-            embed = discord.Embed(colour=discord.Colour(random.choice([0x008000, 0xffa500, 0xffff00])))
-            pp = ud.Pp(ctx.author.id)
+            embed,pp,exception = await ud.create_embed(ctx)
+            if exception:
+                return await ud.handle_exception(ctx,exception)
             shop = ud.Shop()
-            #no pp
-            if not await pp.check():
-                embed.description = f"{ctx.author.mention}, you need a pp first! Get one using `pp new`!"
-                return await ctx.send(embed=embed)
+            shopitems = await shop.items()
+            totalpages = len(shopitems) // 5 + (len(shopitems) % 5 > 0)
             #yes pp
+            #page bad
+            if page < 1 or page > totalpages:
+                embed.description = f"{ctx.author.mention}, that page is doesn't exist."
+                return await ctx.send(embed=embed)
+            #page good
             embed.title = "shop"
             embed.description = f'In the shop you can buy items with inches. You currently have **{await pp.pp_size()}** inches.\n Type `pp buy <amount> <item>` to buy an item. Prices of items may change depending on how many you\'ve bought'
-            for i in await shop.items():
+            for i in shopitems[page * 5 - 5:page * 5]:
                 embed.add_field(name=f'**{i.item_name}** ─ __{await i.price(pp)} inches__ ─ `{await i.item_type()}`',value=f'{await i.item_desc()}{" | The price of this item depends on your current multiplier" if await i.multiplierdependent() else ""}',inline=False)
+            embed.set_footer(text=f'page {page}/{totalpages}')
         return await ctx.send(embed=embed)
 
 
