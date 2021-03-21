@@ -1,10 +1,6 @@
-# pylint: disable=unused-variable
-# pylint: enable=too-many-lines
-
 import discord
 from discord.ext import commands
 import random
-import json
 import userdata as ud
 
 
@@ -13,8 +9,7 @@ class shop(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
-
-
+    
     
     @commands.command(aliases=['store'])
     @commands.bot_has_permissions(send_messages=True)
