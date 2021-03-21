@@ -33,7 +33,7 @@ class helping(commands.Cog):
         embed.add_field(
             name   = "**pp commands**",
             value  = """
-`new, display <user (optional)>, grow, rename`
+`new, show <user (optional)>, grow, rename`
             """,
         inline = True
         )
