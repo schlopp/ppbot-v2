@@ -75,7 +75,7 @@ class helping(commands.Cog):
         embed.add_field(
             name   = "**Help commands**",
             value  = """
-`help, invite, support`
+`help, invite, support, suggest, github`
             """,
         inline = True
         )
