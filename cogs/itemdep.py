@@ -5,6 +5,7 @@ import discord
 from discord.ext import commands
 import random
 import json
+import asyncio
 import userdata as ud
 
 
@@ -67,14 +68,39 @@ class fishing(commands.Cog):
         if random_number == 2:
             embed.description = f"{ctx.author.mention} shot a homeless man who had just gambled away the last of his inches."
             return await ctx.send(embed=embed)
-        options = {'shot a homeless man': random.randint(1,20)*await pp.multiplier(),
+        if random_number <= 45:
+            options = {
+                'shot a homeless man': random.randint(1,20)*await pp.multiplier(),
                 'deadass just killed a man': random.randint(5,20)*await pp.multiplier(),
                 'shot up a walmart': random.randint(10,30)*await pp.multiplier(),
-                'hijacked a fucking orphanage and sold all the kids': random.randint(30,50)*await pp.multiplier()}
-        choice = random.choice(list(options.items()))
-        await pp.size_add(choice[1])
-        embed.description = f"{ctx.author.mention} {choice[0]} for **{choice[1]} inches!**"
-        return await ctx.send(embed=embed)
+                'hijacked a fucking orphanage and sold all the kids': random.randint(30,50)*await pp.multiplier()
+                }
+            choice = random.choice(list(options.items()))
+            await pp.size_add(choice[1])
+            embed.description = f"{ctx.author.mention} {choice[0]} for **{choice[1]} inches!**"
+            return await ctx.send(embed=embed)
+        else:
+            options = {
+                '[____] an ambulance! But not for me.': 'CALL',
+                'You\'ll never [____] me alive! *doot*': 'TAKE',
+                }
+            choice = random.choice(list(options.items()))
+            embed.description = f"{ctx.author.mention} tried to shoot a police officer but they shot back! **Fill in this sentence to dodge the bullets:**\n\n`{choice[0]}`"
+            await ctx.send(embed=embed)
+            try:
+                await self.bot.wait_for('message',timeout=20.0,check=lambda m: m.content.upper() == choice[1] and m.author == ctx.author and m.channel == ctx.channel)
+            except asyncio.TimeoutError:
+                random_number = random.randint(1,50)
+                currentsize = await pp.pp_size()
+                if currentsize > 50:
+                    pp.size_add(-random_number)
+                    embed.description = f"**Too slow!** The police officer shoots you and takes **{random_number} inches** from your corpse."
+                else:
+                    embed.description = "**Too slow!** The police officer shoots you and realises your pp is so small it's not even worth taking."
+                return await ctx.send(embed=embed)
+            random_number = random_number * await pp.multiplier()
+            embed.description = f"You avoid the bullet and loot the police officer. You find **{random_number} inches!**"
+            await ctx.send(embed=embed)
 
 
 
