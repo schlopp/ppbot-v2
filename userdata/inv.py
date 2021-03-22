@@ -27,7 +27,7 @@ class Inv:
         return True if fetched and dict(fetched[0])["amount"]>0 else False
     
     
-    async def new_item(self, item_name:str, amount:int):
+    async def new_item(self, item_name:str, amount:int=1):
         conn = await asyncpg.connect(config['admin']['PSQL'])
         await conn.execute('''
             INSERT INTO userdata.inv (user_id, item_name, amount) VALUES ($1, $2, $3)

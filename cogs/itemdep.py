@@ -99,7 +99,14 @@ class fishing(commands.Cog):
                     embed.description = "**Too slow!** The police officer shoots you and realises your pp is so small it's not even worth taking."
                 return await ctx.send(embed=embed)
             random_number = random_number * await pp.multiplier()
-            embed.description = f"You avoid the bullet and loot the police officer. You find **{random_number} inches!**"
+            options = [
+                'bronze coin',
+                'happy flour',
+                'fishing rod',
+                ]
+            choice = random.choice(options)
+            await inv.new_item(options)
+            embed.description = f"You avoid the bullet and loot the police officer. You find a **{choice}!**"
             await ctx.send(embed=embed)
 
 

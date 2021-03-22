@@ -77,7 +77,7 @@ async def create_embed(ctx:commands.Context, **kwargs):
         inv = Inv(user.id)
         if not await inv.has_item(item_required):
             exception = f'you need a "{item_required}" to use this command. Check if its for sale at the shop!'
-    if include_tip and random.randint(1,3)==2:
+    if include_tip and random.randint(1,10)==1:
         embed.add_field(name="TIP:",value=random.choice([
             "Tools in the shop unlock commands!",
             "There's a small chance of an event happening upon using a command!",
