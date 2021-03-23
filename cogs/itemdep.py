@@ -105,7 +105,7 @@ class fishing(commands.Cog):
                 'fishing rod',
                 ]
             choice = random.choice(options)
-            await inv.new_item(options)
+            await inv.new_item(choice)
             embed.description = f"You avoid the bullet and loot the police officer. You find a **{choice}!**"
             await ctx.send(embed=embed)
 
