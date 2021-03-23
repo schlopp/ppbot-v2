@@ -15,7 +15,7 @@ class important(commands.Cog):
     async def test(self,ctx):
         async with ctx.typing():
             await asyncio.sleep(.1)
-            await ctx.send('Invite ghigeon! https://discord.ly/ghigeon')
+        await ctx.send('Yep it works')
     
     
     @commands.command(aliases=['top','lb'],no_pm=True)
