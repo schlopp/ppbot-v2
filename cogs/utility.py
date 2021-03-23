@@ -18,7 +18,8 @@ class important(commands.Cog):
         await ctx.send('Yep it works')
     
     
-    @commands.command(aliases=['top','lb'],no_pm=True)
+    @commands.command(aliases=['top','lb'])
+    @commands.guild_only()
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def leaderboard(self, ctx, user:discord.Member=None):
         async with ctx.typing():
