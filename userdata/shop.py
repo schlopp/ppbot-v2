@@ -48,6 +48,13 @@ class Shop:
             fetched = await conn.fetch('''SELECT multiplierdependent FROM userdata.shopItems WHERE item_name = $1''',self.item_name)
             await conn.close()
             return dict(fetched[0])["multiplierdependent"] if fetched else False
+        
+        
+        async def sell_for(self):
+            conn = await asyncpg.connect(config['admin']['PSQL'])
+            fetched = await conn.fetch('''SELECT sell_for FROM userdata.shopItems WHERE item_name = $1''',self.item_name)
+            await conn.close()
+            return dict(fetched[0])["sell_for"] if fetched else False
           
           
         async def gain(self):
