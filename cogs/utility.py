@@ -18,7 +18,7 @@ class important(commands.Cog):
             await ctx.send('Invite ghigeon! https://discord.ly/ghigeon')
     
     
-    @commands.command(aliases=['top','lb'])
+    @commands.command(aliases=['top','lb'],no_pm=True)
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def leaderboard(self, ctx, user:discord.Member=None):
         async with ctx.typing():
