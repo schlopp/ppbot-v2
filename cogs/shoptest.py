@@ -11,7 +11,7 @@ class shoptest(commands.Cog):
         self.bot = bot
     
     
-    @commands.command(aliases=['store'])
+    @commands.command(aliases=['storetest'])
     @commands.bot_has_permissions(send_messages=True)
     @commands.cooldown(1, 5, commands.BucketType.user)
     @commands.is_owner()
