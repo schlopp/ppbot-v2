@@ -107,7 +107,7 @@ class fishing(commands.Cog):
                 choice = random.choice(options)
                 await inv.new_item(choice)
                 await pp.size_add(random_number)
-                embed.description = f"You avoid the bullet and loot the police officer. You find **{random_number} inches and 1 {choice}!**"
+                embed.description = f"You avoid the bullet and loot the police officer. You find **{random_number} inches** and **1 {choice}!**"
             else:
                 await pp.size_add(random_number)
                 embed.description = f"You avoid the bullet and loot the police officer. You find **{random_number} inches!**"
