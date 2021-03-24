@@ -94,7 +94,7 @@ class fishing(commands.Cog):
                 currentsize = await pp.pp_size()
                 if currentsize > 50:
                     await pp.size_add(-random_number)
-                    embed.description = f"**Too slow!** The police officer shoots you and takes **{random_number} inches** from your corpse. The correct word was `{choice[1}`"
+                    embed.description = f"**Too slow!** The police officer shoots you and takes **{random_number} inches** from your corpse. The correct word was `{choice[1]}`"
                 else:
                     embed.description = "**Too slow!** The police officer shoots you and realises your pp is so small it's not even worth taking. The correct word was `{choice[1}`"
                 return await ctx.send(embed=embed)
