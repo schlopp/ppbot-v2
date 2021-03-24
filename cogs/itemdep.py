@@ -68,7 +68,7 @@ class fishing(commands.Cog):
         if random_number == 2:
             embed.description = f"{ctx.author.mention} shot a homeless man who had just gambled away the last of his inches."
             return await ctx.send(embed=embed)
-        if random_number <= 45:
+        if random_number == 1000:#<= 45:
             options = {
                 'shot a homeless man': random.randint(1,20)*await pp.multiplier(),
                 'deadass just killed a man': random.randint(5,20)*await pp.multiplier(),
