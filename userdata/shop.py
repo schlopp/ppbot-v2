@@ -7,7 +7,7 @@ with open("./config.toml") as f:
 
 class Shop:
     def __init__(self):
-        """Init isn't needed lmao this is more like a group don't judge""" 
+        """No __init__ required""" 
         pass
     
     
@@ -16,6 +16,13 @@ class Shop:
         fetched = await conn.fetch('''SELECT item_name FROM userdata.shopItems''')
         await conn.close()
         return [Shop.Item(dict(i)["item_name"]) for i in fetched]
+    
+    
+    async def dict_items(self):
+        conn = await asyncpg.connect(config['admin']['PSQL'])
+        fetched = await conn.fetch('''SELECT item_name FROM userdata.shopItems''')
+        await conn.close()
+        return [dict(i) for i in fetched]
     
     
     class Item:
