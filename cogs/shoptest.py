@@ -33,8 +33,9 @@ class shoptest(commands.Cog):
             embed.description = f'In the shop you can buy items with inches. You currently have **{await pp.pp_size()}** inches.\n Type `pp buy <amount> <item>` to buy an item. Prices of items may change depending on how many you\'ve bought'
             for i in shopitems[page * 5 - 5:page * 5]:
                 embed.add_field(
-                    name=f'**{i.item_name}** ─ __{await i.price(pp)} inches__ `{await i.item_type()}: sell for {await i.sell_for()} inches`',
-                    value=f'{await i.item_desc()}{" | The price of this item depends on your current multiplier" if await i.multiplierdependent() else ""}',inline=False)
+                    item = shop.Item(i)
+                    name=f'**{item.item_name}** ─ __{await i.price(pp)} inches__ `{i["item_type"]}: sell for {i["sell_for"]} inches`',
+                    value=f'{i["item_desc"]}{" | The price of this item depends on your current multiplier" if i["multiplierdependent"] else ""}',inline=False)
             embed.set_footer(text=f'page {page}/{totalpages}')
         return await ctx.send(embed=embed)
 
