@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-from importlib import reload
 import random
 import userdata as ud
 
@@ -18,7 +17,6 @@ class shoptest(commands.Cog):
     @commands.is_owner()
     async def shoptest(self, ctx, page:int=1):
         async with ctx.typing():
-            reload(ud)
             embed,pp,exception = await ud.create_embed(ctx)
             if exception:
                 return await ud.handle_exception(ctx,exception)
