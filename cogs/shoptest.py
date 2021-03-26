@@ -21,7 +21,7 @@ class shoptest(commands.Cog):
             if exception:
                 return await ud.handle_exception(ctx,exception)
             shop = ud.Shop()
-            shopitems = await shop.items()
+            shopitems = await shop.dict_items()
             totalpages = len(shopitems) // 5 + (len(shopitems) % 5 > 0)
             #yes pp
             #page bad
@@ -32,10 +32,12 @@ class shoptest(commands.Cog):
             embed.title = "shop"
             embed.description = f'In the shop you can buy items with inches. You currently have **{await pp.pp_size()}** inches.\n Type `pp buy <amount> <item>` to buy an item. Prices of items may change depending on how many you\'ve bought'
             for i in shopitems[page * 5 - 5:page * 5]:
+                item = shop.Item(i["item_name"])
                 embed.add_field(
-                    item = shop.Item(i)
-                    name=f'**{item.item_name}** ─ __{await i.price(pp)} inches__ `{i["item_type"]}: sell for {i["sell_for"]} inches`',
-                    value=f'{i["item_desc"]}{" | The price of this item depends on your current multiplier" if i["multiplierdependent"] else ""}',inline=False)
+                    name = f'**{item.item_name}** ─ __{await item.price(pp)} inches__ `{i["item_type"]}: sell for {i["sell_for"]} inches`',
+                    value = f'{i["item_desc"]}{" | The price of this item depends on your current multiplier" if i["multiplierdependent"] else ""}',
+                    inline=False
+                    )
             embed.set_footer(text=f'page {page}/{totalpages}')
         return await ctx.send(embed=embed)
 

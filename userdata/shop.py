@@ -20,7 +20,7 @@ class Shop:
     
     async def dict_items(self):
         conn = await asyncpg.connect(config['admin']['PSQL'])
-        fetched = await conn.fetch('''SELECT item_name FROM userdata.shopItems''')
+        fetched = await conn.fetch('''SELECT * FROM userdata.shopItems''')
         await conn.close()
         return [dict(i) for i in fetched]
     
@@ -34,22 +34,22 @@ class Shop:
             fetched = await conn.fetch('''SELECT item_type FROM userdata.shopItems WHERE item_name = $1''',self.item_name)
             await conn.close()
             return dict(fetched[0])["item_type"] if fetched else None
-          
-         
+        
+        
         async def item_desc(self):
             conn = await asyncpg.connect(config['admin']['PSQL'])
             fetched = await conn.fetch('''SELECT item_desc FROM userdata.shopItems WHERE item_name = $1''',self.item_name)
             await conn.close()
             return dict(fetched[0])["item_desc"] if fetched else None
-          
-          
+        
+        
         async def default_price(self):
             conn = await asyncpg.connect(config['admin']['PSQL'])
             fetched = await conn.fetch('''SELECT default_price FROM userdata.shopItems WHERE item_name = $1''',self.item_name)
             await conn.close()
             return dict(fetched[0])["default_price"] if fetched else None
-          
-          
+        
+        
         async def multiplierdependent(self):
             conn = await asyncpg.connect(config['admin']['PSQL'])
             fetched = await conn.fetch('''SELECT multiplierdependent FROM userdata.shopItems WHERE item_name = $1''',self.item_name)
@@ -62,8 +62,8 @@ class Shop:
             fetched = await conn.fetch('''SELECT sell_for FROM userdata.shopItems WHERE item_name = $1''',self.item_name)
             await conn.close()
             return dict(fetched[0])["sell_for"] if fetched else False
-          
-          
+        
+        
         async def gain(self):
             conn = await asyncpg.connect(config['admin']['PSQL'])
             fetched = await conn.fetch('''SELECT gain FROM userdata.shopItems WHERE item_name = $1''',self.item_name)

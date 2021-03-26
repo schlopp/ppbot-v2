@@ -1,7 +1,9 @@
 import discord
 from discord.ext import commands
 import userdata as ud
-import os, toml
+import os
+import toml
+from importlib import reload
 
 #prefixes
 bot = commands.AutoShardedBot(command_prefix=[
@@ -111,6 +113,11 @@ async def git(ctx):
 @bot.command(aliases=['server'])
 async def support(ctx):
     await ctx.send('https://discord.gg/VnSyg3J')
+    
+@bot.command(aliases=['reloaduserdata'])
+async def rldud(ctx):
+    reload(ud)
+    await ctx.send('Done')
 
 if __name__ == '__main__':
     with open("config.toml") as f:
