@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from datetime import datetime
 import random
 import userdata as ud
 
@@ -34,7 +35,7 @@ class shop(commands.Cog):
                 embed.add_field(name=f'**{i.item_name}** ─ __{await i.price(pp)} inches__ ─ `{await i.item_type()}`',value=f'{await i.item_desc()}{" | The price of this item depends on your current multiplier" if await i.multiplierdependent() else ""}',inline=False)
             embed.set_footer(text=f'page {page}/{totalpages}')
         return await ctx.send(embed=embed)
-
+    
 
     @commands.command(cooldown_after_parsing=True)
     @commands.cooldown(1, 5, commands.BucketType.user)

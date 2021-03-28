@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from datetime import datetime
 import random
 import userdata as ud
 
@@ -40,7 +41,6 @@ class shoptest(commands.Cog):
                     )
             embed.set_footer(text=f'page {page}/{totalpages}')
         return await ctx.send(embed=embed)
-
 
 def setup(bot):
     bot.add_cog(shoptest(bot))

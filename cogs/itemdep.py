@@ -81,6 +81,7 @@ class fishing(commands.Cog):
                 '[ _ _ _ _ ] an ambulance! But not for me.': 'CALL',
                 'You\'ll never [ _ _ _ _ ] me alive! *doot*': 'TAKE',
                 '*dodges bullets like in The [ _ _ _ _ _ _ ]*': 'MATRIX',
+                'I have the power of [ _ _ _   _ _ _   _ _ _ _ _ ] on my side!': 'GOD AND ANIME',
                 }
             choice = random.choice(list(options.items()))
             embed.description = f"{ctx.author.mention} tried to shoot a police officer but they shot back! **Fill in this sentence to dodge the bullets:**\n\n`{choice[0]}`"
