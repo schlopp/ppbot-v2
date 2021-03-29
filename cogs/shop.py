@@ -39,7 +39,7 @@ class shop(commands.Cog):
 
     @commands.command(cooldown_after_parsing=True)
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def buy(self, ctx, amount:int, *, item:str):
+    async def buy(self, ctx, amount, *, item:str):
         embed = discord.Embed(colour=discord.Colour(random.choice([0x008000, 0xffa500, 0xffff00])))
         pp = ud.Pp(ctx.author.id)
         inv = ud.Inv(ctx.author.id)
@@ -50,7 +50,12 @@ class shop(commands.Cog):
             embed.description = f"{ctx.author.mention}, you need a pp first! Get one using `pp new`!"
             return await ctx.send(embed=embed)
         #yes pp
-        amount = 1 if amount < 1 else amount
+        if amount == 'max':
+            amount = await pp.pp_size() // await item.price(pp)
+        amount = int(amount)
+        if amount < 1:
+            embed.description = f'{ctx.author.mention}, you can\'t buy less than 1 of an item?????'
+            return await ctx.send(embed=embed)
         #no item
         if item.item_name.lower() not in [i.item_name.lower() for i in await shop.items()]:
             embed.description = f'{ctx.author.mention}, **`"{item.item_name}"`** is not something for sale at the moment. Check out `pp shop` to see what\'s currently available'
@@ -64,7 +69,7 @@ class shop(commands.Cog):
         if await item.item_type() == "MULTIPLIER":
             await pp.size_add(-1*amount*await item.price(pp))
             await pp.multiplier_add(amount*await item.gain())
-            embed.description = f"*{ctx.author.mention} takes the **pills** and feels a strong power going thru their body. They now have a {await pp.multiplier()} multiplier.*"
+            embed.description = f"*{ctx.author.mention} takes the **{amount} pills** and feels a strong power going thru their body. They now have a {await pp.multiplier()} multiplier.*"
             return await ctx.send(embed=embed)
         if await item.item_type() in ["TOOL","ITEM"]:
             await pp.size_add(-1*amount*await item.price(pp))
