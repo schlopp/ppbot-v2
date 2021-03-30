@@ -26,7 +26,7 @@ class errors(commands.Cog):
         if isinstance(error, discord.errors.Forbidden) or isinstance(error, commands.CommandNotFound):
             return
         if isinstance(error, commands.BadArgument):
-            embed.description = f"Value error: make sure you use numbers and words in the correct places"
+            embed.description = f"Make sure you use numbers and words in the correct places"
             embed.add_field(name="example:",value="`pp buy 10 fishing rod` ✅\n`pp show @obama` ✅\n`pp buy AAAAAAAAA fishing rod` ❌\n`pp show WAEDFSEWFSFEAWFEAW` ❌")
             return await ctx.send(embed=embed)
         else:
