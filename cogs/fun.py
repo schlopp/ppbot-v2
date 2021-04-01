@@ -20,7 +20,7 @@ class animals(commands.Cog):
         self.reddit = praw.Reddit(client_id="6BHhUI735hQNaA",client_secret="hi6RSWw_JFHWePcJsrpJ9hd4-wJlzA",user_agent="pp_bot:%s:1.0"%"hi6RSWw_JFHWePcJsrpJ9hd4-wJlzA")
         self.cute_message = ['very cute', '10/10', ]
         
-    @commands.command()
+    @commands.command(aliases=["pussy"])
     @commands.bot_has_permissions(send_messages=True)
     async def cat(self, ctx):
         async with aiohttp.ClientSession() as session:
