@@ -134,5 +134,5 @@ def has_pp() -> bool:
     async def predicate(ctx:commands.Context):
         if await Pp(ctx.author.id).check():
             return True
-        raise HasNoPP("You don't have a PP!")
+        raise HasNoPP(f"{ctx.author.mention}, you need a pp first! Get one using `pp new`!")
     return commands.check(predicate)
