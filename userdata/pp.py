@@ -1,5 +1,9 @@
 import asyncpg
 import toml
+import aiohttp
+import json
+from discord.ext import commands
+
 
 with open("./config.toml") as f:
     config = toml.loads(f.read())
@@ -23,11 +27,25 @@ class Pp:
         return dict(fetched[0])["pp_size"] if fetched else None
     
 
-    async def multiplier(self):
+    async def multiplier(self, bot:commands.AutoShardedBot):
         conn = await asyncpg.connect(config['admin']['PSQL'])
         fetched = await conn.fetch('''SELECT multiplier FROM userdata.pp WHERE user_id = $1''',self.user_id)
         await conn.close()
-        return dict(fetched[0])["multiplier"] if fetched else None
+        if fetched:
+            url = f"https://top.gg/api/bots/{bot.user.id}/check"
+            session: aiohttp.ClientSession = aiohttp.ClientSession()
+            async with session.get(url, params={"userId": self.user_id}, headers={"Authorization": config["dbl"]["TOKEN"]}) as r:
+                try:
+                    data = await r.json()
+                except Exception:
+                    await session.close()
+                    return dict(fetched[0])["multiplier"]
+                if r.status != 200:
+                    await session.close()
+                    return dict(fetched[0])["multiplier"]
+                await session.close()
+            return dict(fetched[0])["multiplier"]*2
+        return None
     
 
     async def check(self):

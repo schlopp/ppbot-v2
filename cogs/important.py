@@ -30,16 +30,18 @@ class important(commands.Cog):
     async def show(self, ctx, user:discord.Member=None):
         async with ctx.typing():
             embed = await ud.create_embed(ctx, include_tip=False)
-            if user and not await ud.Pp(user.id).check():
-                return await ud.handle_exception(ctx,f'{user.mention} doesn\'t have a pp.')
+            if user:
+                if not await ud.Pp(user.id).check():
+                    return await ud.handle_exception(ctx,f'{user.mention} doesn\'t have a pp.')
+                user = user
             else:
                 user = ctx.author
             pp = ud.Pp(user.id)
             inv = ud.Inv(user.id)
-            pp_size,pp_name,multiplier = await pp.pp_size(),await pp.pp_name(),await pp.multiplier()
+            pp_size,pp_name,multiplier = await pp.pp_size(),await pp.pp_name(),await pp.multiplier(self.bot)
             embed.title = f"{pp_name} ({user.display_name}'s pp)"
             embed.description = f"8{('='*int(pp_size/50))[:400] if pp_size else ''}D"
-            embed.add_field(name="Stats", value=f"{pp_size} inches, {multiplier}x multiplier")
+            embed.add_field(name="Stats", value=f"{pp_size} inches\n~~{multiplier//2}x multiplier~~ **[VOTER REWARD BONUS! {multiplier}x MULTIPLIER](https://top.gg/bot/735147633076863027/vote)**")
             invlist = []
             items = await inv.fetch_all()
             for item, amount in items.items():
@@ -59,7 +61,7 @@ class important(commands.Cog):
         async with ctx.typing():
             embed = await ud.create_embed(ctx)
             pp = ud.Pp(ctx.author.id)
-            growsize = random.randrange(1, 5)*await pp.multiplier()
+            growsize = random.randrange(1, 5)*await pp.multiplier(self.bot)
             await pp.size_add(growsize)
             embed.description = f'{ctx.author.mention}, your pp grew **{growsize} inches!**'
         return await ctx.send(embed=embed)

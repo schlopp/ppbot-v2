@@ -23,10 +23,10 @@ class extra(commands.Cog):
                 embed.description = f"{ctx.author.mention}, you need a pp first! Get one using `pp new`!"
                 return await ctx.send(embed=embed)
         #yes pp
-        if await pp.pp_size() < 25*await pp.multiplier():
-            embed.description = f"{ctx.author.mention}, your pp isnt big enough! You need at least **{25*await pp.multiplier()} inches** to get surgery!"
+        if await pp.pp_size() < 25*await pp.multiplier(self.bot):
+            embed.description = f"{ctx.author.mention}, your pp isnt big enough! You need at least **{25*await pp.multiplier(self.bot)} inches** to get surgery!"
             return await ctx.send(embed=embed)
-        growsize = random.randrange(5, 14)*await pp.multiplier()
+        growsize = random.randrange(5, 14)*await pp.multiplier(self.bot)
         embed.title = "HOSPITAL"
         embed.description = f"{ctx.author.mention} goes to the hospital for some pp surgery..."
         if random.randrange(1, 100)>=20:
@@ -99,7 +99,7 @@ class extra(commands.Cog):
             }
             responce = random.choice(list(combo.items()))
             if random.randrange(0, 5)!=1:
-                donation_amount = random.randrange(1, 10)*await pp.multiplier()
+                donation_amount = random.randrange(1, 10)*await pp.multiplier(self.bot)
                 await pp.size_add(donation_amount)
                 embed.description = f'**{responce[0]}** donated {donation_amount} inches to {ctx.author.mention}'
             else:

@@ -122,4 +122,4 @@ def has_no_pp() -> bool:
         if not await Pp(ctx.author.id).check():
             return True
         raise HasPP(f"you already have a pp, so you can't use this command.")
-    return commands.check(predicate) 
+    return commands.check(predicate)

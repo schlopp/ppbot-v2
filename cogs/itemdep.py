@@ -34,7 +34,7 @@ class fishing(commands.Cog):
         if random_number == 2:
             embed.description = f"{ctx.author.mention} went fishing and caught nothing."
             return await ctx.send(embed=embed)
-        fish_amount = random_number*await pp.multiplier()
+        fish_amount = random_number*await pp.multiplier(self.bot)
         await pp.size_add(fish_amount)
         quote = random.choice(['Pretty cool huh?','Nice!','Epic!'])
         embed.description = f"{ctx.author.mention} went fishing and caught **{fish_amount} inches!** {quote}"
@@ -65,10 +65,10 @@ class fishing(commands.Cog):
         
         if random_number <= 45:
             options = {
-                'shot a homeless man': random.randint(1,20)*await pp.multiplier(),
-                'deadass just killed a man': random.randint(5,20)*await pp.multiplier(),
-                'shot up a walmart': random.randint(10,30)*await pp.multiplier(),
-                'hijacked a fucking orphanage and sold all the kids': random.randint(30,50)*await pp.multiplier()
+                'shot a homeless man': random.randint(1,20)*await pp.multiplier(self.bot),
+                'deadass just killed a man': random.randint(5,20)*await pp.multiplier(self.bot),
+                'shot up a walmart': random.randint(10,30)*await pp.multiplier(self.bot),
+                'hijacked a fucking orphanage and sold all the kids': random.randint(30,50)*await pp.multiplier(self.bot)
                 }
             choice = random.choice(list(options.items()))
             await pp.size_add(choice[1])

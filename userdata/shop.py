@@ -1,5 +1,6 @@
 import asyncpg
 import toml
+from discord.ext import commands
 
 with open("./config.toml") as f:
     config = toml.loads(f.read())
@@ -71,12 +72,12 @@ class Shop:
             return dict(fetched[0])["gain"] if fetched else None
         
         
-        async def price(self, pp=None):
+        async def price(self, bot:commands.AutoShardedBot, pp=None):
             conn = await asyncpg.connect(config['admin']['PSQL'])
             fetched = await conn.fetch('''SELECT multiplierDependent FROM userdata.shopItems WHERE item_name = $1''',self.item_name)
             await conn.close()
             #price = await self.default_price()*await pp.multiplier() if dict(fetched[0])["multiplierDependent"] else await self.default_price()
-            return await self.default_price()*await pp.multiplier() if dict(fetched[0])["multiplierdependent"] else await self.default_price()
+            return await self.default_price()*await pp.multiplier(bot) if dict(fetched[0])["multiplierdependent"] else await self.default_price()
         
         
         async def add(self,item_type:str,item_desc:str,default_price:int,multiplierDependant:bool=False):
