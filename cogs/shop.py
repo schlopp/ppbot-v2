@@ -15,11 +15,11 @@ class shop(commands.Cog):
     @commands.command(aliases=['store'])
     @commands.bot_has_permissions(send_messages=True)
     @commands.cooldown(1, 5, commands.BucketType.user)
+    @ud.has_pp()
     async def shop(self, ctx, page:int=1):
         async with ctx.typing():
-            embed,pp,exception = await ud.create_embed(ctx)
-            if exception:
-                return await ud.handle_exception(ctx,exception)
+            embed = await ud.create_embed(ctx)
+            pp = ud.Pp(ctx.author.id)
             shop = ud.Shop()
             shopitems = await shop.items()
             totalpages = len(shopitems) // 5 + (len(shopitems) % 5 > 0)
@@ -39,17 +39,14 @@ class shop(commands.Cog):
 
     @commands.command(cooldown_after_parsing=True)
     @commands.cooldown(1, 5, commands.BucketType.user)
+    @ud.has_pp()
     async def buy(self, ctx, amount, *, item:str):
-        embed = discord.Embed(colour=discord.Colour(random.choice([0x008000, 0xffa500, 0xffff00])))
+        embed = await ud.create_embed(ctx)
         pp = ud.Pp(ctx.author.id)
         inv = ud.Inv(ctx.author.id)
         item = ud.Shop.Item(item.lower())
         shop = ud.Shop()
-        #no pp
-        if not await pp.check():
-            embed.description = f"{ctx.author.mention}, you need a pp first! Get one using `pp new`!"
-            return await ctx.send(embed=embed)
-        #yes pp
+        
         if amount == 'max':
             amount = await pp.pp_size() // await item.price(pp)
         amount = int(float(amount))

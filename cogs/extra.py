@@ -44,11 +44,11 @@ class extra(commands.Cog):
     @commands.command(aliases=['pray'])
     @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.bot_has_permissions(send_messages=True)
+    @ud.has_pp()
     async def beg(self, ctx):
         async with ctx.typing():
-            embed,pp,exception = await ud.create_embed(ctx)
-            if exception:
-                return await ud.handle_exception(ctx,exception)
+            embed = await ud.create_embed(ctx)
+            pp = ud.Pp(ctx.author.id)
             #yes pp
             quote = random.choice([
                 'ew poor',

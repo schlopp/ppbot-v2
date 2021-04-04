@@ -72,14 +72,18 @@ class animals(commands.Cog):
                     await ctx.send(embed=e)
     @commands.command()
     @commands.bot_has_permissions(send_messages=True)
+    @ud.has_pp()
     async def meme(self, ctx):
         async with ctx.channel.typing():
-            embed,pp,exception = await ud.create_embed(ctx,pp_dependent=False,include_tip=False,item_required="meme machine")
-            if exception:
-                return await ud.handle_exception(ctx,exception)
+            embed = await ud.create_embed(ctx,include_tip=False)
+            pp = ud.Pp(ctx.author.id)
+            
+            if not await ud.Inv(ctx.author.id).has_item('meme machine'):
+                raise ud.ItemRequired(f"you need a **meme machine** to use this command and become a master of the memes. Check if its for sale at the shop!")
+            
             subreddit = await self.reddit.subreddit(random.choice(['dankmemes','memes']))
             memes = []
-            async for i in subreddit.hot(limit=50) :
+            async for i in subreddit.hot(limit=50):
                 if not i.stickied:
                     memes.append(i)
             meme = random.choice(memes)

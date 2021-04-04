@@ -13,12 +13,12 @@ class important(commands.Cog):
     @commands.command(cooldown_after_parsing=True)
     @commands.cooldown(1, 60*60*24, commands.BucketType.user)
     @commands.bot_has_permissions(send_messages=True)
+    @ud.has_pp()
     async def daily(self, ctx):
         async with ctx.typing():
-            embed,pp,exception = await ud.create_embed(ctx)
-            if exception:
-                return await ud.handle_exception(ctx,exception)
-            growsize = random.randrange(40, 80)*await pp.multiplier()
+            embed = await ud.create_embed(ctx)
+            pp = ud.Pp(ctx.author.id)
+            growsize = random.randrange(40, 80) * await pp.multiplier()
             await pp.size_add(growsize)
             embed.description = f'{ctx.author.mention} received their daily **{growsize} inches!**'
         return await ctx.send(embed=embed)

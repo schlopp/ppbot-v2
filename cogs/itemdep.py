@@ -17,19 +17,15 @@ class fishing(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.bot_has_permissions(send_messages=True)
+    @ud.has_pp()
     async def fish(self, ctx):
-        embed = discord.Embed(colour=discord.Colour(random.choice([0x008000, 0xffa500, 0xffff00])))
+        embed = await ud.create_embed(ctx)
         pp = ud.Pp(ctx.author.id)
         inv = ud.Inv(ctx.author.id)
-        #no pp
-        if not await pp.check():
-                embed.description = f"{ctx.author.mention}, you need a pp first! Get one using `pp new`!"
-                return await ctx.send(embed=embed)
-        #yes pp
-        #no fish
-        if not await inv.has_item("fishing rod"):
-            embed.description = f"lol {ctx.author.mention} you dont have a fishing rod. smh go buy one in the `pp shop`"
-            return await ctx.send(embed=embed)
+        
+        if not await inv.has_item('fishing rod'):
+            raise ud.ItemRequired(f"you need a **fishing rod** to use this command and become a master of the memes. Check if its for sale at the shop!")
+        
         random_number = random.randrange(1, 20)
         if random_number == 1:
             await inv.new_item("fishing rod", -1)
@@ -47,11 +43,14 @@ class fishing(commands.Cog):
     @commands.command()
     @commands.cooldown(1, 45, commands.BucketType.user)
     @commands.bot_has_permissions(send_messages=True)
+    @ud.has_pp()
     async def hunt(self, ctx):
-        embed,pp,exception = await ud.create_embed(ctx,item_required='rifle')
-        if exception:
-            return await ud.handle_exception(ctx,exception)
+        embed = await ud.create_embed(ctx)
+        pp = ud.Pp(ctx.author.id)
         inv = ud.Inv(ctx.author.id)
+        
+        if not await inv.has_item('rifle'):
+            raise ud.ItemRequired(f"you need a **rifle** to use this command and become a master of the memes. Check if its for sale at the shop!")
         
         random_number = random.randrange(1, 50)
         

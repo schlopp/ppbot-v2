@@ -1,7 +1,10 @@
+import asyncio
+import json
+import random
+
 import discord
-from discord.ext import commands
-import json, random, asyncio
 import userdata as ud
+from discord.ext import commands
 
 
 class important(commands.Cog):
@@ -12,23 +15,26 @@ class important(commands.Cog):
 
     @commands.command(aliases=['start', 'create', 'make'])
     @commands.bot_has_permissions(send_messages=True)
+    @ud.has_no_pp()
     async def new(self, ctx):
         async with ctx.typing():
-            embed,pp,exception = await ud.create_embed(ctx,pp_adjective=True,pp_dependent=False)
-            if exception:
-                return await ud.handle_exception(ctx,exception)
-            await pp.create()
+            embed = await ud.create_embed(ctx)
+            await ud.Pp(ctx.author.id).create()
             embed.description = f"{ctx.author.mention}, New pp created!"
         return await ctx.send(embed=embed)
 
 
     @commands.command(aliases=['display', 'view', 'inv', 'inventory', 'level', 'stats'])
     @commands.bot_has_permissions(send_messages=True)
+    @ud.has_pp()
     async def show(self, ctx, user:discord.Member=None):
         async with ctx.typing():
-            embed,pp,user,exception = await ud.create_embed(ctx,user=user or ctx.author,return_user=True,include_tip=False)
-            if exception:
-                return await ud.handle_exception(ctx,exception)
+            embed = await ud.create_embed(ctx, include_tip=False)
+            if user and not await ud.Pp(user.id).check():
+                return await ud.handle_exception(ctx,f'{user.mention} doesn\'t have a pp.')
+            else:
+                user = ctx.author
+            pp = ud.Pp(user.id)
             inv = ud.Inv(user.id)
             pp_size,pp_name,multiplier = await pp.pp_size(),await pp.pp_name(),await pp.multiplier()
             embed.title = f"{pp_name} ({user.display_name}'s pp)"
@@ -48,29 +54,28 @@ class important(commands.Cog):
     @commands.command(aliases=['upgrade', 'enlarge', '🆙'], cooldown_after_parsing=True)
     @commands.cooldown(1, 10, commands.BucketType.user)
     @commands.bot_has_permissions(send_messages=True)
+    @ud.has_pp()
     async def grow(self, ctx):
         async with ctx.typing():
-            embed,pp,exception = await ud.create_embed(ctx)
-            if exception:
-                return await ud.handle_exception(ctx,exception)
+            embed = await ud.create_embed(ctx)
+            pp = ud.Pp(ctx.author.id)
             growsize = random.randrange(1, 5)*await pp.multiplier()
             await pp.size_add(growsize)
-            embed.description = f'{ctx.author.mention}, your pp grew **{growsize} inches!** It is now {await pp.pp_size()} inches. You can view your pp with the `pp show` command!'
+            embed.description = f'{ctx.author.mention}, your pp grew **{growsize} inches!**'
         return await ctx.send(embed=embed)
 
 
     @commands.command(aliases=['name'], cooldown_after_parsing=True)
     @commands.cooldown(1, 60, commands.BucketType.user)
     @commands.bot_has_permissions(send_messages=True)
+    @ud.has_pp()
     async def rename(self, ctx):
         async with ctx.typing():
-            embed,pp,exception = await ud.create_embed(ctx)
-            if exception:
-                return await ud.handle_exception(ctx,exception)
+            embed = await ud.create_embed(ctx)
+            pp = ud.Pp(ctx.author.id)
             embed.description = "What will your pp's new name be?"
         await ctx.send(embed=embed)
-        def check(m):
-            return m.author == ctx.author
+        check = lambda m: m.author == ctx.author
         try:
             x = await self.bot.wait_for('message', timeout=45.0, check=check)
             async with ctx.typing():
