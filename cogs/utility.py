@@ -6,10 +6,8 @@ import asyncio
 
 
 class important(commands.Cog):
-    
     def __init__(self, bot):
         self.bot = bot
-
 
     @commands.command()
     async def test(self,ctx):

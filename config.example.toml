@@ -3,3 +3,6 @@ title = 'Pp bot variables'
 [admin]
 TOKEN = '' #discord bot token
 PSQL = '' #postgreSQL login
+
+[dbl]
+TOKEN = '' # token for https://top.gg/

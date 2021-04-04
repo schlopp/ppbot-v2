@@ -1,6 +1,9 @@
 import asyncpg
+import asyncio
 import discord
 import toml
+import json
+import aiohttp
 import random
 from userdata import Pp, Inv
 from discord.ext import commands
@@ -45,7 +48,7 @@ async def runsql(method:str,sqlstring:str):
         await conn.close()
         raise SQLMethodError(method=method)
 
-        
+
 async def create_embed(ctx:commands.Context, **kwargs):
     """
     kwargs:
@@ -97,3 +100,39 @@ async def handle_exception(ctx:commands.Context, exception:str):
     embed.title = f"Oopsie {ctx.author.display_name}, something went wrong."
     embed.description = exception
     return await ctx.send(embed=embed)
+
+
+async def get_user_topgg_vote(bot, user_id:int) -> bool:
+    """
+    Returns whether or not the user has voted on Top.gg. If there's no Top.gg token provided then this will always return `False`.
+    This method doesn't handle timeouts; you are expected to implement them yourself.
+    """
+
+    # Try and see whether the user has voted
+    url = f"https://top.gg/api/bots/{bot.user.id}/check"
+    session: aiohttp.ClientSession = aiohttp.ClientSession()
+    
+    async with session.get(url, params={"userId": user_id}, headers={"Authorization": config["dbl"]["TOKEN"]}) as r:
+        try:
+            data = await r.json()
+        except Exception:
+            await session.close()
+            return False
+        if r.status != 200:
+            await session.close()
+            return False
+    
+    await session.close()
+    return data.get("voted", False)
+
+
+class HasNoPP(commands.CheckFailure):
+    """The generic error for when a user doesn't have a pp"""
+
+
+def has_pp() -> bool:
+    async def predicate(ctx:commands.Context):
+        if await Pp(ctx.author.id).check():
+            return True
+        raise HasNoPP("You don't have a PP!")
+    return commands.check(predicate)
