@@ -64,7 +64,8 @@ async def create_embed(ctx:commands.Context, **kwargs):
             "There are a ton of fun commands! Have you tried them yet?",
             "[Invite my friend's pigeon pet bot!](https://top.gg/bot/753013667460546560)",
             "Join the official pp bot server! use `pp support`",
-            "Add pp bot to your server! use `pp invite`"
+            "Add pp bot to your server! use `pp invite`",
+            "Did you know: MOOB has the all time record for the biggest pp!",
         ]))
     return embed
 
