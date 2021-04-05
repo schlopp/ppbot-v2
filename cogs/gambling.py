@@ -28,7 +28,7 @@ class gambling(commands.Cog):
         if await pp.pp_size() < amount:
             embed.description = f"{ctx.author.mention}, your pp isnt big enough! You need **{amount} inches** to gamble this amount!"
             return await ctx.send(embed=embed)
-        maxamount = 100000 if ud.get_user_topgg_vote(self.bot, ctx.author.id) else 1000
+        maxamount = 100000 if await ud.get_user_topgg_vote(self.bot, ctx.author.id) else 1000
         if amount > maxamount or amount < 2:
             embed.description = f"{ctx.author.mention}, you cant gamble that ammount! At most you can gamble **{maxamount//1000}k inches. [VOTERS CAN GAMBLE UP TO 100K!](https://top.gg/bot/735147633076863027)**"
             return await ctx.send(embed=embed)
