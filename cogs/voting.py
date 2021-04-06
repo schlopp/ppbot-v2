@@ -17,8 +17,8 @@ class TopGG(commands.Cog):
         self.dblpy = dbl.DBLClient(self.bot, self.token, autopost=True) # 30 minute update go brr
     
     
-    @commands.command()
-    async def voted(self,ctx):
+    @commands.command(aliases=["vote","voted","upvote",])
+    async def vote_check(self,ctx):
         voted = await get_user_topgg_vote(self.bot, ctx.author.id)
         if voted:
             return await ctx.send('You\'ve voted for pp bot on https://top.gg/bot/735147633076863027')
