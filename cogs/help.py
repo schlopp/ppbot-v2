@@ -33,7 +33,7 @@ class helping(commands.Cog):
         embed.add_field(
             name   = "**pp commands**",
             value  = """
-`new, show <user (optional)>, grow, rename`
+[`new, show <user (optional)>, grow, rename`](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=2147863616)
             """,
         inline = True
         )
@@ -61,7 +61,7 @@ class helping(commands.Cog):
         embed.add_field(
             name   = "**Extra economy commands**",
             value  = """
-[`hospital, fish, hunt, beg, daily`]
+[`hospital, fish, hunt, beg, daily`](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=2147863616)
             """,
         inline = True
         )
