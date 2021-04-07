@@ -41,7 +41,10 @@ class important(commands.Cog):
             pp_size,pp_name,multiplier = await pp.pp_size(),await pp.pp_name(),await pp.multiplier(self.bot)
             embed.title = f"{pp_name} ({user.display_name}'s pp)"
             embed.description = f"8{('='*int(pp_size/50))[:400] if pp_size else ''}D"
-            embed.add_field(name="Stats", value=f"{pp_size} inches\n~~{multiplier//2}x multiplier~~ **[VOTER REWARD BONUS! {multiplier}x MULTIPLIER](https://top.gg/bot/735147633076863027/vote)**")
+            if await ud.get_user_topgg_vote(self.bot, user.id):
+                embed.add_field(name="Stats", value=f"{pp_size} inches\n~~{multiplier//2}x multiplier~~ **[VOTER REWARD BONUS! {multiplier}x MULTIPLIER](https://top.gg/bot/735147633076863027/vote)**")
+            else:
+                embed.add_field(name="Stats", value=f"{pp_size} inches\n{multiplier}x multiplier **[You're currently missing out on a VOTER REWARD BONUS! Vote now to get a {multiplier*2}x multiplier!](https://top.gg/bot/735147633076863027/vote)**")
             invlist = []
             items = await inv.fetch_all()
             for item, amount in items.items():
