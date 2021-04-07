@@ -43,8 +43,10 @@ class Pp:
                 if r.status != 200:
                     await session.close()
                     return dict(fetched[0])["multiplier"]
-                await session.close()
-            return dict(fetched[0])["multiplier"]*2
+            await session.close()
+            if data.get("voted", False):
+                return dict(fetched[0])["multiplier"]*2
+            return dict(fetched[0])["multiplier"]
         return None
     
 

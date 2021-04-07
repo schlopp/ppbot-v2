@@ -98,7 +98,7 @@ async def get_user_topgg_vote(bot, user_id:int) -> bool:
             return False
     
     await session.close()
-    return data.get("voted", False)
+    return bool(data.get("voted", False))
 
 
 class HasNoPP(commands.CheckFailure):
