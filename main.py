@@ -122,4 +122,9 @@ async def rldud(ctx):
 if __name__ == '__main__':
     with open("config.toml") as f:
         config = toml.loads(f.read())
-    bot.run(config['admin']['TOKEN'])
+                                  
+    bot.start(
+        config['admin']['TOKEN'],
+        reconnect=True,
+    )
+    
