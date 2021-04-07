@@ -123,8 +123,15 @@ if __name__ == '__main__':
     with open("config.toml") as f:
         config = toml.loads(f.read())
                                   
-    bot.start(
-        config['admin']['TOKEN'],
-        reconnect=True,
-    )
+    loop = asyncio.new_event_loop()
+    
+    try:
+        loop.run_until_complete (
+            bot.start (
+                config['admin']['TOKEN'],
+                reconnect=True,
+            )
+        )
+    except KeyboardInterrupt:
+        loop.run_until_complete(bot.logout())
     
