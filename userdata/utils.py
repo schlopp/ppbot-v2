@@ -124,3 +124,23 @@ def has_no_pp() -> bool:
             return True
         raise HasPP(f"you already have a pp, so you can't use this command.")
     return commands.check(predicate)
+
+async def has_sfw_mode(guild_id:int) -> bool:
+    conn = await asyncpg.connect(config['admin']['PSQL'])
+    fetched = await conn.fetch('''SELECT sfw FROM userdata.server_settings WHERE guild_id = $1''',guild_id)
+    if not fetched:
+        await conn.execute('''INSERT INTO userdata.server_settings(guild_id) VALUES($1) ON CONFLICT (guild_id) DO NOTHING;''',guild_id)
+        fetched = await conn.fetch('''SELECT sfw FROM userdata.server_settings WHERE guild_id = $1''',guild_id)
+    await conn.close()
+    if dict(fetched[0])['sfw']:
+        return True
+    return False
+
+async def toggle_sfw_mode(guild_id:int):
+    if await has_sfw_mode(guild_id):
+        conn = await asyncpg.connect(config['admin']['PSQL'])
+        await conn.execute('''UPDATE userdata.server_settings SET sfw = false WHERE guild_id = $1;''',guild_id)
+        return await conn.close()
+    conn = await asyncpg.connect(config['admin']['PSQL'])
+    await conn.execute('''UPDATE userdata.server_settings SET sfw = true WHERE guild_id = $1;''',guild_id)
+    await conn.close()

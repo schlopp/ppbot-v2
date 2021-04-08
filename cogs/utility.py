@@ -16,6 +16,19 @@ class important(commands.Cog):
         await ctx.send('Yep it works')
     
     
+    @commands.command(aliases=['sfwtoggle','sfw_toggle','familyfriendlymode','familyfriendly_mode','family_friendly_mode','togglesfw'])
+    @commands.guild_only()
+    @commands.has_permissions(manage_guild=True)
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
+    @commands.cooldown(1, 5, commands.BucketType.user)
+    async def sfwmode(self, ctx):
+        sfw_mode = await ud.has_sfw_mode(ctx.guild.id)
+        await ud.toggle_sfw_mode(ctx.guild.id)
+        if sfw_mode:
+            return await ctx.send(embed=discord.Embed(description='Disabled family friendly mode!'))
+        return await ctx.send(embed=discord.Embed(description='Enabled family friendly mode!'))
+    
+    
     @commands.command(aliases=['top','lb'])
     @commands.guild_only()
     @commands.cooldown(1, 5, commands.BucketType.user)

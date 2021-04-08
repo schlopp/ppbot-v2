@@ -40,7 +40,19 @@ class important(commands.Cog):
             inv = ud.Inv(user.id)
             pp_size,pp_name,multiplier = await pp.pp_size(),await pp.pp_name(),await pp.multiplier(self.bot)
             embed.title = f"{pp_name} ({user.display_name}'s pp)"
-            embed.description = f"8{('='*int(pp_size/50))[:400] if pp_size else ''}D"
+            
+            if await ud.has_sfw_mode(ctx.guild.id):
+                length = pp_size//100
+                dog:list = [
+                    f'  __  {(" "*length)[:20]}   _',
+                    f'o\'\')}}_{("_"*length)[:20]}__//',
+                    f' ` _/ {(" "*length)[:20]}   )',
+                    f' (_(_/{("-"*length)[:20]}(_/',
+                ]
+                embed.description = "```\n{}```".format("\n".join(dog))
+            else:
+                embed.description = f"8{('='*(pp_size//50))[:400] if pp_size else ''}D"
+                
             if await ud.get_user_topgg_vote(self.bot, user.id):
                 embed.add_field(name="Stats", value=f"{pp_size} inches\n~~{multiplier//2}x multiplier~~ **[VOTER REWARD BONUS! {multiplier}x MULTIPLIER](https://top.gg/bot/735147633076863027/vote)**")
             else:
