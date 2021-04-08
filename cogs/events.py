@@ -18,12 +18,12 @@ class Events(commands.Cog):
         #event is triggered
         await asyncio.sleep(1)
         string = random.choice([
-            'big pp gang',
-            'i love women',
-            'dick and balls',
+            'pp bot time',
+            'tax evasion',
+            'frog',
             'peepee poopoo',
             'gambling addiction',
-            'giant cock',
+            'cool kids',
             'human rights'])
         event = ud.Event(ctx.channel.id,string[::-1])
         await event.create()

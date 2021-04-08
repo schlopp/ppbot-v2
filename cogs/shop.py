@@ -51,7 +51,10 @@ class shop(commands.Cog):
         
         if amount == 'max':
             amount = await pp.pp_size() // await item.price(self.bot, pp)
-        amount = int(float(amount))
+        try:
+            amount = int(float(amount))
+        except ValueError:
+            raise commands.BadArgument()
         if amount < 1:
             embed.description = f'{ctx.author.mention}, you can\'t buy less than 1 of an item?????'
             return await ctx.send(embed=embed)
