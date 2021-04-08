@@ -68,7 +68,7 @@ class helping(commands.Cog):
         embed.add_field(
             name   = "**Utility commands**",
             value  = """
-[`leaderboard <user>, suggest, github, vote`](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=2147863616)
+[`sfwtoggle, leaderboard <user>, suggest, github, vote`](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=2147863616)
             """,
         inline = True
         )
