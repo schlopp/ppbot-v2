@@ -3,6 +3,7 @@ from discord.ext import commands
 import userdata as ud
 import os
 import toml
+import asyncio
 from importlib import reload
 
 #prefixes
@@ -122,12 +123,12 @@ async def rldud(ctx):
 if __name__ == '__main__':
     with open("config.toml") as f:
         config = toml.loads(f.read())
-                                  
-    loop = asyncio.new_event_loop()
+    
+    loop = asyncio.get_event_loop()
     
     try:
-        loop.run_until_complete (
-            bot.start (
+        loop.run_until_complete(
+            bot.start(
                 config['admin']['TOKEN'],
                 reconnect=True,
             )
