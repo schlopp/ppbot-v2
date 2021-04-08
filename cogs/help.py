@@ -28,7 +28,7 @@ class helping(commands.Cog):
         embed.url               = "https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=2147863616"
         embed.description       = "pp bot. Grow your own pp today!"
         embed.set_thumbnail(url = "https://cdn.discordapp.com/avatars/735147633076863027/a34d69e6d5e2021fc64caa69f642e37b.webp?size=1024")
-        embed.set_footer(text   = "\""+random.choice(["big pp gang","my gf has a bigger pp than me","lmao wtf is this bot","i love my wife"])+"\"")
+        embed.set_footer(text   = "\""+random.choice(["big pp gang","my gf has a bigger pp than me","wtf is this bot","i love my wife"])+"\"")
 
         embed.add_field(
             name   = "**pp commands**",

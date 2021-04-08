@@ -18,9 +18,10 @@ class important(commands.Cog):
     @ud.has_no_pp()
     async def new(self, ctx):
         async with ctx.typing():
+            ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
             embed = await ud.create_embed(ctx)
             await ud.Pp(ctx.author.id).create()
-            embed.description = f"{ctx.author.mention}, New pp created!"
+            embed.description = f"{ctx.author.mention}, New {ppname} created!"
         return await ctx.send(embed=embed)
 
 
@@ -29,17 +30,18 @@ class important(commands.Cog):
     @ud.has_pp()
     async def show(self, ctx, user:discord.Member=None):
         async with ctx.typing():
+            ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
             embed = await ud.create_embed(ctx, include_tip=False)
             if user:
                 if not await ud.Pp(user.id).check():
-                    return await ud.handle_exception(ctx,f'{user.mention} doesn\'t have a pp.')
+                    return await ud.handle_exception(ctx,f'{user.mention} doesn\'t have a {ppname}.')
                 user = user
             else:
                 user = ctx.author
             pp = ud.Pp(user.id)
             inv = ud.Inv(user.id)
             pp_size,pp_name,multiplier = await pp.pp_size(),await pp.pp_name(),await pp.multiplier(self.bot)
-            embed.title = f"{pp_name} ({user.display_name}'s pp)"
+            embed.title = f"{pp_name} ({user.display_name}'s {ppname})"
             
             if await ud.has_sfw_mode(ctx.guild.id):
                 length = pp_size//100
@@ -64,7 +66,7 @@ class important(commands.Cog):
                     invlist.append(f"{item}: **{amount}**")
             if invlist:
                 embed.add_field(name="Inventory", value="\n".join(invlist))
-            embed.set_footer(text="give your pp a name with \"pp rename\"")
+            embed.set_footer(text=f"give your {ppname} a name with \"pp rename\"")
         return await ctx.send(embed=embed)
 
 
@@ -74,11 +76,12 @@ class important(commands.Cog):
     @ud.has_pp()
     async def grow(self, ctx):
         async with ctx.typing():
+            ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
             embed = await ud.create_embed(ctx)
             pp = ud.Pp(ctx.author.id)
             growsize = random.randrange(1, 5)*await pp.multiplier(self.bot)
             await pp.size_add(growsize)
-            embed.description = f'{ctx.author.mention}, your pp grew **{growsize} inches!**'
+            embed.description = f'{ctx.author.mention}, your {ppname} grew **{growsize} inches!**'
         return await ctx.send(embed=embed)
 
 
@@ -88,9 +91,10 @@ class important(commands.Cog):
     @ud.has_pp()
     async def rename(self, ctx):
         async with ctx.typing():
+            ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
             embed = await ud.create_embed(ctx)
             pp = ud.Pp(ctx.author.id)
-            embed.description = "What will your pp's new name be?"
+            embed.description = f"What will your {ppname}'s new name be?"
         await ctx.send(embed=embed)
         check = lambda m: m.author == ctx.author
         try:
@@ -101,7 +105,7 @@ class important(commands.Cog):
                     embed.description = f"{ctx.author.mention}, that name is too big! (32 characters max)"
                     return await ctx.send(embed=embed)
                 await pp.rename(newname)
-                embed.description = f"{ctx.author.mention}, your pp's name is now **{newname}**"
+                embed.description = f"{ctx.author.mention}, your {ppname}'s name is now **{newname}**"
             return await ctx.send(embed=embed)
         except asyncio.TimeoutError:
             async with ctx.typing():
