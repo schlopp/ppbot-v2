@@ -16,6 +16,7 @@ class shoptest(commands.Cog):
     @commands.bot_has_permissions(send_messages=True)
     @commands.cooldown(1, 5, commands.BucketType.user)
     @commands.is_owner()
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
     async def shoptest(self, ctx, page:int=1):
         async with ctx.typing():
             embed,pp,exception = await ud.create_embed(ctx)

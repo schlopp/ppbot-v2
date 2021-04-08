@@ -12,7 +12,7 @@ class important(commands.Cog):
 
     @commands.command(cooldown_after_parsing=True)
     @commands.cooldown(1, 60*60*24, commands.BucketType.user)
-    @commands.bot_has_permissions(send_messages=True)
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
     @ud.has_pp()
     async def daily(self, ctx):
         async with ctx.typing():

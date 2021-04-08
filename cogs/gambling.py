@@ -15,7 +15,7 @@ class gambling(commands.Cog):
         self.bot = bot
     @commands.command(aliases=['bet'])
     @commands.cooldown(1, 2, commands.BucketType.user)
-    @commands.bot_has_permissions(send_messages=True)
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
     async def gamble(self, ctx, amount):
         embed = discord.Embed(colour=discord.Colour(random.choice([0x008000, 0xffa500, 0xffff00])))
         pp = ud.Pp(ctx.author.id)

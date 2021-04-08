@@ -14,7 +14,7 @@ class helping(commands.Cog):
         self.bot = bot
         #Help command
     @commands.command()
-    @commands.bot_has_permissions(send_messages=True)
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
     async def help(self, ctx, *, category=None):
         advert = random.choice([
             'click me!',

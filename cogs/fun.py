@@ -21,7 +21,7 @@ class animals(commands.Cog):
         self.cute_message = ['very cute', '10/10', ]
         
     @commands.command(aliases=["pussy"])
-    @commands.bot_has_permissions(send_messages=True)
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
     async def cat(self, ctx):
         async with aiohttp.ClientSession() as session:
             async with session.get('http://aws.random.cat/meow') as r:
@@ -31,7 +31,7 @@ class animals(commands.Cog):
                     e.set_image(url=js['file'])
                     await ctx.send(embed=e)
     @commands.command()
-    @commands.bot_has_permissions(send_messages=True)
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
     async def dog(self, ctx):
         async with aiohttp.ClientSession() as session:
             async with session.get('https://dog.ceo/api/breeds/image/random') as r:
@@ -41,7 +41,7 @@ class animals(commands.Cog):
                     e.set_image(url=js['message'])
                     await ctx.send(embed=e)
     @commands.command()
-    @commands.bot_has_permissions(send_messages=True)
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
     async def fox(self, ctx):
         async with aiohttp.ClientSession() as session:
             async with session.get('https://randomfox.ca/floof/') as r:
@@ -51,7 +51,7 @@ class animals(commands.Cog):
                     e.set_image(url=js['image'])
                     await ctx.send(embed=e)
     @commands.command()
-    @commands.bot_has_permissions(send_messages=True)
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
     async def panda(self, ctx):
         async with aiohttp.ClientSession() as session:
             async with session.get('https://some-random-api.ml/img/panda/') as r:
@@ -61,7 +61,7 @@ class animals(commands.Cog):
                     e.set_image(url=js['link'])
                     await ctx.send(embed=e)
     @commands.command()
-    @commands.bot_has_permissions(send_messages=True)
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
     async def redpanda(self, ctx, panda:str=None):
         async with aiohttp.ClientSession() as session:
             async with session.get('https://some-random-api.ml/img/red_panda/') as r:
@@ -71,7 +71,7 @@ class animals(commands.Cog):
                     e.set_image(url=js['link'])
                     await ctx.send(embed=e)
     @commands.command()
-    @commands.bot_has_permissions(send_messages=True)
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
     @ud.has_pp()
     async def meme(self, ctx):
         async with ctx.channel.typing():

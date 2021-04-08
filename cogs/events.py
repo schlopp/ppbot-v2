@@ -54,7 +54,7 @@ class Events(commands.Cog):
     
     @commands.Cog.listener()
     @commands.has_permissions(send_messages=True)
-    async def on_message(self, message):
+    async def on_message(self, message, embed_links=True):
         if message.author.bot:
             return
         if message.content == 'reee':

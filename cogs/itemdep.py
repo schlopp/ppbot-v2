@@ -16,7 +16,7 @@ class fishing(commands.Cog):
         self.bot = bot
     @commands.command()
     @commands.cooldown(1, 10, commands.BucketType.user)
-    @commands.bot_has_permissions(send_messages=True)
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
     @ud.has_pp()
     async def fish(self, ctx):
         embed = await ud.create_embed(ctx)
@@ -42,7 +42,7 @@ class fishing(commands.Cog):
     
     @commands.command()
     @commands.cooldown(1, 45, commands.BucketType.user)
-    @commands.bot_has_permissions(send_messages=True)
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
     @ud.has_pp()
     async def hunt(self, ctx):
         embed = await ud.create_embed(ctx)

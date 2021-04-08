@@ -15,6 +15,7 @@ class shop(commands.Cog):
     @commands.command(aliases=['store'])
     @commands.bot_has_permissions(send_messages=True)
     @commands.cooldown(1, 5, commands.BucketType.user)
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
     @ud.has_pp()
     async def shop(self, ctx, page:int=1):
         async with ctx.typing():
@@ -39,6 +40,7 @@ class shop(commands.Cog):
 
     @commands.command(cooldown_after_parsing=True)
     @commands.cooldown(1, 5, commands.BucketType.user)
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
     @ud.has_pp()
     async def buy(self, ctx, amount, *, item:str):
         embed = await ud.create_embed(ctx)

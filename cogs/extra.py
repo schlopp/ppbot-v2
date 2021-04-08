@@ -14,7 +14,7 @@ class extra(commands.Cog):
         self.bot = bot
     @commands.command(aliases=['hospital'])
     @commands.cooldown(1, 60, commands.BucketType.user)
-    @commands.bot_has_permissions(send_messages=True)
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
     async def surgery(self, ctx):
         embed = discord.Embed(colour=discord.Colour(random.choice([0x008000, 0xffa500, 0xffff00])))
         pp = ud.Pp(ctx.author.id)
@@ -43,7 +43,7 @@ class extra(commands.Cog):
     
     @commands.command(aliases=['pray'])
     @commands.cooldown(1, 10, commands.BucketType.user)
-    @commands.bot_has_permissions(send_messages=True)
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
     @ud.has_pp()
     async def beg(self, ctx):
         async with ctx.typing():

@@ -32,6 +32,7 @@ class important(commands.Cog):
     @commands.command(aliases=['top','lb'])
     @commands.guild_only()
     @commands.cooldown(1, 5, commands.BucketType.user)
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
     @ud.has_pp()
     async def leaderboard(self, ctx, user:discord.Member=None):
         async with ctx.typing():
@@ -68,6 +69,7 @@ class important(commands.Cog):
     
     @commands.command(aliases=['suggestion',])
     @commands.cooldown(1, 30, commands.BucketType.user)
+    @commands.bot_has_permissions(send_messages=True)
     async def suggest(self, ctx, *, suggestion:str):
         async with ctx.typing():
             channel = self.bot.get_channel(816777533089513490)

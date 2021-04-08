@@ -14,7 +14,7 @@ class important(commands.Cog):
 
 
     @commands.command(aliases=['start', 'create', 'make'])
-    @commands.bot_has_permissions(send_messages=True)
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
     @ud.has_no_pp()
     async def new(self, ctx):
         async with ctx.typing():
@@ -26,7 +26,7 @@ class important(commands.Cog):
 
 
     @commands.command(aliases=['display', 'view', 'inv', 'inventory', 'level', 'stats'])
-    @commands.bot_has_permissions(send_messages=True)
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
     @ud.has_pp()
     async def show(self, ctx, user:discord.Member=None):
         async with ctx.typing():
@@ -72,7 +72,7 @@ class important(commands.Cog):
 
     @commands.command(aliases=['upgrade', 'enlarge', '🆙'], cooldown_after_parsing=True)
     @commands.cooldown(1, 10, commands.BucketType.user)
-    @commands.bot_has_permissions(send_messages=True)
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
     @ud.has_pp()
     async def grow(self, ctx):
         async with ctx.typing():
@@ -87,7 +87,7 @@ class important(commands.Cog):
 
     @commands.command(aliases=['name'], cooldown_after_parsing=True)
     @commands.cooldown(1, 60, commands.BucketType.user)
-    @commands.bot_has_permissions(send_messages=True)
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
     @ud.has_pp()
     async def rename(self, ctx):
         async with ctx.typing():
