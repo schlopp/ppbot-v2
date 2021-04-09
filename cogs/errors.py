@@ -62,7 +62,7 @@ class CommandErrorHandler(commands.Cog):
         
         elif isinstance(error, commands.BotMissingPermissions):
             try:
-                return await ctx.send(f"**Oopsie {ctx.author.display_name},** The command you're trying to use requires the permission to send links. Ask and admin to change pp bot's permissions.")
+                return await ctx.send(f"**Oopsie {ctx.author.display_name},** The command you're trying to use requires the permission to send links. Ask an admin to change pp bot's permissions.")
             except:
                 pass
             
