@@ -16,21 +16,31 @@ class Event:
         conn = await asyncpg.connect(config['admin']['PSQL'])
         fetched = await conn.fetch('''SELECT first_place FROM userdata.events WHERE channel_id = $1 AND answer = $2;''',self.channel_id,self.answer)
         await conn.close()
-        return dict(fetched[0])["first_place"] if dict(fetched[0])["first_place"] != 1 else None
+        try:
+            return dict(fetched[0])["first_place"] if dict(fetched[0])["first_place"] != 1 else None
+        except IndexError:
+            return None
     
     
     async def second(self):
         conn = await asyncpg.connect(config['admin']['PSQL'])
         fetched = await conn.fetch('''SELECT second_place FROM userdata.events WHERE channel_id = $1 AND answer = $2;''',self.channel_id,self.answer)
         await conn.close()
-        return dict(fetched[0])["second_place"] if dict(fetched[0])["second_place"] != 1 else None
+        try:
+            return dict(fetched[0])["second_place"] if dict(fetched[0])["second_place"] != 1 else None
+        except IndexError:
+            return None
     
     
     async def third(self):
         conn = await asyncpg.connect(config['admin']['PSQL'])
         fetched = await conn.fetch('''SELECT third_place FROM userdata.events WHERE channel_id = $1 AND answer = $2;''',self.channel_id,self.answer)
         await conn.close()
-        return dict(fetched[0])["third_place"] if dict(fetched[0])["third_place"] != 1 else None
+        try:
+            return dict(fetched[0])["third_place"] if dict(fetched[0])["third_place"] != 1 else None
+        except IndexError:
+            return None
+    
     
     
     async def check(self):

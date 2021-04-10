@@ -57,8 +57,8 @@ class Events(commands.Cog):
     async def on_message(self, message, embed_links=True):
         if message.author.bot:
             return
-        if message.content == 'reee':
-            return await message.channel.send(f'**REEE{"E"*random.randint(1,40)}** <a:reee:812625046543663114>')
+        #if message.content == 'reee':
+        # return await message.channel.send(f'**REEE{"E"*random.randint(1,40)}** <a:reee:812625046543663114>')
         event = ud.Event(message.channel.id,message.content.lower())
         if await event.check():
             pp = ud.Pp(message.author.id)

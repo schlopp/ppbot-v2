@@ -36,23 +36,35 @@ class important(commands.Cog):
     @ud.has_pp()
     async def leaderboard(self, ctx, user:discord.Member=None):
         async with ctx.typing():
+            ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
+            embed = await ud.create_embed(ctx, include_tip=False)
+            if user:
+                if not await ud.Pp(user.id).check():
+                    return await ud.handle_exception(ctx,f'{user.mention} doesn\'t have a {ppname}.')
+                user = user
+            else:
+                user = ctx.author
+                
             fetched = await ud.fetch('*','userdata.pp')
             fetched = sorted(fetched, key=lambda i:i['pp_size'])
             fetched.reverse()
-            
-            embed = await ud.create_embed(ctx)
-            if user and not await ud.Pp(user.id).check():
-                return await ud.handle_exception(ctx,f'{user.mention} doesn\'t have a pp.')
-            else:
-                user = ctx.author
             pp = ud.Pp(user.id)
             
-            position = 1
-            for i in fetched[:10]:
-                if ctx.guild:
-                    member = ctx.guild.get_member(i["user_id"]) if ctx.guild else None
-                embed.add_field(name=f'{position}. {i["pp_name"]}{f" ({member.display_name})" if member else ""}',value=f'{i["pp_size"]} inches',inline=False)
-                position+=1
+            if await ud.has_sfw_mode(ctx.guild.id):
+                embed.description = f'This server is on SFW mode. Showing the names of the top 10 {ppname}s is disabled.'
+                position = 1
+                for i in fetched[:10]:
+                    if ctx.guild:
+                        member = ctx.guild.get_member(i["user_id"]) if ctx.guild else None
+                        embed.add_field(name=f'{position}. {f" ({member.display_name})" if member else ""}',value=f'{i["pp_size"]} inches',inline=False)
+                    position+=1
+            else:
+                position = 1
+                for i in fetched[:10]:
+                    if ctx.guild:
+                        member = ctx.guild.get_member(i["user_id"]) if ctx.guild else None
+                        embed.add_field(name=f'{position}. {i["pp_name"]}{f" ({member.display_name})" if member else ""}',value=f'{i["pp_size"]} inches',inline=False)
+                    position+=1
             try:
                 position = [i["user_id"] for i in fetched].index(pp.user_id)+1
                 if position == 1:
@@ -61,7 +73,7 @@ class important(commands.Cog):
                     front = [i["user_id"] for i in fetched].index(pp.user_id)
                     difference = fetched[front-1]["pp_size"]-fetched[position-1]["pp_size"]
                     lead = f"{difference} inches behind {front}."
-                embed.set_footer(text=f'{user.display_name or "Your"} position on the leaderboard: {position}. {lead}')
+                embed.set_footer(text=f'{user.display_name if user.id != ctx.author.id else "Your"} position on the leaderboard: {position}. {lead}')
             except ValueError:
                 pass
         return await ctx.send(embed=embed)
