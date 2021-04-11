@@ -3,6 +3,7 @@ from discord.ext import commands
 import userdata as ud
 
 import asyncio
+import random
 
 
 class important(commands.Cog):
@@ -92,6 +93,16 @@ class important(commands.Cog):
             await message.add_reaction('👍')
             await message.add_reaction('👎')
         await ctx.send('Thank you for your suggestion.')
+    
+    
+    @commands.command(aliases=['%','percent'])
+    @commands.bot_has_permissions(send_messages=True)
+    async def percentage(self, ctx, *, thing:str):
+        async with ctx.typing():
+            embed = discord.Embed()
+            embed.title = f'{ctx.author.display_name}\'s {thing} percentage'
+            embed.description = f'**{random.randint(0,100)}%** {thing}'
+        await ctx.send(embed=embed)
 
 
 def setup(bot):
