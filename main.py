@@ -10,15 +10,15 @@ from importlib import reload
 bot = commands.AutoShardedBot(command_prefix=[
     'pp ',
     'Pp ',
-    'PP'
-],case_insensitive=True,owner_id=393305855929483264)
+    'PP ',
+],case_insensitive=True,owner_ids=[393305855929483264,724967330064629830,])
 bot.load_extension('jishaku')
 bot.remove_command('help')
 for filename in os.listdir("./cogs"):
     if filename.endswith('.py'):
         bot.load_extension(f'cogs.{filename[:-3]}')
 
-#status
+#status#c
 @bot.event
 async def on_connect():
     await bot.change_presence(activity=discord.Game(name="Connecting.."))
@@ -32,7 +32,14 @@ async def on_guild_join(guild):
     await ppchannel.send(f"Bot joined new server: {guild.name}")
     for channel in guild.text_channels:
         if channel.permissions_for(guild.me).send_messages:
-            await channel.send(embed=discord.Embed(title="pp bot has joined the game",description="Sup guys its me, pp bot. **Type** `pp help` **to get a nice lil list of commands. Type** `pp new` **to create a pp.** Have fun!\n\n**[Invite the pp bot](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=104713793)**\n**[Join the pp bot server](https://discord.gg/VnSyg3J)**"))
+            embed = discord.Embed()
+            embed.title = "pp bot has joined the game"
+            embed.description = "Sup guys its me, pp bot. **Type** `pp help` **to get a neat list of commands. Type** `pp new` **to create a pp.** Have fun!\n\n**[Invite the pp bot](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=104713793)**\n**[Join the pp bot server](https://discord.gg/VnSyg3J)**"
+            embed.add_field(
+                name='Enable **family friendly mode** using `pp sfwtoggle`',
+                value='Server admins can use `the pp sfwtoggle` command to enable/disable family friendly mode, making the bot more appropriate.',)
+            await channel.send(embed=embed)
+        
         break
 @bot.event
 async def on_guild_remove(guild):
