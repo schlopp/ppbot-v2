@@ -2,6 +2,7 @@ import discord
 import traceback
 import sys
 from discord.ext import commands
+import datetime
 
 
 class CommandErrorHandler(commands.Cog):
@@ -57,7 +58,23 @@ class CommandErrorHandler(commands.Cog):
         elif isinstance(error, commands.CommandOnCooldown):
             embed = discord.Embed(colour=discord.Colour(0xff0000))
             embed.title = f"Bro, slow down"
-            embed.description = f"You can use this command again in **{round(error.retry_after, 1)} seconds**.\nBe patient {ctx.author.mention}"
+            
+            td = datetime.timedelta(milliseconds=int(error.retry_after*1000))
+            days = td.days
+            hours, remainder = divmod(td.seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            # If you want to take into account fractions of a second
+            seconds += td.microseconds / 1e6
+            
+            time_left = f"{round(seconds, 1)} second" if round(seconds, 1) == 1.0 else f"{round(seconds, 1)} seconds"
+            
+            if minutes:
+                time_left = f"{minutes} minute and {time_left}" if minutes == 1 else f"{minutes} minutes and {time_left}"
+                for key, value in {'hours':hours,'days':days}.items():
+                    if value:
+                        time_left = f"{value} {key[:-1]}, {time_left}" if value == 1 else f"{value} {key}, {time_left}"
+            
+            embed.description = f"You can use this command again in **{time_left}**\nBe patient {ctx.author.mention}"
             return await ctx.send(embed=embed)
         
         elif isinstance(error, commands.BotMissingPermissions):

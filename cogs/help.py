@@ -33,7 +33,7 @@ class helping(commands.Cog):
         embed.add_field(
             name   = "**pp commands**",
             value  = """
-[`new, show <user (optional)>, grow, rename`](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=2147863616)
+[`new, show @user, grow, rename`](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=2147863616)
             """,
         inline = True
         )
@@ -54,7 +54,7 @@ class helping(commands.Cog):
         embed.add_field(
             name   = "**Fun commands**",
             value  = """
-[`cat, dog, fox, redpanda, panda`](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=2147863616)
+[`cat, dog, fox, redpanda, panda, meme, compare @user, percentage <thing>`](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=2147863616)
             """,
         inline = True
         )
@@ -68,7 +68,7 @@ class helping(commands.Cog):
         embed.add_field(
             name   = "**Utility commands**",
             value  = """
-[`sfwtoggle, leaderboard <user>, suggest, github, vote`](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=2147863616)
+[`sfwtoggle, leaderboard @user, suggest, github, vote`](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=2147863616)
             """,
         inline = True
         )

@@ -90,6 +90,30 @@ class animals(commands.Cog):
             embed.title = meme.title
             embed.set_image(url=meme.url)
         return await ctx.send(embed=embed)
+    
+    
+    @commands.command()
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
+    @ud.has_pp()
+    async def compare(self, ctx, user:discord.Member):
+        async with ctx.typing():
+            if user == ctx.author:
+                return await ud.handle_exception(ctx,'Wha- How would you compare yourself to yourself?')
+            
+            ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
+            
+            if not await ud.Pp(user.id).check():
+                return await ud.handle_exception(ctx,f'{user.mention} doesn\'t have a {ppname}.')
+            
+            embed = await ud.create_embed(ctx)
+            pp = ud.Pp(ctx.author.id)
+            pp2 = ud.Pp(user.id)
+            
+            difference = 'bigger' if await pp.pp_size() > await pp2.pp_size() else 'smaller'
+            
+            embed.title = f'Your {ppname} is {difference} than **{user.display_name}**\'s'
+            embed.description = f'Your {ppname} is {abs(await pp.pp_size() - await pp2.pp_size())} inches {difference} than **{user.display_name}**\'s'
+        await ctx.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(animals(bot))
