@@ -33,14 +33,14 @@ class CommandErrorHandler(commands.Cog):
             if cog._get_overridden_method(cog.cog_command_error) is not None:
                 return
 
-        #ignored = (commands.CommandNotFound, )
+        ignored = (commands.CommandNotFound, )
 
         # Anything in ignored will return and prevent anything happening.
-        #if isinstance(error, ignored):
-        #    return
+        if isinstance(error, ignored):
+            return
         
-        if isinstance(error, commands.CommandNotFound):
-            return await ctx.send('pp bot is currently being updated. Join the support server for more information. discord.gg/H7Avd8c')
+        #if isinstance(error, commands.CommandNotFound):
+        #    return await ctx.send('pp bot is currently being updated. Join the support server for more information. discord.gg/H7Avd8c')
         
         if isinstance(error, commands.DisabledCommand):
             await ctx.send(f'{ctx.command} has been disabled.')
