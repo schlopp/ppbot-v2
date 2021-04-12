@@ -16,10 +16,11 @@ class important(commands.Cog):
     @ud.has_pp()
     async def daily(self, ctx):
         async with ctx.typing():
-            embed = await ud.create_embed(ctx)
-            pp = ud.Pp(ctx.author.id)
-            growsize = random.randrange(40, 80) * await pp.multiplier(self.bot)
+            pp = await ud.Pp.fetch(ctx.author.id, self.bot)
+            growsize = random.randrange(40, 80) * pp.multiplier["multiplier"]
             await pp.size_add(growsize)
+            
+            embed = await ud.create_embed(ctx)
             embed.description = f'{ctx.author.mention} received their daily **{growsize} inches!**'
         return await ctx.send(embed=embed)
 

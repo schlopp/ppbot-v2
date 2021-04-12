@@ -9,25 +9,58 @@ with open("./config.toml") as f:
     config = toml.loads(f.read())
 
 class Pp:
-    def __init__(self, user_id:int):
-        self.user_id = user_id
-    
 
-    async def pp_name(self):
+    def __init__(self, user_id=None, **kwargs):
+        self.user_id = user_id or kwargs.get('user_id', None)
+    
+    @classmethod
+    async def fetch(cls, user_id:int, bot:commands.AutoShardedBot=None, get_multiplier:bool=True):
+        """
+        Gets the current PP object data for a given user.
+        """
+
+        conn = await asyncpg.connect(config['admin']['PSQL'])
+        fetched = await conn.fetch('''SELECT * FROM userdata.pp WHERE user_id=$1''', user_id)
+        await conn.close()
+
+        if not fetched:
+            return cls(user_id)
+        
+        self = cls(user_id)
+        self.name = fetched[0]["pp_name"]
+        self.size = fetched[0]["pp_size"]
+        self.default_multiplier = fetched[0]["multiplier"]
+        
+        if get_multiplier and bot:
+            url = f"https://top.gg/api/bots/{bot.user.id}/check"
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, params={"userId": user_id}, headers={"Authorization": config["dbl"]["TOKEN"]}) as r:
+                    self.multiplier = {
+                        "multiplier":fetched[0]["multiplier"], "voted":False}
+                    try:
+                        data = await r.json()                        
+                        if r.status == 200 and data.get("voted", False):
+                            self.multiplier["voted"] = True
+                    except Exception:
+                        pass
+        return self
+    
+    
+    async def get_name(self):
         conn = await asyncpg.connect(config['admin']['PSQL'])
         fetched = await conn.fetch('''SELECT pp_name FROM userdata.pp WHERE user_id = $1''',self.user_id)
         await conn.close()
         return dict(fetched[0])["pp_name"] if fetched else None
     
 
-    async def pp_size(self):
+    async def get_size(self):
         conn = await asyncpg.connect(config['admin']['PSQL'])
         fetched = await conn.fetch('''SELECT pp_size FROM userdata.pp WHERE user_id = $1''',self.user_id)
         await conn.close()
         return dict(fetched[0])["pp_size"] if fetched else None
     
 
-    async def multiplier(self, bot:commands.AutoShardedBot):
+    async def get_multiplier(self, bot:commands.AutoShardedBot):
         conn = await asyncpg.connect(config['admin']['PSQL'])
         fetched = await conn.fetch('''SELECT multiplier FROM userdata.pp WHERE user_id = $1''',self.user_id)
         await conn.close()

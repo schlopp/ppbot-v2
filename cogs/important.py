@@ -35,16 +35,15 @@ class important(commands.Cog):
             if user:
                 if not await ud.Pp(user.id).check():
                     return await ud.handle_exception(ctx,f'{user.mention} doesn\'t have a {ppname}.')
-                user = user
             else:
                 user = ctx.author
-            pp = ud.Pp(user.id)
+                
+            pp = await ud.Pp.fetch(user.id, self.bot)
             inv = ud.Inv(user.id)
-            pp_size,pp_name,multiplier = await pp.pp_size(),await pp.pp_name(),await pp.multiplier(self.bot)
-            embed.title = f"{pp_name} ({user.display_name}'s {ppname})"
+            embed.title = f"{pp.name} ({user.display_name}'s {ppname})"
             
             if await ud.has_sfw_mode(ctx.guild.id):
-                length = pp_size//100
+                length = pp.size//100
                 dog:list = [
                     f'  __  {(" "*length)[:20]}   _',
                     f'o\'\')}}_{("_"*length)[:20]}__//',
@@ -53,12 +52,12 @@ class important(commands.Cog):
                 ]
                 embed.description = "```\n{}```".format("\n".join(dog))
             else:
-                embed.description = f"8{('='*(pp_size//50))[:400] if pp_size else ''}D"
+                embed.description = f"8{('='*(pp.size//50))[:400] if pp.size else ''}D"
                 
-            if await ud.get_user_topgg_vote(self.bot, user.id):
-                embed.add_field(name="Stats", value=f"{pp_size} inches\n~~{multiplier//2}x multiplier~~ **[VOTER REWARD BONUS! {multiplier}x MULTIPLIER](https://top.gg/bot/735147633076863027/vote)**")
+            if pp.multiplier["voted"]:
+                embed.add_field(name="Stats", value=f"{pp.size} inches\n~~{pp.default_multiplier//2}x multiplier~~ **[VOTER REWARD BONUS! {pp.multiplier['multiplier']}x MULTIPLIER](https://top.gg/bot/735147633076863027/vote)**")
             else:
-                embed.add_field(name="Stats", value=f"{pp_size} inches\n{multiplier}x multiplier **[You're currently missing out on a VOTER REWARD BONUS! Vote now to get a {multiplier*2}x multiplier!](https://top.gg/bot/735147633076863027/vote)**")
+                embed.add_field(name="Stats", value=f"{pp.size} inches\n{pp.multiplier['multiplier']}x multiplier **[You're currently missing out on a VOTER REWARD BONUS! Vote now to get a {pp.multiplier['multiplier']*2}x multiplier!](https://top.gg/bot/735147633076863027/vote)**")
             invlist = []
             items = await inv.fetch_all()
             for item, amount in items.items():
@@ -79,7 +78,7 @@ class important(commands.Cog):
             ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
             embed = await ud.create_embed(ctx)
             pp = ud.Pp(ctx.author.id)
-            growsize = random.randrange(1, 5)*await pp.multiplier(self.bot)
+            growsize = random.randrange(1, 5) * await pp.get_multiplier(self.bot)
             await pp.size_add(growsize)
             embed.description = f'{ctx.author.mention}, your {ppname} grew **{growsize} inches!**'
         return await ctx.send(embed=embed)

@@ -15,29 +15,30 @@ class extra(commands.Cog):
     @commands.command(aliases=['hospital'])
     @commands.cooldown(1, 60, commands.BucketType.user)
     @commands.bot_has_permissions(send_messages=True, embed_links=True)
+    @ud.has_pp()
     async def surgery(self, ctx):
-        embed = discord.Embed(colour=discord.Colour(random.choice([0x008000, 0xffa500, 0xffff00])))
-        pp = ud.Pp(ctx.author.id)
-        #no pp
-        if not await pp.check():
-                embed.description = f"{ctx.author.mention}, you need a pp first! Get one using `pp new`!"
+        async with ctx.typing():
+            embed = await ud.create_embed(ctx)
+            pp = await ud.Pp.fetch(ctx.author.id, self.bot)
+            
+            if pp.size < 25 * pp.multiplier['multiplier']:
+                embed.description = f"{ctx.author.mention}, your pp isnt big enough! You need at least **{25 * pp.multiplier['multiplier']} inches** to get surgery!"
                 return await ctx.send(embed=embed)
-        #yes pp
-        if await pp.pp_size() < 25*await pp.multiplier(self.bot):
-            embed.description = f"{ctx.author.mention}, your pp isnt big enough! You need at least **{25*await pp.multiplier(self.bot)} inches** to get surgery!"
-            return await ctx.send(embed=embed)
-        growsize = random.randrange(5, 14)*await pp.multiplier(self.bot)
-        embed.title = "HOSPITAL"
-        embed.description = f"{ctx.author.mention} goes to the hospital for some pp surgery..."
-        if random.randrange(1, 100)>=20:
-            await pp.size_add(growsize)
-            status = "SUCCESSFUL"
-            message = f"The operation was successful! Your pp gained {growsize} inches! It is now {await pp.pp_size()} inches."
-        else:
-            await pp.size_add(-growsize)
-            status = "FAILED"
-            message = f"The operation failed. Your pp snapped and you lost **{growsize} inches.** 😭 It is now {await pp.pp_size()} inches."
-        embed.add_field(name=status, value=message)
+            
+            growsize = random.randrange(5, 14) * pp.multiplier['multiplier']
+            embed.title = "HOSPITAL"
+            embed.description = f"{ctx.author.mention} goes to the hospital for some pp surgery..."
+            
+            if random.randrange(1, 10) > 2: # 20% chance
+                await pp.size_add(growsize)
+                status = "SUCCESSFUL"
+                message = f"The operation was successful! Your pp gained {growsize} inches! It is now {pp.size + growsize} inches."
+            else:
+                await pp.size_add(-growsize)
+                status = "FAILED"
+                message = f"The operation failed. Your pp snapped and you lost **{growsize} inches.** 😭 It is now {pp.size - growsize} inches."
+                
+            embed.add_field(name=status, value=message)
         return await ctx.send(embed=embed)
     
     
@@ -48,8 +49,8 @@ class extra(commands.Cog):
     async def beg(self, ctx):
         async with ctx.typing():
             embed = await ud.create_embed(ctx)
-            pp = ud.Pp(ctx.author.id)
-            #yes pp
+            pp = await ud.Pp.fetch(ctx.author.id, self.bot)
+            
             quote = random.choice([
                 'ew poor',
                 'don\'t touch my pp',
@@ -99,7 +100,7 @@ class extra(commands.Cog):
             }
             responce = random.choice(list(combo.items()))
             if random.randrange(0, 5)!=1:
-                donation_amount = random.randrange(1, 10)*await pp.multiplier(self.bot)
+                donation_amount = random.randrange(1, 10) * pp.multiplier['multiplier']
                 await pp.size_add(donation_amount)
                 embed.description = f'**{responce[0]}** donated {donation_amount} inches to {ctx.author.mention}'
             else:

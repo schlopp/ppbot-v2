@@ -75,8 +75,7 @@ class animals(commands.Cog):
     @ud.has_pp()
     async def meme(self, ctx):
         async with ctx.channel.typing():
-            embed = await ud.create_embed(ctx,include_tip=False)
-            pp = ud.Pp(ctx.author.id)
+            embed = await ud.create_embed(ctx, include_tip=False)
             
             if not await ud.Inv(ctx.author.id).has_item('meme machine'):
                 raise ud.ItemRequired(f"you need a **meme machine** to use this command and become a master of the memes. Check if its for sale at the shop!")
@@ -106,13 +105,12 @@ class animals(commands.Cog):
                 return await ud.handle_exception(ctx,f'{user.mention} doesn\'t have a {ppname}.')
             
             embed = await ud.create_embed(ctx)
-            pp = ud.Pp(ctx.author.id)
-            pp2 = ud.Pp(user.id)
+            pp = await ud.Pp.fetch(ctx.author.id, get_multiplier=False)
+            pp2 = await ud.Pp.fetch(user.id, get_multiplier=False)
             
-            difference = 'bigger' if await pp.pp_size() > await pp2.pp_size() else 'smaller'
-            
+            difference = 'bigger' if pp.size > pp2.size else 'smaller'
             embed.title = f'Your {ppname} is {difference} than **{user.display_name}**\'s'
-            embed.description = f'Your {ppname} is {abs(await pp.pp_size() - await pp2.pp_size())} inches {difference} than **{user.display_name}**\'s'
+            embed.description = f'Your {ppname} is **{abs(pp.size - pp2.size)} inches** {difference} than **{user.display_name}**\'s'
         await ctx.send(embed=embed)
 
 def setup(bot):

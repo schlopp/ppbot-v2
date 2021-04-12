@@ -13,7 +13,7 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_command(self, ctx):
         await ud.runsql('execute','UPDATE userdata.stats SET commands_run = userdata.stats.commands_run + 1')
-        if random.randint(1,200)!=1: # 0.1% chance
+        if random.randint(1,200)!=1: # 0.5% chance
             return
         #event is triggered
         await asyncio.sleep(1)
@@ -37,17 +37,19 @@ class Events(commands.Cog):
             embed.title = 'nobody won lmaoooo'
         else:
             size = random.randint(50,200)
-            first = ud.Pp(await event.first())
-            await first.size_add(size*3)
-            embed.add_field(name='🥇 first place', value=f'{await first.pp_name()} wins {size*3} inches!',inline=False)
+            first = await ud.Pp.fetch(await event.first(), get_multiplier=False)
+            await first.size_add(size * 3)
+            
+            embed.add_field(name='🥇 first place', value=f'{first.name} wins {size * 3} inches!',inline=False)
             if await event.second():
-                second = ud.Pp(await event.second())
-                await second.size_add(size*2)
-                embed.add_field(name='🥈 second place', value=f'{await second.pp_name()} wins {size*2} inches!',inline=False)
+                second = await ud.Pp.fetch(await event.second(), get_multiplier=False)
+                await second.size_add(size* 2)
+                embed.add_field(name='🥈 second place', value=f'{second.name} wins {size * 2} inches!',inline=False)
+                
             if await event.third():
-                third = ud.Pp(await event.third())
+                third = await ud.Pp.fetch(await event.third(), get_multiplier=False)
                 await third.size_add(size)
-                embed.add_field(name='🥉 third place', value=f'{await third.pp_name()} wins {size} inches!',inline=False)
+                embed.add_field(name='🥉 third place', value=f'{third.name} wins {size} inches!',inline=False)
         await ctx.send(embed=embed)
         await eventmsg.delete()
         return await event.delete()

@@ -16,38 +16,37 @@ class gambling(commands.Cog):
     @commands.command(aliases=['bet'])
     @commands.cooldown(1, 2, commands.BucketType.user)
     @commands.bot_has_permissions(send_messages=True, embed_links=True)
+    @ud.has_pp()
     async def gamble(self, ctx, amount):
-        embed = discord.Embed(colour=discord.Colour(random.choice([0x008000, 0xffa500, 0xffff00])))
-        pp = ud.Pp(ctx.author.id)
-        #no pp
-        if not await pp.check():
-                embed.description = f"{ctx.author.mention}, you need a pp first! Get one using `pp new`!"
+        async with ctx.typing():
+            embed = await ud.create_embed(ctx)
+            pp = await ud.Pp.fetch(ctx.author.id, self.bot)
+            
+            amount = pp.size if amount == "all" else int(amount)
+            if pp.size < amount:
+                embed.description = f"{ctx.author.mention}, your pp isnt big enough! You need **{amount} inches** to gamble this amount!"
                 return await ctx.send(embed=embed)
-        #yes pp
-        amount = await pp.pp_size() if amount == "all" else int(amount)
-        if await pp.pp_size() < amount:
-            embed.description = f"{ctx.author.mention}, your pp isnt big enough! You need **{amount} inches** to gamble this amount!"
-            return await ctx.send(embed=embed)
-        maxamount = 100000 if await ud.get_user_topgg_vote(self.bot, ctx.author.id) else 1000
-        if amount > maxamount or amount < 2:
-            embed.description = f"{ctx.author.mention}, you cant gamble that ammount! At most you can gamble **{maxamount//1000}k inches. [VOTERS CAN GAMBLE UP TO 100K!](https://top.gg/bot/735147633076863027)**"
-            return await ctx.send(embed=embed)
-        
-        botroll = random.randint(1,12)
-        humanroll = random.randint(1, 12)
-        
-        if botroll == humanroll:
-            outcome = "draw!"
-        elif botroll > humanroll:
-            outcome = f"You lose {amount} inches."
-            await pp.size_add(-amount)
-        else:
-            outcome = f"You win {amount} inches!"
-            await pp.size_add(amount)
-        embed.title = f"{ctx.author.display_name} decides to gamble {amount} inches"
-        embed.description = f"{outcome}\n\nYou now have {await pp.pp_size()}."
-        embed.add_field(name=f"{ctx.author.display_name}", value=f"Landed on `{humanroll}`")
-        embed.add_field(name=f"pp bot", value=f"Landed on `{botroll}`")
+            maxamount = 10 ** 5 if pp.multiplier["voted"] else 10 ** 3
+            if amount > maxamount or amount < 2:
+                embed.description = f"{ctx.author.mention}, you cant gamble that ammount! At most you can gamble **{maxamount // 10 ** 3}k inches. [VOTERS CAN GAMBLE UP TO 100K!](https://top.gg/bot/735147633076863027)**"
+                return await ctx.send(embed=embed)
+            
+            botroll = random.randint(1,12)
+            humanroll = random.randint(1, 12)
+            
+            if botroll == humanroll:
+                outcome = "draw!"
+            elif botroll > humanroll:
+                outcome = f"You lose {amount} inches."
+                await pp.size_add(-amount)
+            else:
+                outcome = f"You win {amount} inches!"
+                await pp.size_add(amount)
+                
+            embed.title = f"{ctx.author.display_name} decides to gamble {amount} inches"
+            embed.description = f"{outcome}\n\nYou now have {await pp.get_size()}."
+            embed.add_field(name=f"{ctx.author.display_name}", value=f"Landed on `{humanroll}`")
+            embed.add_field(name=f"pp bot", value=f"Landed on `{botroll}`")
         await ctx.send(embed=embed)
 
 
