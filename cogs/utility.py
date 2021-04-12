@@ -58,21 +58,21 @@ class important(commands.Cog):
                     if ctx.guild:
                         member = ctx.guild.get_member(i["user_id"]) if ctx.guild else None
                         embed.add_field(name=f'{position}. {f" ({member.display_name})" if member else ""}',value=f'{i["pp_size"]} inches',inline=False)
-                    position+=1
+                    position += 1
             else:
                 position = 1
                 for i in fetched[:10]:
                     if ctx.guild:
                         member = ctx.guild.get_member(i["user_id"]) if ctx.guild else None
                         embed.add_field(name=f'{position}. {i["pp_name"]}{f" ({member.display_name})" if member else ""}',value=f'{i["pp_size"]} inches',inline=False)
-                    position+=1
+                    position += 1
             try:
-                position = [i["user_id"] for i in fetched].index(pp.user_id)+1
+                position = [i["user_id"] for i in fetched].index(pp.user_id ) + 1
                 if position == 1:
                     lead = f"in first place!"
                 else:
                     front = [i["user_id"] for i in fetched].index(pp.user_id)
-                    difference = fetched[front-1]["pp_size"]-fetched[position-1]["pp_size"]
+                    difference = fetched[front - 1]["pp_size"] - fetched[position - 1]["pp_size"]
                     lead = f"{difference} inches behind {front}."
                 embed.set_footer(text=f'{user.display_name if user.id != ctx.author.id else "Your"} position on the leaderboard: {position}. {lead}')
             except ValueError:

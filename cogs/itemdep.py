@@ -19,25 +19,27 @@ class fishing(commands.Cog):
     @commands.bot_has_permissions(send_messages=True, embed_links=True)
     @ud.has_pp()
     async def fish(self, ctx):
-        embed = await ud.create_embed(ctx)
-        pp = ud.Pp(ctx.author.id)
-        inv = ud.Inv(ctx.author.id)
-        
-        if not await inv.has_item('fishing rod'):
-            raise ud.ItemRequired(f"you need a **fishing rod** to use this command and become a master of the memes. Check if its for sale at the shop!")
-        
-        random_number = random.randrange(1, 20)
-        if random_number == 1:
-            await inv.new_item("fishing rod", -1)
-            embed.description = f"{ctx.author.mention} flung their fishing rod too hard and it broke lmaoo"
-            return await ctx.send(embed=embed)
-        if random_number == 2:
-            embed.description = f"{ctx.author.mention} went fishing and caught nothing."
-            return await ctx.send(embed=embed)
-        fish_amount = random_number*await pp.multiplier(self.bot)
-        await pp.size_add(fish_amount)
-        quote = random.choice(['Pretty cool huh?','Nice!','Epic!'])
-        embed.description = f"{ctx.author.mention} went fishing and caught **{fish_amount} inches!** {quote}"
+        async with ctx.typing():
+            embed = await ud.create_embed(ctx)
+            pp = ud.Pp(ctx.author.id)
+            inv = ud.Inv(ctx.author.id)
+            
+            if not await inv.has_item('fishing rod'):
+                raise ud.ItemRequired(f"you need a **fishing rod** to use this command and become a master of the memes. Check if its for sale at the shop!")
+            
+            random_number = random.randrange(1, 20)
+            if random_number == 1:
+                await inv.new_item("fishing rod", -1)
+                embed.description = f"{ctx.author.mention} flung their fishing rod too hard and it broke lmaoo"
+                return await ctx.send(embed=embed)
+            if random_number == 2:
+                embed.description = f"{ctx.author.mention} went fishing and caught nothing."
+                return await ctx.send(embed=embed)
+            
+            fish_amount = random_number * await pp.get_multiplier(self.bot)
+            await pp.size_add(fish_amount)
+            quote = random.choice(['Pretty cool huh?','Nice!','Epic!'])
+            embed.description = f"{ctx.author.mention} went fishing and caught **{fish_amount} inches!** {quote}"
         return await ctx.send(embed=embed)
     
     @commands.command()
@@ -46,7 +48,7 @@ class fishing(commands.Cog):
     @ud.has_pp()
     async def hunt(self, ctx):
         embed = await ud.create_embed(ctx)
-        pp = ud.Pp(ctx.author.id)
+        pp = await ud.Pp.fetch(ctx.author.id, self.bot)
         inv = ud.Inv(ctx.author.id)
         
         if not await inv.has_item('rifle'):
@@ -65,10 +67,10 @@ class fishing(commands.Cog):
         
         if random_number <= 45:
             options = {
-                'shot a homeless man': random.randint(1,20)*await pp.multiplier(self.bot),
-                'deadass just killed a man': random.randint(5,20)*await pp.multiplier(self.bot),
-                'shot up a walmart': random.randint(10,30)*await pp.multiplier(self.bot),
-                'hijacked a fucking orphanage and sold all the kids': random.randint(30,50)*await pp.multiplier(self.bot)
+                'shot a homeless man': random.randint(1,20) * pp.multiplier["multiplier"],
+                'deadass just killed a man': random.randint(5,20) * pp.multiplier["multiplier"],
+                'shot up a walmart': random.randint(10,30) * pp.multiplier["multiplier"],
+                'hijacked a fucking orphanage and sold all the kids': random.randint(30,50) * pp.multiplier["multiplier"],
                 }
             choice = random.choice(list(options.items()))
             await pp.size_add(choice[1])
@@ -91,7 +93,7 @@ class fishing(commands.Cog):
                 
             except asyncio.TimeoutError:
                 random_number = random.randint(1,50)
-                currentsize = await pp.pp_size()
+                currentsize = pp.size
                 
                 if currentsize > 50:
                     await pp.size_add(-random_number)
