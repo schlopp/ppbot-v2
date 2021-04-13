@@ -49,6 +49,10 @@ class shop(commands.Cog):
         item = ud.Shop.Item(item.lower())
         shop = ud.Shop()
         
+        if item.item_name.lower() not in [i.item_name.lower() for i in await shop.items()]:
+            embed.description = f'{ctx.author.mention}, **`"{item.item_name}"`** is not something for sale at the moment. Check out `pp shop` to see what\'s currently available'
+            return await ctx.send(embed=embed)
+                                
         if amount == 'max':
             amount = pp.size // await item.price(self.bot, pp)
         try:
@@ -58,11 +62,7 @@ class shop(commands.Cog):
         if amount < 1:
             embed.description = f'{ctx.author.mention}, you can\'t buy less than 1 of an item?????'
             return await ctx.send(embed=embed)
-        #no item
-        if item.item_name.lower() not in [i.item_name.lower() for i in await shop.items()]:
-            embed.description = f'{ctx.author.mention}, **`"{item.item_name}"`** is not something for sale at the moment. Check out `pp shop` to see what\'s currently available'
-            return await ctx.send(embed=embed)
-        #yes item
+                                
         #broke boi
         if pp.size < amount * await item.price(self.bot, pp):
             embed.description = f"{ctx.author.mention}, your pp isnt big enough! You need **{await item.price(self.bot, pp) * amount - pp.size} more inches** to buy this item! Type `pp grow` to grow your pp."
