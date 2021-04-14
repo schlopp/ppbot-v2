@@ -55,7 +55,7 @@ class important(commands.Cog):
                 embed.description = f"8{('='*(pp.size//50))[:400] if pp.size else ''}D"
                 
             if pp.multiplier["voted"]:
-                embed.add_field(name="Stats", value=f"{pp.size} inches\n~~{pp.default_multiplier//2}x multiplier~~ **[VOTER REWARD BONUS! {pp.multiplier['multiplier']}x MULTIPLIER](https://top.gg/bot/735147633076863027/vote)**")
+                embed.add_field(name="Stats", value=f"{pp.size} inches\n~~{pp.default_multiplier}x multiplier~~ **[VOTER REWARD BONUS! {pp.multiplier['multiplier']}x MULTIPLIER](https://top.gg/bot/735147633076863027/vote)**")
             else:
                 embed.add_field(name="Stats", value=f"{pp.size} inches\n{pp.multiplier['multiplier']}x multiplier **[You're currently missing out on a VOTER REWARD BONUS! Vote now to get a {pp.multiplier['multiplier']*2}x multiplier!](https://top.gg/bot/735147633076863027/vote)**")
             invlist = []

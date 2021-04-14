@@ -36,11 +36,16 @@ class Pp:
             async with aiohttp.ClientSession() as session:
                 async with session.get(url, params={"userId": user_id}, headers={"Authorization": config["dbl"]["TOKEN"]}) as r:
                     self.multiplier = {
-                        "multiplier":fetched[0]["multiplier"], "voted":False}
+                        "multiplier":fetched[0]["multiplier"],
+                        "voted":False,
+                        }
                     try:
                         data = await r.json()                        
                         if r.status == 200 and data.get("voted", False):
-                            self.multiplier["voted"] = True
+                            self.multiplier = {
+                                "multiplier":fetched[0]["multiplier"] * 2,
+                                "voted":True,
+                                }
                     except Exception:
                         pass
         return self
