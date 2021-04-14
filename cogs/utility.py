@@ -103,6 +103,38 @@ class important(commands.Cog):
             embed.title = f'{ctx.author.display_name}\'s {thing} percentage'
             embed.description = f'**{random.randint(0,100)}%** {thing}'
         await ctx.send(embed=embed)
+    
+    
+    @commands.command()
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
+    @ud.has_pp()
+    async def donate(self, ctx, user:discord.Member, amount):
+        async with ctx.typing():
+            ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
+            embed = await ud.create_embed(ctx)
+            pp = await ud.Pp.fetch(ctx.author.id, self.bot)
+            pp2 = await ud.Pp.fetch(ctx.author.id, self.bot)
+            amount = pp.size if amount == "all" else int(amount)
+            
+            if pp.size < amount:
+                return await ud.handle_exception(ctx,f"your pp isnt big enough! You need **{amount} inches** to donate this amount!")
+                                 
+            maxamount = 10 ** 4 if pp.multiplier["voted"] else 10 ** 3
+                                 
+            if amount > maxamount or amount < 2:
+                return await ud.handle_exception(ctx,f"you cant donate that ammount! At most you can donate **{maxamount // 10 ** 3}k inches. [VOTERS CAN GAMBLE UP TO 10K!](https://top.gg/bot/735147633076863027)**")
+                                 
+            if user == ctx.author:
+                return await ud.handle_exception(ctx,'That\'s some tax evasion type shit')
+            
+            if not await ud.Pp(user.id).check():
+                return await ud.handle_exception(ctx,f'{user.mention} doesn\'t have a {ppname}.')
+            
+            
+            embed.title = f'Donation completed! {amount} given.'
+            embed.description = f'Your {ppname} is now **{pp.size - amount} inches.** **{user.display_name}**\'s {ppname} is now **{pp2.size + amount} inches!**'
+        await ctx.send(embed=embed)
+
 
 
 def setup(bot):
