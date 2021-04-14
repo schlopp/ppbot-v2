@@ -107,6 +107,7 @@ class important(commands.Cog):
     
     @commands.command()
     @commands.bot_has_permissions(send_messages=True, embed_links=True)
+    @commands.cooldown(1, 60*15, commands.BucketType.user)
     @ud.has_pp()
     async def donate(self, ctx, user:discord.Member, amount):
         async with ctx.typing():
