@@ -130,7 +130,9 @@ class important(commands.Cog):
             if not await ud.Pp(user.id).check():
                 return await ud.handle_exception(ctx,f'{user.mention} doesn\'t have a {ppname}.')
             
-            
+            await pp.size_add(-amount)
+            await pp2.size_add(amount)
+                                 
             embed.title = f'Donation completed! {amount} given.'
             embed.description = f'Your {ppname} is now **{pp.size - amount} inches.** **{user.display_name}**\'s {ppname} is now **{pp2.size + amount} inches!**'
         await ctx.send(embed=embed)
