@@ -122,7 +122,7 @@ class important(commands.Cog):
             maxamount = 10 ** 4 if pp.multiplier["voted"] else 10 ** 3
                                  
             if amount > maxamount or amount < 2:
-                return await ud.handle_exception(ctx,f"you cant donate that ammount! At most you can donate **{maxamount // 10 ** 3}k inches. [VOTERS CAN GAMBLE UP TO 10K!](https://top.gg/bot/735147633076863027)**")
+                return await ud.handle_exception(ctx,f"you cant donate that ammount! At most you can donate **{maxamount // 10 ** 3}k inches. [VOTERS CAN DONATE UP TO 10K!](https://top.gg/bot/735147633076863027)**")
                                  
             if user == ctx.author:
                 return await ud.handle_exception(ctx,'That\'s some tax evasion type shit')
