@@ -100,7 +100,7 @@ class fishing(commands.Cog):
                     embed.description = f"**Too slow!** The police officer shoots you and takes **{random_number} inches** from your corpse. The correct word was `{choice[1]}`"
                     
                 else:
-                    embed.description = f"**Too slow!** The police officer shoots you and realises your pp is so small it's not even worth taking. The correct word was `{choice[1}`"
+                    embed.description = f"**Too slow!** The police officer shoots you and realises your pp is so small it's not even worth taking. The correct word was `{choice[1]}`"
                 return await ctx.send(embed=embed)
             
             if random_number < 30:
