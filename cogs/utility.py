@@ -113,7 +113,7 @@ class important(commands.Cog):
             ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
             embed = await ud.create_embed(ctx)
             pp = await ud.Pp.fetch(ctx.author.id, self.bot)
-            pp2 = await ud.Pp.fetch(ctx.author.id, self.bot)
+            pp2 = await ud.Pp.fetch(user.id, self.bot)
             amount = pp.size if amount == "all" else int(amount)
             
             if pp.size < amount:
