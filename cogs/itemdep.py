@@ -27,7 +27,7 @@ class fishing(commands.Cog):
             if not await inv.has_item('fishing rod'):
                 raise ud.ItemRequired(f"you need a **fishing rod** to use this command and become a master of the memes. Check if its for sale at the shop!")
             
-            random_number = random.randrange(1, 20)
+            random_number = random.randint(1, 40)
             if random_number == 1:
                 await inv.new_item("fishing rod", -1)
                 embed.description = f"{ctx.author.mention} flung their fishing rod too hard and it broke lmaoo"
@@ -36,7 +36,7 @@ class fishing(commands.Cog):
                 embed.description = f"{ctx.author.mention} went fishing and caught nothing."
                 return await ctx.send(embed=embed)
             
-            fish_amount = random_number * await pp.get_multiplier(self.bot)
+            fish_amount = random_number // 2 * await pp.get_multiplier(self.bot)
             await pp.size_add(fish_amount)
             quote = random.choice(['Pretty cool huh?','Nice!','Epic!'])
             embed.description = f"{ctx.author.mention} went fishing and caught **{fish_amount} inches!** {quote}"
