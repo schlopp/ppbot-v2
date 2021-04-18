@@ -55,16 +55,20 @@ class important(commands.Cog):
                 embed.description = f'This server is on SFW mode. Showing the names of the top 10 {ppname}s is disabled.'
                 position = 1
                 for i in fetched[:10]:
-                    if ctx.guild:
-                        member = ctx.guild.get_member(i["user_id"]) if ctx.guild else None
-                        embed.add_field(name=f'{position}. {f" ({member.display_name})" if member else ""}',value=f'{i["pp_size"]} inches',inline=False)
+                    member = ctx.guild.get_member(i["user_id"])
+                    embed.add_field(
+                        name=f'{position}. {f" ({member.display_name})" if member else ""}',
+                        value=f'{ud.human_format(i["pp_size"])} inches',inline=False,
+                        )
                     position += 1
             else:
                 position = 1
                 for i in fetched[:10]:
-                    if ctx.guild:
-                        member = ctx.guild.get_member(i["user_id"]) if ctx.guild else None
-                        embed.add_field(name=f'{position}. {i["pp_name"]}{f" ({member.display_name})" if member else ""}',value=f'{i["pp_size"]} inches',inline=False)
+                    member = ctx.guild.get_member(i["user_id"]) if ctx.guild else None
+                    embed.add_field(
+                        name=f'{position}. {i["pp_name"]}{f" ({member.display_name})" if member else ""}',
+                        value=f'{ud.human_format(i["pp_size"])}  inches',inline=False,
+                        )
                     position += 1
             try:
                 position = [i["user_id"] for i in fetched].index(pp.user_id ) + 1
@@ -119,12 +123,12 @@ class important(commands.Cog):
             
             if pp.size < amount:
                 return await ud.handle_exception(ctx,f"your pp isnt big enough! You need **{amount} inches** to donate this amount!")
-                                 
+
             maxamount = 10 ** 4 if pp.multiplier["voted"] else 10 ** 3
-                                 
+
             if amount > maxamount or amount < 2:
                 return await ud.handle_exception(ctx,f"you cant donate that ammount! At most you can donate **{maxamount // 10 ** 3}k inches. [VOTERS CAN DONATE UP TO 10K!](https://top.gg/bot/735147633076863027)**")
-                                 
+
             if user == ctx.author:
                 return await ud.handle_exception(ctx,'That\'s some tax evasion type shit')
             
@@ -133,7 +137,7 @@ class important(commands.Cog):
             
             await pp.size_add(-amount)
             await pp2.size_add(amount)
-                                 
+
             embed.title = f'Donation completed! {amount} given.'
             embed.description = f'Your {ppname} is now **{pp.size - amount} inches.** **{user.display_name}**\'s {ppname} is now **{pp2.size + amount} inches!**'
         await ctx.send(embed=embed)

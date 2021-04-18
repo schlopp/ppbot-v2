@@ -76,7 +76,7 @@ class Shop:
             conn = await asyncpg.connect(config['admin']['PSQL'])
             fetched = await conn.fetch('''SELECT multiplierDependent FROM userdata.shopItems WHERE item_name = $1''',self.item_name)
             await conn.close()
-            return await self.default_price()*await pp.get_multiplier(bot) if dict(fetched[0])["multiplierdependent"] else await self.default_price()
+            return int(await self.default_price() * await pp.get_multiplier(bot) ** 2) if dict(fetched[0])["multiplierdependent"] else await self.default_price()
         
         
         async def add(self,item_type:str,item_desc:str,default_price:int,multiplierDependant:bool=False):
