@@ -5,7 +5,7 @@ import userdata as ud
 import asyncio
 
 
-class important(commands.Cog):
+class Owner(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
@@ -92,4 +92,4 @@ class important(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(important(bot))
+    bot.add_cog(Owner(bot))

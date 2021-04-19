@@ -7,11 +7,22 @@ import asyncio
 from importlib import reload
 
 #prefixes
-bot = commands.AutoShardedBot(command_prefix=[
-    'pp ',
-    'Pp ',
-    'PP ',
-],case_insensitive=True,owner_ids=[393305855929483264,724967330064629830,])
+intents = discord.Intents.default()
+intents.reactions = True
+bot = commands.AutoShardedBot(
+    command_prefix=[
+        'pp ',
+        'Pp ',
+        'PP ',
+        ],
+    case_insensitive = True,
+    owner_ids = [
+        393305855929483264,
+        724967330064629830,
+        ],
+    intents = intents
+    )
+
 bot.load_extension('jishaku')
 bot.remove_command('help')
 for filename in os.listdir("./cogs"):
