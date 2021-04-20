@@ -15,6 +15,7 @@ class important(commands.Cog):
 
     @commands.command(aliases=['start', 'create', 'make'])
     @commands.bot_has_permissions(send_messages=True, embed_links=True)
+    @commands.cooldown(1, 10, commands.BucketType.user)
     @ud.has_no_pp()
     async def new(self, ctx):
         async with ctx.typing():
@@ -27,28 +28,31 @@ class important(commands.Cog):
 
     @commands.command(aliases=['display', 'view', 'inv', 'inventory', 'level', 'stats'])
     @commands.bot_has_permissions(send_messages=True, embed_links=True)
+    @commands.cooldown(1, 10, commands.BucketType.user)
     @ud.has_pp()
     async def show(self, ctx, user:discord.Member=None):
         async with ctx.typing():
             ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
             embed = await ud.create_embed(ctx, include_tip=False)
+            
             if user:
-                if not await ud.Pp(user.id).check():
+                pp = await ud.Pp.fetch(user.id, self.bot)
+                if not pp:
                     return await ud.handle_exception(ctx,f'{user.mention} doesn\'t have a {ppname}.')
             else:
                 user = ctx.author
+                pp = await ud.Pp.fetch(user.id, self.bot)
                 
-            pp = await ud.Pp.fetch(user.id, self.bot)
             inv = ud.Inv(user.id)
             embed.title = f"{pp.name} ({user.display_name}'s {ppname})"
             
             if await ud.has_sfw_mode(ctx.guild.id):
-                length = pp.size//100
+                length = pp.size // 100
                 dog:list = [
-                    f'  __  {(" "*length)[:20]}   _',
-                    f'o\'\')}}_{("_"*length)[:20]}__//',
-                    f' ` _/ {(" "*length)[:20]}   )',
-                    f' (_(_/{("-"*length)[:20]}(_/',
+                    f'  __  {(" " * length)[:20]}   _',
+                    f'o\'\')}}_{("_" * length)[:20]}__//',
+                    f' ` _/ {(" " * length)[:20]}   )',
+                    f' (_(_/{("-" * length)[:20]}(_/',
                 ]
                 embed.description = "```\n{}```".format("\n".join(dog))
             else:
@@ -77,10 +81,11 @@ class important(commands.Cog):
         async with ctx.typing():
             ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
             embed = await ud.create_embed(ctx)
-            pp = ud.Pp(ctx.author.id)
-            growsize = random.randrange(1, 5) * await pp.get_multiplier(self.bot)
-            await pp.size_add(growsize)
+            pp = await ud.Pp.fetch(ctx.author.id, self.bot)
+            growsize = random.randrange(1, 5) * pp.multiplier["multiplier"]
+            pp.size += growsize
             embed.description = f'{ctx.author.mention}, your {ppname} grew **{growsize} inches!**'
+            await pp.update()
         return await ctx.send(embed=embed)
 
 
@@ -92,20 +97,22 @@ class important(commands.Cog):
         async with ctx.typing():
             ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
             embed = await ud.create_embed(ctx)
-            pp = ud.Pp(ctx.author.id)
+            pp = await ud.Pp.fetch(ctx.author.id)
             embed.description = f"What will your {ppname}'s new name be?"
         await ctx.send(embed=embed)
         check = lambda m: m.author == ctx.author
         try:
             x = await self.bot.wait_for('message', timeout=45.0, check=check)
-            async with ctx.typing():
-                newname = x.content
-                if len(newname) > 32:
-                    embed.description = f"{ctx.author.mention}, that name is too big! (32 characters max)"
-                    return await ctx.send(embed=embed)
-                await pp.rename(newname)
-                embed.description = f"{ctx.author.mention}, your {ppname}'s name is now **{newname}**"
-            return await ctx.send(embed=embed)
+            if x:
+                async with ctx.typing():
+                    newname = x.content
+                    if len(newname) > 32:
+                        embed.description = f"{ctx.author.mention}, that name is too big! (32 characters max)"
+                        return await ctx.send(embed=embed)
+                    pp.name = newname
+                    await pp.update()
+                    embed.description = f"{ctx.author.mention}, your {ppname}'s name is now **{newname}**"
+                return await ctx.send(embed=embed)
         except asyncio.TimeoutError:
             async with ctx.typing():
                 return await ctx.send(f"{ctx.author.mention}, time's up for changing name! Type faster next time")

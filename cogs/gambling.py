@@ -37,16 +37,17 @@ class gambling(commands.Cog):
             if botroll == humanroll:
                 outcome = "draw!"
             elif botroll > humanroll:
-                outcome = f"You lose {amount} inches."
-                await pp.size_add(-amount)
+                outcome = f"You lose **{amount} inches.**"
+                pp.size -= amount
             else:
-                outcome = f"You win {amount} inches!"
-                await pp.size_add(amount)
+                outcome = f"You win **{amount} inches!**"
+                pp.size += amount
                 
             embed.title = f"{ctx.author.display_name} decides to gamble {amount} inches"
-            embed.description = f"{outcome}\n\nYou now have {await pp.get_size()}."
+            embed.description = f"{outcome}\n\nYou now have {pp.size} inches."
             embed.add_field(name=f"{ctx.author.display_name}", value=f"Landed on `{humanroll}`")
             embed.add_field(name=f"pp bot", value=f"Landed on `{botroll}`")
+            await pp.update()
         await ctx.send(embed=embed)
 
 

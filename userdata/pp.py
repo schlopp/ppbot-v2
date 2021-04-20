@@ -13,6 +13,11 @@ class Pp:
     def __init__(self, user_id=None, **kwargs):
         self.user_id = user_id
     
+    def __bool__(self):
+        if hasattr(self, 'size'):
+            return True
+        return False
+    
     @classmethod
     async def fetch(cls, user_id:int, bot:commands.AutoShardedBot=None, get_multiplier:bool=True):
         """
@@ -96,15 +101,15 @@ class Pp:
     
 
     async def create(self):
-        async with await asyncpg.connect(config['admin']['PSQL']) as conn:
-            await conn.execute('''
-                INSERT INTO userdata.pp(user_id, pp_name, pp_size, multiplier) VALUES($1, "Unnamed Pp", 0, 1)
-                ON CONFLICT (user_id) DO NOTHING;''', self.user_id)
+        conn = await asyncpg.connect(config['admin']['PSQL'])
+        await conn.execute('''INSERT INTO userdata.pp(user_id, pp_name, pp_size, multiplier) VALUES($1, 'Unnamed Pp', 0, 1)
+            ON CONFLICT (user_id) DO NOTHING;''', self.user_id)
+        await conn.close()
     
     async def delete(self):
-        async with await asyncpg.connect(config['admin']['PSQL']) as conn:
-            await conn.execute('''
-                DELETE FROM userdata.pp WHERE user_id = $1;''', self.user_id)
+        conn = await asyncpg.connect(config['admin']['PSQL'])
+        await conn.execute('''DELETE FROM userdata.pp WHERE user_id = $1;''', self.user_id)
+        await conn.close()
     
     #async def size_add(self, amount:int):
     #    async with await asyncpg.connect(config['admin']['PSQL']) as conn:
@@ -119,5 +124,6 @@ class Pp:
     #        await conn.execute('''UPDATE userdata.pp SET pp_name = $2 WHERE userdata.pp.user_id = $1;''', self.user_id, pp_name)
     
     async def update(self):
-        async with await asyncpg.connect(config['admin']['PSQL']) as conn:
-            await conn.execute('''UPDATE userdata.pp SET pp_name = $1, pp_size = $2, multiplier = $3 WHERE user_id = $4''', self.name, self.size, self.default_multiplier, self.user_id)
+        conn = await asyncpg.connect(config['admin']['PSQL'])
+        await conn.execute('''UPDATE userdata.pp SET pp_name = $1, pp_size = $2, multiplier = $3 WHERE user_id = $4''', self.name, self.size, self.default_multiplier, self.user_id)
+        await conn.close()

@@ -18,8 +18,9 @@ class important(commands.Cog):
         async with ctx.typing():
             pp = await ud.Pp.fetch(ctx.author.id, self.bot)
             growsize = random.randrange(40, 80) * pp.multiplier["multiplier"]
-            await pp.size_add(growsize)
+            pp.size += growsize
             
+            await pp.update()
             embed = await ud.create_embed(ctx)
             embed.description = f'{ctx.author.mention} received their daily **{growsize} inches!**'
         return await ctx.send(embed=embed)

@@ -30,10 +30,11 @@ class Owner(commands.Cog):
     async def db_update(self, ctx, user:discord.User, choice:str, *, arg1):
         async with ctx.typing():
             await asyncio.sleep(.1)
-        pp = ud.Pp(user.id)
+        pp = ud.Pp.fetch(user.id)
         if choice == 'size':
-            await pp.size_add(int(arg1))
+            pp.size += int(arg1)
         elif choice == 'multiplier':
+            pp.default += int(arg1)
             await pp.multiplier_add(int(arg1))
         elif choice == 'name':
             await pp.rename(str(arg1))

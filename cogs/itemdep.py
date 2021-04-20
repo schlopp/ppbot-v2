@@ -21,11 +21,11 @@ class fishing(commands.Cog):
     async def fish(self, ctx):
         async with ctx.typing():
             embed = await ud.create_embed(ctx)
-            pp = ud.Pp(ctx.author.id)
+            pp = await ud.Pp.fetch(ctx.author.id, self.bot)
             inv = ud.Inv(ctx.author.id)
             
             if not await inv.has_item('fishing rod'):
-                raise ud.ItemRequired(f"you need a **fishing rod** to use this command and become a master of the memes. Check if its for sale at the shop!")
+                raise ud.ItemRequired(f"How are you planning on fishing without a **fishing rod**? You need that item to use this command. Check if its for sale at the shop!")
             
             random_number = random.randint(1, 40)
             if random_number == 1:
@@ -36,8 +36,9 @@ class fishing(commands.Cog):
                 embed.description = f"{ctx.author.mention} went fishing and caught nothing."
                 return await ctx.send(embed=embed)
             
-            fish_amount = random_number // 2 * await pp.get_multiplier(self.bot)
-            await pp.size_add(fish_amount)
+            fish_amount = random_number // 2 * pp.multiplier["multiplier"]
+            pp.size += fish_amount
+            await pp.update()
             quote = random.choice(['Pretty cool huh?','Nice!','Epic!'])
             embed.description = f"{ctx.author.mention} went fishing and caught **{fish_amount} inches!** {quote}"
         return await ctx.send(embed=embed)
@@ -73,7 +74,8 @@ class fishing(commands.Cog):
                 'hijacked a fucking orphanage and sold all the kids': random.randint(30,50) * pp.multiplier["multiplier"],
                 }
             choice = random.choice(list(options.items()))
-            await pp.size_add(choice[1])
+            pp.size += choice[1]
+            await pp.update()
             embed.description = f"{ctx.author.mention} {choice[0]} for **{choice[1]} inches!**"
             return await ctx.send(embed=embed)
         
@@ -92,11 +94,11 @@ class fishing(commands.Cog):
                 await self.bot.wait_for('message',timeout=20.0,check=lambda m: m.content.upper() == choice[1] and m.author == ctx.author and m.channel == ctx.channel)
                 
             except asyncio.TimeoutError:
-                random_number = random.randint(1,50)
-                currentsize = pp.size
+                random_number = random.randint(1,50) * pp.multiplier["multiplier"]
                 
-                if currentsize > 50:
-                    await pp.size_add(-random_number)
+                if pp.size > 50 * pp.multiplier["multiplier"]:
+                    pp.size -= random_number
+                    await pp.update()
                     embed.description = f"**Too slow!** The police officer shoots you and takes **{random_number} inches** from your corpse. The correct word was `{choice[1]}`"
                     
                 else:
@@ -111,13 +113,14 @@ class fishing(commands.Cog):
                     ]
                 choice = random.choice(options)
                 await inv.new_item(choice)
-                await pp.size_add(random_number)
+                pp.size += random_number
+                await pp.update()
                 embed.description = f"You avoid the bullet and loot the police officer. You find **{random_number} inches** and **1 {choice}!**"
                 
             else:
-                await pp.size_add(random_number)
+                pp.size += random_number
+                await pp.update()
                 embed.description = f"You avoid the bullet and loot the police officer. You find **{random_number} inches!**"
-                
             await ctx.send(embed=embed)
 
 

@@ -113,14 +113,14 @@ class ItemRequired(commands.CheckFailure):
 
 def has_pp() -> bool:
     async def predicate(ctx:commands.Context):
-        if await Pp(ctx.author.id).check():
+        if await Pp.fetch(ctx.author.id, get_multiplier=False):
             return True
         raise HasNoPP(f"you need a pp first! Get one using `pp new`!")
     return commands.check(predicate) 
 
 def has_no_pp() -> bool:
     async def predicate(ctx:commands.Context):
-        if not await Pp(ctx.author.id).check():
+        if not await Pp.fetch(ctx.author.id, get_multiplier=False):
             return True
         raise HasPP(f"you already have a pp, so you can't use this command.")
     return commands.check(predicate)

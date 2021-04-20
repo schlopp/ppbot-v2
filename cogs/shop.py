@@ -20,7 +20,7 @@ class shop(commands.Cog):
     async def shop(self, ctx, page:int=1):
         async with ctx.typing():
             embed = await ud.create_embed(ctx)
-            pp = ud.Pp(ctx.author.id)
+            pp = await ud.Pp.fetch(ctx.author.id, self.bot)
             shop = ud.Shop()
             shopitems = await shop.items()
             totalpages = len(shopitems) // 5 + (len(shopitems) % 5 > 0)
@@ -31,7 +31,7 @@ class shop(commands.Cog):
                 return await ctx.send(embed=embed)
             #page good
             embed.title = "shop"
-            embed.description = f'In the shop you can buy items with inches. You currently have **{await pp.get_size()}** inches.\n Type `pp buy <amount> <item>` to buy an item. Prices of items may change depending on how many you\'ve bought'
+            embed.description = f'In the shop you can buy items with inches. You currently have **{pp.size}** inches.\n Type `pp buy <amount> <item>` to buy an item. Prices of items may change depending on how many you\'ve bought'
             for i in shopitems[page * 5 - 5:page * 5]:
                 embed.add_field(name=f'**{i.item_name}** ─ __{await i.price(self.bot, pp)} inches__ ─ `{await i.item_type()}`',value=f'{await i.item_desc()}{" | The price of this item depends on your current multiplier" if await i.multiplierdependent() else ""}',inline=False)
             embed.set_footer(text=f'page {page}/{totalpages}')
@@ -68,14 +68,15 @@ class shop(commands.Cog):
             embed.description = f"{ctx.author.mention}, your pp isnt big enough! You need **{await item.price(self.bot, pp) * amount - pp.size} more inches** to buy this item! Type `pp grow` to grow your pp."
             return await ctx.send(embed=embed)
         #rich boi
+        pp.size += -amount * await item.price(self.bot, pp)
         if await item.item_type() == "MULTIPLIER":
-            await pp.size_add(-amount * await item.price(self.bot, pp))
-            await pp.multiplier_add(amount * await item.gain())
-            embed.description = f"*{ctx.author.mention} takes the **{amount} pills** and feels a strong power going thru their body. They now have a {await pp.get_multiplier(self.bot)} multiplier.*"
+            pp.default_multiplier = amount * await item.gain()
+            await pp.update()
+            embed.description = f"*{ctx.author.mention} takes the **{amount} {item.item_name}** and feels a strong power going through their body. Their multiplier has exapnded!"
             return await ctx.send(embed=embed)
         
         if await item.item_type() in ["TOOL","ITEM"]:
-            await pp.size_add(-amount * await item.price(self.bot, pp))
+            await pp.update()
             await inv.new_item(item.item_name, amount)
             embed.description = f"{ctx.author.mention}, you now have {f'**{amount}**' if amount>1 else 'a'} new **{item.item_name+'s' if amount>1 else item.item_name}!**"
             return await ctx.send(embed=embed)

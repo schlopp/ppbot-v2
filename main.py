@@ -11,9 +11,10 @@ intents = discord.Intents.default()
 intents.reactions = True
 bot = commands.AutoShardedBot(
     command_prefix=[
-        'pp ',
-        'Pp ',
-        'PP ',
+        'peepo ',
+        'Peepo',
+        'PEEPO',
+        '.',
         ],
     case_insensitive = True,
     owner_ids = [
@@ -133,10 +134,6 @@ async def git(ctx):
 async def support(ctx):
     await ctx.send('https://discord.gg/VnSyg3J')
     
-@bot.command(aliases=['reloaduserdata'])
-async def rldud(ctx):
-    reload(ud)
-    await ctx.send('Done')
 
 if __name__ == '__main__':
     with open("config.toml") as f:

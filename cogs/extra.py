@@ -30,14 +30,15 @@ class extra(commands.Cog):
             embed.description = f"{ctx.author.mention} goes to the hospital for some pp surgery..."
             
             if random.randrange(1, 10) > 2: # 20% chance
-                await pp.size_add(growsize)
+                pp.size += growsize
                 status = "SUCCESSFUL"
-                message = f"The operation was successful! Your pp gained {growsize} inches! It is now {pp.size + growsize} inches."
+                message = f"The operation was successful! Your pp gained {growsize} inches! It is now {pp.size} inches."
             else:
-                await pp.size_add(-growsize)
+                pp.size -= growsize
                 status = "FAILED"
-                message = f"The operation failed. Your pp snapped and you lost **{growsize} inches.** 😭 It is now {pp.size - growsize} inches."
+                message = f"The operation failed. Your pp snapped and you lost **{growsize} inches.** 😭 It is now {pp.size} inches."
                 
+            await pp.update()
             embed.add_field(name=status, value=message)
         return await ctx.send(embed=embed)
     
@@ -101,7 +102,7 @@ class extra(commands.Cog):
             responce = random.choice(list(combo.items()))
             if random.randrange(0, 5)!=1:
                 donation_amount = random.randrange(1, 10) * pp.multiplier['multiplier']
-                await pp.size_add(donation_amount)
+                pp.size += donation_amount
                 embed.description = f'**{responce[0]}** donated {donation_amount} inches to {ctx.author.mention}'
             else:
                 embed.description = f'**{responce[0]}:** {responce[1]}'

@@ -24,7 +24,8 @@ class Events(commands.Cog):
             'peepee poopoo',
             'gambling addiction',
             'cool kids',
-            'human rights'])
+            'human rights',
+            ])
         event = ud.Event(ctx.channel.id,string[::-1])
         await event.create()
         embed = discord.Embed(colour=discord.Colour(random.choice([0x008000, 0xffa500, 0xffff00])),title='**EVENT**')
@@ -38,18 +39,22 @@ class Events(commands.Cog):
         else:
             size = random.randint(50,200)
             first = await ud.Pp.fetch(await event.first(), get_multiplier=False)
-            await first.size_add(size * 3)
+            first.size += size * 3
+            await first.update()
             
             embed.add_field(name='🥇 first place', value=f'{first.name} wins {size * 3} inches!',inline=False)
             if await event.second():
                 second = await ud.Pp.fetch(await event.second(), get_multiplier=False)
-                await second.size_add(size* 2)
+                second.size += size * 2
+                await second.update()
                 embed.add_field(name='🥈 second place', value=f'{second.name} wins {size * 2} inches!',inline=False)
                 
             if await event.third():
                 third = await ud.Pp.fetch(await event.third(), get_multiplier=False)
-                await third.size_add(size)
+                third.size += size
+                await third.update()
                 embed.add_field(name='🥉 third place', value=f'{third.name} wins {size} inches!',inline=False)
+        
         await ctx.send(embed=embed)
         await eventmsg.delete()
         return await event.delete()
@@ -63,9 +68,9 @@ class Events(commands.Cog):
         # return await message.channel.send(f'**REEE{"E"*random.randint(1,40)}** <a:reee:812625046543663114>')
         event = ud.Event(message.channel.id,message.content.lower())
         if await event.check():
-            pp = ud.Pp(message.author.id)
+            pp = await ud.Pp.fetch(message.author.id)
             #no pp
-            if not await pp.check():
+            if not pp:
                 embed = discord.Embed(colour=discord.Colour(random.choice([0x008000, 0xffa500, 0xffff00])))
                 embed.description = f"{message.author.mention}, you need a pp first! Get one using `pp new`!"
                 return await message.channel.send(embed=embed)
