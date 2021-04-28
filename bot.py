@@ -11,10 +11,9 @@ intents = discord.Intents.default()
 intents.reactions = True
 bot = commands.AutoShardedBot(
     command_prefix=[
-        'peepo ',
-        'Peepo',
-        'PEEPO',
-        '.',
+        'pp ',
+        'Pp ',
+        'PP ',
         ],
     case_insensitive = True,
     owner_ids = [

@@ -40,16 +40,16 @@ class important(commands.Cog):
             ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
             embed = await ud.create_embed(ctx, include_tip=False)
             if user:
-                if not await ud.Pp(user.id).check():
+                pp = await ud.Pp.fetch(user.id)
+                if not pp:
                     return await ud.handle_exception(ctx,f'{user.mention} doesn\'t have a {ppname}.')
                 user = user
             else:
                 user = ctx.author
-                
+                pp = await ud.Pp.fetch(user.id)
             fetched = await ud.fetch('*','userdata.pp')
             fetched = sorted(fetched, key=lambda i:i['pp_size'])
             fetched.reverse()
-            pp = ud.Pp(user.id)
             
             if await ud.has_sfw_mode(ctx.guild.id):
                 embed.description = f'This server is on SFW mode. Showing the names of the top 10 {ppname}s is disabled.'
@@ -71,7 +71,7 @@ class important(commands.Cog):
                         )
                     position += 1
             try:
-                position = [i["user_id"] for i in fetched].index(pp.user_id ) + 1
+                position = [i["user_id"] for i in fetched].index(pp.user_id) + 1
                 if position == 1:
                     lead = "in first place!"
                 else:
