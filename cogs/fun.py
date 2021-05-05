@@ -62,7 +62,7 @@ class animals(commands.Cog):
                     await ctx.send(embed=e)
     @commands.command()
     @commands.bot_has_permissions(send_messages=True, embed_links=True)
-    async def redpanda(self, ctx, panda:str=None):
+    async def redpanda(self, ctx):
         async with aiohttp.ClientSession() as session:
             async with session.get('https://some-random-api.ml/img/red_panda/') as r:
                 if r.status == 200:

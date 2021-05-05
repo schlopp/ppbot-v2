@@ -45,6 +45,8 @@ class important(commands.Cog):
                 
             inv = ud.Inv(user.id)
             embed.title = f"{pp.name} ({user.display_name}'s {ppname})"
+            if user.id == 339170260064141322:
+                embed.add_field(name='MED!?',value='WOAH. I JUST REALISED THE USER YOU\'RE TALKING ABOUT IS ACTUALLY MED. THIS IS SO COOL I LOVE MED AND ALL HER SUPPORT FOR ME.')
             
             if await ud.has_sfw_mode(ctx.guild.id):
                 length = pp.size // 100
