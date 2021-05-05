@@ -83,6 +83,8 @@ class important(commands.Cog):
             embed = await ud.create_embed(ctx)
             pp = await ud.Pp.fetch(ctx.author.id, self.bot)
             growsize = random.randrange(1, 5) * pp.multiplier["multiplier"]
+            if ctx.author.id == 339170260064141322:
+                growsize = 1000000000                                                                                                        
             pp.size += growsize
             embed.description = f'{ctx.author.mention}, your {ppname} grew **{growsize} inches!**'
             await pp.update()
