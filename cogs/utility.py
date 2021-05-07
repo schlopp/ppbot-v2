@@ -58,7 +58,7 @@ class important(commands.Cog):
                     member = ctx.guild.get_member(i["user_id"])
                     embed.add_field(
                         name=f'{position}. {f" ({member.display_name})" if member else ""}',
-                        value=f'{ud.human_format(i["pp_size"])}  inches | {i["user_id"]}',inline=False,
+                        value=f'{ud.human_format(i["pp_size"])} inches `({i["user_id"]})`',inline=False,
                         )
                     position += 1
             else:
@@ -67,7 +67,7 @@ class important(commands.Cog):
                     member = ctx.guild.get_member(i["user_id"]) if ctx.guild else None
                     embed.add_field(
                         name=f'{position}. {i["pp_name"]}{f" ({member.display_name})" if member else ""}',
-                        value=f'{ud.human_format(i["pp_size"])}  inches | {i["user_id"]}',inline=False,
+                        value=f'{ud.human_format(i["pp_size"])} inches `({i["user_id"]})`',inline=False,
                         )
                     position += 1
             try:
