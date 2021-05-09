@@ -22,14 +22,14 @@ class fishing(commands.Cog):
         async with ctx.typing():
             embed = await ud.create_embed(ctx)
             pp = await ud.Pp.fetch(ctx.author.id, self.bot)
-            inv = ud.Inv(ctx.author.id)
+            inv = ud.Inv.fetch(ctx.author.id)
             
             if not await inv.has_item('fishing rod'):
                 raise ud.ItemRequired(f"How are you planning on fishing without a **fishing rod**? You need that item to use this command. Check if its for sale at the shop!")
             
             random_number = random.randint(1, 40)
             if random_number == 1:
-                await inv.new_item("fishing rod", -1)
+                inv["fishing rod"] -= 1
                 embed.description = f"{ctx.author.mention} flung their fishing rod too hard and it broke lmaoo"
                 return await ctx.send(embed=embed)
             if random_number == 2:

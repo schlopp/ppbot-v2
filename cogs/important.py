@@ -43,7 +43,6 @@ class important(commands.Cog):
                 user = ctx.author
                 pp = await ud.Pp.fetch(user.id, self.bot)
                 
-            inv = ud.Inv(user.id)
             embed.title = f"{pp.name} ({user.display_name}'s {ppname})"
             
             if await ud.has_sfw_mode(ctx.guild.id):
@@ -63,10 +62,10 @@ class important(commands.Cog):
             else:
                 embed.add_field(name="Stats", value=f"{pp.size} inches\n{pp.multiplier['multiplier']}x multiplier **[You're currently missing out on a VOTER REWARD BONUS! Vote now to get a {pp.multiplier['multiplier']*2}x multiplier!](https://top.gg/bot/735147633076863027/vote)**")
             invlist = []
-            items = await inv.fetch_all()
-            for item, amount in items.items():
-                if amount > 0:
-                    invlist.append(f"{item}: **{amount}**")
+            async with ud.Inv(user.id) as inv:
+                for item, amount in inv.items():
+                    if amount > 0:
+                        invlist.append(f"{item}: **{amount}**")
             if invlist:
                 embed.add_field(name="Inventory", value="\n".join(invlist))
             embed.set_footer(text=f"give your {ppname} a name with \"pp rename\"")
