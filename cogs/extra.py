@@ -107,6 +107,7 @@ class extra(commands.Cog):
             else:
                 embed.description = f'**{responce[0]}:** {responce[1]}'
         await ctx.send(embed=embed)
+        return await pp.update()
 
 
 

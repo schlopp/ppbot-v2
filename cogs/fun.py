@@ -62,7 +62,7 @@ class animals(commands.Cog):
                     await ctx.send(embed=e)
     @commands.command()
     @commands.bot_has_permissions(send_messages=True, embed_links=True)
-    async def redpanda(self, ctx, panda:str=None):
+    async def redpanda(self, ctx):
         async with aiohttp.ClientSession() as session:
             async with session.get('https://some-random-api.ml/img/red_panda/') as r:
                 if r.status == 200:
@@ -101,7 +101,8 @@ class animals(commands.Cog):
             
             ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
             
-            if not await ud.Pp(user.id).check():
+            pp2 = await ud.Pp.fetch(user.id, get_multiplier=False)
+            if not await ud.Pp.fetch(user.id):
                 return await ud.handle_exception(ctx,f'{user.mention} doesn\'t have a {ppname}.')
             
             embed = await ud.create_embed(ctx)

@@ -40,16 +40,16 @@ class important(commands.Cog):
             ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
             embed = await ud.create_embed(ctx, include_tip=False)
             if user:
-                if not await ud.Pp(user.id).check():
+                pp = await ud.Pp.fetch(user.id)
+                if not pp:
                     return await ud.handle_exception(ctx,f'{user.mention} doesn\'t have a {ppname}.')
                 user = user
             else:
                 user = ctx.author
-                
+                pp = await ud.Pp.fetch(user.id)
             fetched = await ud.fetch('*','userdata.pp')
             fetched = sorted(fetched, key=lambda i:i['pp_size'])
             fetched.reverse()
-            pp = ud.Pp(user.id)
             
             if await ud.has_sfw_mode(ctx.guild.id):
                 embed.description = f'This server is on SFW mode. Showing the names of the top 10 {ppname}s is disabled.'
@@ -58,7 +58,7 @@ class important(commands.Cog):
                     member = ctx.guild.get_member(i["user_id"])
                     embed.add_field(
                         name=f'{position}. {f" ({member.display_name})" if member else ""}',
-                        value=f'{ud.human_format(i["pp_size"])} inches',inline=False,
+                        value=f'{ud.human_format(i["pp_size"])} inches `({i["user_id"]})`',inline=False,
                         )
                     position += 1
             else:
@@ -67,11 +67,11 @@ class important(commands.Cog):
                     member = ctx.guild.get_member(i["user_id"]) if ctx.guild else None
                     embed.add_field(
                         name=f'{position}. {i["pp_name"]}{f" ({member.display_name})" if member else ""}',
-                        value=f'{ud.human_format(i["pp_size"])}  inches',inline=False,
+                        value=f'{ud.human_format(i["pp_size"])} inches `({i["user_id"]})`',inline=False,
                         )
                     position += 1
             try:
-                position = [i["user_id"] for i in fetched].index(pp.user_id ) + 1
+                position = [i["user_id"] for i in fetched].index(pp.user_id) + 1
                 if position == 1:
                     lead = "in first place!"
                 else:
@@ -107,43 +107,6 @@ class important(commands.Cog):
             embed.title = f'{ctx.author.display_name}\'s {thing} percentage'
             embed.description = f'**{random.randint(0,100)}%** {thing}'
         await ctx.send(embed=embed)
-    
-    
-    @commands.command()
-    @commands.bot_has_permissions(send_messages=True, embed_links=True)
-    @commands.cooldown(1, 60*15, commands.BucketType.user)
-    @ud.has_pp()
-    async def donate(self, ctx, user:discord.Member, amount):
-        async with ctx.typing():
-            ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
-            embed = await ud.create_embed(ctx)
-            pp = await ud.Pp.fetch(ctx.author.id, self.bot)
-            pp2 = await ud.Pp.fetch(user.id, self.bot)
-            amount = pp.size if amount == "all" else int(amount)
-            
-            if pp.size < amount:
-                return await ud.handle_exception(ctx,f"your pp isnt big enough! You need **{amount} inches** to donate this amount!")
-
-            maxamount = 10 ** 4 if pp.multiplier["voted"] else 10 ** 3
-
-            if amount > maxamount or amount < 1:
-                return await ud.handle_exception(ctx,f"you cant donate that ammount! At most you can donate **{ud.human_format(maxamount)} inches. [VOTERS CAN DONATE UP TO 10K!](https://top.gg/bot/735147633076863027)**")
-
-            if user == ctx.author:
-                return await ud.handle_exception(ctx,'That\'s some tax evasion type shit')
-            
-            if not pp2:
-                return await ud.handle_exception(ctx,f'{user.mention} doesn\'t have a {ppname}.')
-            
-            pp.size -= amount
-            pp2.size += amount
-            await pp.update()
-            await pp2.update()
-
-            embed.title = f'Donation completed! {amount} given.'
-            embed.description = f'Your {ppname} is now **{pp.size} inches.** **{user.display_name}**\'s {ppname} is now **{pp2.size} inches!**'
-        await ctx.send(embed=embed)
-
 
 
 def setup(bot):

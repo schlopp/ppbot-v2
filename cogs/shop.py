@@ -70,7 +70,7 @@ class shop(commands.Cog):
         #rich boi
         pp.size += -amount * await item.price(self.bot, pp)
         if await item.item_type() == "MULTIPLIER":
-            pp.default_multiplier = amount * await item.gain()
+            pp.default_multiplier += amount * await item.gain()
             await pp.update()
             embed.description = f"*{ctx.author.mention} takes the **{amount} {item.item_name}** and feels a strong power going through their body. Their multiplier has exapnded!"
             return await ctx.send(embed=embed)

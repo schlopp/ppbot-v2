@@ -11,10 +11,9 @@ intents = discord.Intents.default()
 intents.reactions = True
 bot = commands.AutoShardedBot(
     command_prefix=[
-        'peepo ',
-        'Peepo',
-        'PEEPO',
-        '.',
+        'pp ',
+        'Pp ',
+        'PP ',
         ],
     case_insensitive = True,
     owner_ids = [
@@ -30,14 +29,15 @@ for filename in os.listdir("./cogs"):
     if filename.endswith('.py'):
         bot.load_extension(f'cogs.{filename[:-3]}')
 
-#status#c
 @bot.event
 async def on_connect():
     await bot.change_presence(activity=discord.Game(name="Connecting.."))
+
 @bot.event
 async def on_ready():
     await bot.change_presence(activity=discord.Game(name=f"pp help | pp new | grow your pp today~! ({len(bot.shard_ids) if bot.shard_ids else 0} shards, in {len(bot.guilds)} servers, with {len(await ud.fetch('user_id','userdata.pp'))} current users)"))
     print('Bot ready!')
+    
 @bot.event
 async def on_guild_join(guild):
     ppchannel = bot.get_channel(816767268217290752)
@@ -85,6 +85,7 @@ async def rld(ctx, extension):
     bot.load_extension(f'cogs.{extension}')
     await unloadmsg.edit(content=f'```\nReloaded {extension}!\n```')
 bot.add_command(rld)
+
 @commands.command()
 @commands.is_owner()
 async def uld(ctx, extension):
@@ -104,6 +105,8 @@ async def uld(ctx, extension):
     bot.unload_extension(f'cogs.{extension}')
     await unloadmsg.edit(content=f'```\nUnloaded {extension}!\n```')
 bot.add_command(uld)
+
+
 @bot.command()
 async def status(ctx, *, informationthatineed):
     is_owner = await ctx.bot.is_owner(ctx.author)
@@ -141,13 +144,9 @@ if __name__ == '__main__':
     
     loop = asyncio.get_event_loop()
     
-    try:
-        loop.run_until_complete(
-            bot.start(
-                config['admin']['TOKEN'],
-                reconnect=True,
-            )
+    loop.run_until_complete(
+        bot.start(
+            config['admin']['TOKEN'],
+            reconnect=True,
         )
-    except KeyboardInterrupt:
-        loop.run_until_complete(bot.logout())
-    
+    )
