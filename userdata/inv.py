@@ -34,20 +34,14 @@ class Inv(dict):
         
         for key, value in self.items():
             if key in self.new_items:
-                insertvalues += f'({self.user_id}, {key}, {value}),'
+                insertvalues += f'({self.user_id}, \'{key}\', {value}),'
             elif self[key] != self.old_inv[key]:
                 updatevalues.append((key,value))
                 
         if insertvalues:
-            await conn.execute('''
-                INSERT INTO userdata.inv (user_id, item_name, amount)
-                VALUES
-                    $2
-                ON CONFLICT
-                    (user_id, item_name)
-                    DO NOTHING;
-            ''',
-            self.user_id,insertvalues.rstrip(','))
+            print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n\n\n',insertvalues.rstrip(','))
+            await conn.execute(
+                f'''INSERT INTO userdata.inv(user_id, item_name, amount) VALUES {insertvalues.rstrip(',')}''')
             
         for i in updatevalues:
             await conn.execute('''
@@ -81,20 +75,14 @@ class Inv(dict):
         
         for key, value in self.items():
             if key in self.new_items:
-                insertvalues += f'({self.user_id}, {key}, {value}),'
-            else:
+                insertvalues += f'({self.user_id}, \'{key}\', {value}),'
+            elif self[key] != self.old_inv[key]:
                 updatevalues.append((key,value))
                 
         if insertvalues:
-            await conn.execute('''
-                INSERT INTO userdata.inv (user_id, item_name, amount)
-                VALUES
-                    $2
-                ON CONFLICT
-                    (user_id, item_name)
-                    DO NOTHING;
-            ''',
-            self.user_id,insertvalues.rstrip(','))
+            print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n\n\n',insertvalues.rstrip(','))
+            await conn.execute(
+                f'''INSERT INTO userdata.inv(user_id, item_name, amount) VALUES {insertvalues.rstrip(',')}''')
             
         for i in updatevalues:
             await conn.execute('''

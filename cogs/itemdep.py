@@ -78,8 +78,7 @@ class fishing(commands.Cog):
                 await pp.update()
                 embed.description = f"{ctx.author.mention} {choice[0]} for **{choice[1]} inches!**"
                 return await ctx.send(embed=embed)
-            
-            else:
+                
                 options = {
                     '[ _ _ _ _ ] an ambulance! But not for me.': 'CALL',
                     'You\'ll never [ _ _ _ _ ] me alive! *doot*': 'TAKE',
@@ -92,36 +91,34 @@ class fishing(commands.Cog):
                 
                 try:
                     await self.bot.wait_for('message',timeout=20.0,check=lambda m: m.content.upper() == choice[1] and m.author == ctx.author and m.channel == ctx.channel)
-                    
                 except asyncio.TimeoutError:
                     random_number = random.randint(1,50) * pp.multiplier["multiplier"]
                     
-                    if pp.size > 50 * pp.multiplier["multiplier"]:
-                        pp.size -= random_number
-                        await pp.update()
-                        embed.description = f"**Too slow!** The police officer shoots you and takes **{random_number} inches** from your corpse. The correct word was `{choice[1]}`"
-                        
-                    else:
-                        embed.description = f"**Too slow!** The police officer shoots you and realises your pp is so small it's not even worth taking. The correct word was `{choice[1]}`"
-                    return await ctx.send(embed=embed)
-                
-                if random_number < 30:
-                    options = [
-                        'bronze coin',
-                        'happy flour',
-                        'fishing rod',
-                        ]
-                    choice = random.choice(options)
-                    inv[choice] += 1
-                    pp.size += random_number
+                if pp.size > 50 * pp.multiplier["multiplier"]:
+                    pp.size -= random_number
                     await pp.update()
-                    embed.description = f"You avoid the bullet and loot the police officer. You find **{random_number} inches** and **1 {choice}!**"
-                    
+                    embed.description = f"**Too slow!** The police officer shoots you and takes **{random_number} inches** from your corpse. The correct word was `{choice[1]}`"
                 else:
-                    pp.size += random_number
-                    await pp.update()
-                    embed.description = f"You avoid the bullet and loot the police officer. You find **{random_number} inches!**"
-                await ctx.send(embed=embed)
+                    embed.description = f"**Too slow!** The police officer shoots you and realises your pp is so small it's not even worth taking. The correct word was `{choice[1]}`"
+                return await ctx.send(embed=embed)
+            
+            if random_number < 30:
+                options = [
+                    'bronze coin',
+                    'happy flour',
+                    'fishing rod',
+                    ]
+                choice = random.choice(options)
+                inv[choice] += 1
+                pp.size += random_number
+                await pp.update()
+                embed.description = f"You avoid the bullet and loot the police officer. You find **{random_number} inches** and **1 {choice}!**"
+                
+            else:
+                pp.size += random_number
+                await pp.update()
+                embed.description = f"You avoid the bullet and loot the police officer. You find **{random_number} inches!**"
+                return await ctx.send(embed=embed)
 
 
 
