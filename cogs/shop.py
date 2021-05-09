@@ -45,29 +45,29 @@ class shop(commands.Cog):
     async def buy(self, ctx, amount, *, item:str):
         embed = await ud.create_embed(ctx)
         pp = await ud.Pp.fetch(ctx.author.id, self.bot)
-        inv = ud.Inv(ctx.author.id)
         item = ud.Shop.Item(item.lower())
         shop = ud.Shop()
         
-        if item.item_name.lower() not in [i.item_name.lower() for i in await shop.items()]:
+        if item.item_name not in [i.item_name.lower() for i in await shop.items()]:
             embed.description = f'{ctx.author.mention}, **`"{item.item_name}"`** is not something for sale at the moment. Check out `pp shop` to see what\'s currently available'
             return await ctx.send(embed=embed)
                                 
         if amount == 'max':
             amount = pp.size // await item.price(self.bot, pp)
         try:
-            amount = int(float(amount))
+            amount = int(amount)
         except ValueError:
             raise commands.BadArgument()
         if amount < 1:
             embed.description = f'{ctx.author.mention}, you can\'t buy less than 1 of an item?????'
             return await ctx.send(embed=embed)
-                                
-        #broke boi
+        
+        
         if pp.size < amount * await item.price(self.bot, pp):
             embed.description = f"{ctx.author.mention}, your pp isnt big enough! You need **{await item.price(self.bot, pp) * amount - pp.size} more inches** to buy this item! Type `pp grow` to grow your pp."
             return await ctx.send(embed=embed)
-        #rich boi
+        
+        
         pp.size += -amount * await item.price(self.bot, pp)
         if await item.item_type() == "MULTIPLIER":
             pp.default_multiplier += amount * await item.gain()
@@ -77,7 +77,8 @@ class shop(commands.Cog):
         
         if await item.item_type() in ["TOOL","ITEM"]:
             await pp.update()
-            await inv.new_item(item.item_name, amount)
+            async with ud.Inv(ctx.author.id) as inv:
+                inv[item.item_name] += amount
             embed.description = f"{ctx.author.mention}, you now have {f'**{amount}**' if amount>1 else 'a'} new **{item.item_name+'s' if amount>1 else item.item_name}!**"
             return await ctx.send(embed=embed)
 
