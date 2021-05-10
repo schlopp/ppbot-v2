@@ -34,12 +34,12 @@ class Owner(commands.Cog):
         if choice == 'size':
             pp.size += int(arg1)
         elif choice == 'multiplier':
-            pp.default += int(arg1)
-            await pp.multiplier_add(int(arg1))
+            pp.default_multiplier += int(arg1)
         elif choice == 'name':
-            await pp.rename(str(arg1))
+            pp.name = str(arg1)
         else:
-            await ctx.message.add_reaction('❌')
+            return await ctx.message.add_reaction('❌')
+        await pp.update()
         return await ctx.message.add_reaction('👌')
 
     @db.group(name="shop",invoke_without_command=True)
