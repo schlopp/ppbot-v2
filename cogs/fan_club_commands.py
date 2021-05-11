@@ -3,13 +3,10 @@ from discord.ext import commands
 import random
 
 
-class FanClubCommands(commands.Cog):
+class Misc(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
-    
-    async def cog_check(self, ctx):
-      return ctx.guild.id == 735241297320738826
     
     
     @commands.command()
@@ -32,4 +29,4 @@ class FanClubCommands(commands.Cog):
       
 
 def setup(bot):
-    bot.add_cog(FanClubCommands(bot))
+    bot.add_cog(Misc(bot))
