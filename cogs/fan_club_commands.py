@@ -28,7 +28,7 @@ class FanClubCommands(commands.Cog):
           "Some Orphans",
         ]
       )
-      return await ctx.send(f'destroys **{user.display_name}** with {random_object}')
+      return await ctx.send(f'destroys **{user.display_name}** with **{random_object}**')
       
 
 def setup(bot):
