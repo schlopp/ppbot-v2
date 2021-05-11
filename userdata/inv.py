@@ -52,8 +52,8 @@ class Inv(dict):
                 WHERE
                     item_name = $2 AND user_id = $3;
                 ''',
-                i[0],
                 i[1],
+                i[0],
                 self.user_id)
         await conn.close()
     
