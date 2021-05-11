@@ -46,16 +46,19 @@ class CommandErrorHandler(commands.Cog):
         
         elif isinstance(error, commands.NoPrivateMessage):
             try:
-                return await ctx.author.send(f'{ctx.command} can not be used in DMs.')
+                await ctx.author.send(f'{ctx.command} can not be used in DMs.')
             except discord.HTTPException:
                 pass
+            finally:
+                return ctx.command.reset_cooldown(ctx)
 
         elif isinstance(error, commands.BadArgument):
             embed = discord.Embed(colour=discord.Colour(0xff0000))
             embed.title = f"Oopsie {ctx.author.display_name},"
             embed.description = f"Make sure you use numbers and words in the correct places"
             embed.add_field(name="example:",value="`pp buy 10 fishing rod` ✅\n`pp show @obama` ✅\n`pp buy AAAAAAAAA fishing rod` ❌\n`pp show WAEDFSEWFSFEAWFEAW` ❌")
-            return await ctx.send(embed=embed)
+            await ctx.send(embed=embed)
+            return ctx.command.reset_cooldown(ctx)
             
         elif isinstance(error, commands.CommandOnCooldown):
             embed = discord.Embed(colour=discord.Colour(0xff0000))
@@ -81,9 +84,11 @@ class CommandErrorHandler(commands.Cog):
         
         elif isinstance(error, commands.BotMissingPermissions):
             try:
-                return await ctx.send(f"**Oopsie {ctx.author.display_name},** The command you're trying to use requires the permission to send links. Ask an admin to change pp bot's permissions.")
+                await ctx.send(f"**Oopsie {ctx.author.display_name},** The command you're trying to use requires the permission to send links. Ask an admin to change pp bot's permissions.")
             except:
                 pass
+            finally:
+                ctx.command.reset_cooldown(ctx)
             
         else:
             # All other Errors not returned come here. And we can just print the default TraceBack.
@@ -92,6 +97,7 @@ class CommandErrorHandler(commands.Cog):
             embed.title = f"Oopsie {ctx.author.display_name},"
             embed.description = str(error)
             await ctx.send(embed=embed)
+            return ctx.command.reset_cooldown(ctx)
 
 def setup(bot):
     bot.add_cog(CommandErrorHandler(bot))
