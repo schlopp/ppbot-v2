@@ -1,5 +1,6 @@
 import asyncpg
 import toml
+import copy
 
 with open("./config.toml") as f:
     config = toml.loads(f.read())
@@ -24,7 +25,7 @@ class Inv(dict):
         items = {}
         for i in fetched:
             self[dict(i)["item_name"]] = dict(i)["amount"]
-        self.old_inv = self
+        self.old_inv = copy.deepcopy(self)
         return self
     
     async def __aexit__(self, exc_type, exc, tb):
