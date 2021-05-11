@@ -40,7 +40,6 @@ class Inv(dict):
                 updatevalues.append((key,value))
                 
         if insertvalues:
-            print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n\n\n',insertvalues.rstrip(','))
             await conn.execute(
                 f'''INSERT INTO userdata.inv(user_id, item_name, amount) VALUES {insertvalues.rstrip(',')}''')
             
@@ -81,7 +80,6 @@ class Inv(dict):
                 updatevalues.append((key,value))
                 
         if insertvalues:
-            print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n\n\n',insertvalues.rstrip(','))
             await conn.execute(
                 f'''INSERT INTO userdata.inv(user_id, item_name, amount) VALUES {insertvalues.rstrip(',')}''')
             
@@ -93,10 +91,9 @@ class Inv(dict):
                 WHERE
                     item_name = $2 AND user_id = $3;
                 ''',
-                i[0],
                 i[1],
+                i[0],
                 self.user_id)
-        await conn.close()
     
     async def has_item(self, item_name:str) -> bool:
         conn = await asyncpg.connect(config['admin']['PSQL'])
