@@ -112,6 +112,9 @@ class ItemRequired(commands.CheckFailure):
 
 class ShopItemNotFound(commands.CheckFailure):
     """The generic error for when a item doesnt exist"""
+    
+class AmountNotEnough(commands.CheckFailure):
+    """The generic error for when a amount isn't enough"""
 
 
 def has_pp() -> bool:
