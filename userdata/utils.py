@@ -110,6 +110,9 @@ class HasPP(commands.CheckFailure):
 class ItemRequired(commands.CheckFailure):
     """The generic error for when a user doesn't have an item"""
 
+class ShopItemNotFound(commands.CheckFailure):
+    """The generic error for when a item doesnt exist"""
+
 
 def has_pp() -> bool:
     async def predicate(ctx:commands.Context):
