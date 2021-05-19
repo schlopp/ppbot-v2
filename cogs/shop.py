@@ -11,7 +11,6 @@ class shop(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
-    
     @commands.command(aliases=['store'])
     @commands.bot_has_permissions(send_messages=True)
     @commands.cooldown(1, 5, commands.BucketType.user)
@@ -32,8 +31,10 @@ class shop(commands.Cog):
             embed.title = "shop"
             embed.description = f'In the shop you can buy items with inches. You currently have **{pp.size}** inches.\n Type `pp buy <amount> <item>` to buy an item. Prices of items may change depending on how many you\'ve bought'
             for i in list(shop.items())[page * 5 - 5:page * 5]:
+                await ctx.send(str(i))
                 embed.add_field(
-                    name = f'**{i[0]}** ─ __{i[0]["price"]} inches__ ─ `{i[0]["type"]}`',value=f'{i[0]["description"]}{" | The price of this item depends on your current multiplier" if i[0]["multiplier_dependent"] else ""}',
+                    name = f'**{i[0]}** ─ __{i[1]["price"]} inches__ ─ `{i[1]["type"]}`',
+                    value=f'{i[1]["description"]}{" | The price of this item depends on your current multiplier" if i[1]["multiplier_dependent"] else ""}',
                     inline = False
                 )
             embed.set_footer(text=f'page {page}/{totalpages}')
@@ -54,7 +55,7 @@ class shop(commands.Cog):
             raise ud.ShopItemNotFound(f'{ctx.author.mention}, **`"{item}"`** is not for sale at the moment. Check out the shop to see what\'s currently available')
         
         if amount == 'max':
-            amount = pp.size // await item.price(self.bot, pp)
+            amount = pp.size // shop[item]["price"]
         try:
             amount = int(amount)
         except ValueError:
@@ -71,13 +72,13 @@ class shop(commands.Cog):
             raise ud.AmountNotEnough(f"{ctx.author.mention}, your pp isnt big enough! You need **{shop[item]['price'] * amount - pp.size} more inches** to buy this item! Type `pp grow` to grow your pp.")        
         
         pp.size += -amount * shop[item]["price"]
-        if await shop[item]["type"] == "MULTIPLIER":
+        if shop[item]["type"] == "MULTIPLIER":
             pp.default_multiplier += amount * shop[item]["gain"]
             await pp.update()
             embed.description = f"*{ctx.author.mention} takes the **{amount if amount > 1 else ''} {item}** and feels a strong power going through their body. Their multiplier has exapnded!"
             return await ctx.send(embed=embed)
         
-        if await shop[item]["type"] in ["TOOL","ITEM"]:
+        if shop[item]["type"] in ["TOOL","ITEM"]:
             await pp.update()
             async with ud.Inv(ctx.author.id) as inv:
                 inv[item] += amount

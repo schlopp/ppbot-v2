@@ -32,25 +32,25 @@ class CommandErrorHandler(commands.Cog):
         if cog and cog._get_overridden_method(cog.cog_command_error) is not None:
             return
 
-        ignored = (commands.CommandNotFound)
+        #ignored = (commands.CommandNotFound)
 
         # Anything in ignored will return and prevent anything happening.
-        if isinstance(error, ignored):
-            return
+        #if isinstance(error, ignored):
+        #    return
         
-        #if isinstance(error, commands.CommandNotFound):
-        #    return await ctx.send('pp bot is currently being updated. Join the support server for more information. discord.gg/H7Avd8c')
+        if isinstance(error, commands.CommandNotFound):
+            return await ctx.send('pp bot is currently being updated. Join the support server for more information. discord.gg/H7Avd8c')
         
         if isinstance(error, commands.DisabledCommand):
             await ctx.send(f'{ctx.command} has been disabled.')
         
         elif isinstance(error, commands.NoPrivateMessage):
             try:
-                await ctx.author.send(f'{ctx.command} can not be used in DMs.')
+                return await ctx.author.send(f'{ctx.command} can not be used in DMs.')
             except discord.HTTPException:
                 pass
             finally:
-                return ctx.command.reset_cooldown(ctx)
+                ctx.command.reset_cooldown(ctx)
 
         elif isinstance(error, commands.BadArgument):
             embed = discord.Embed(colour=discord.Colour(0xff0000))

@@ -22,7 +22,6 @@ class Inv(dict):
         conn = await asyncpg.connect(config['admin']['PSQL'])
         fetched = await conn.fetch('''SELECT * FROM userdata.inv WHERE user_id = $1''',self.user_id)
         await conn.close()
-        items = {}
         for i in fetched:
             self[dict(i)["item_name"]] = dict(i)["amount"]
         self.old_inv = copy.deepcopy(self)
@@ -62,7 +61,6 @@ class Inv(dict):
         conn = await asyncpg.connect(config['admin']['PSQL'])
         fetched = await conn.fetch('''SELECT * FROM userdata.inv WHERE user_id = $1''',self.user_id)
         await conn.close()
-        items = {}
         for i in fetched:
             self[dict(i)["item_name"]] = dict(i)["amount"]
         self.old_inv = self
