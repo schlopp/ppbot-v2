@@ -55,7 +55,7 @@ class Owner(commands.Cog):
         async with ctx.typing():
             def check(m):
                 return m.author == ctx.author
-            item = ud.Shop.Item(item_name)
+            item = item.lower()
             await asyncio.sleep(.1)
         await ctx.send('What\'s the item type?')
         try:
@@ -70,7 +70,7 @@ class Owner(commands.Cog):
             await ctx.send('Is the item multiplier dependant?')
             x = await self.bot.wait_for('message', timeout=120.0, check=check)
             multiplierDependant = x == 'yes'
-            await item.add(item_type,item_desc,default_price,multiplierDependant)
+            await ud.Shop.add_item(item_name,item_type,item_desc,default_price,multiplierDependant)
             await ctx.send('Process completed.')
         except asyncio.TimeoutError:
             await ctx.send('Slowpoke.')
