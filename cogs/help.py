@@ -54,7 +54,7 @@ class helping(commands.Cog):
         embed.add_field(
             name   = "**Fun commands**",
             value  = """
-[`cat, dog, fox, redpanda, panda, meme, compare @user, percentage <thing>`](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=2147863616)
+[`cat, dog, fox, redpanda, panda, meme, compare @user, percentage <thing>, snort`](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=2147863616)
             """,
         inline = True
         )
