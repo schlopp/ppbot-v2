@@ -1,11 +1,9 @@
 import asyncpg
-import asyncio
 import discord
 import toml
-import json
 import aiohttp
 import random
-from userdata import Pp, Inv
+from userdata import Pp
 from discord.ext import commands
 
 with open("./config.toml") as f:

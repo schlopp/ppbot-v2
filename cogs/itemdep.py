@@ -79,21 +79,21 @@ class fishing(commands.Cog):
                 embed.description = f"{ctx.author.mention} {choice[0]} for **{choice[1]} inches!**"
                 return await ctx.send(embed=embed)
                 
-                options = {
-                    '[ _ _ _ _ ] an ambulance! But not for me.': 'CALL',
-                    'You\'ll never [ _ _ _ _ ] me alive! *doot*': 'TAKE',
-                    '*dodges bullets like in The [ _ _ _ _ _ _ ]*': 'MATRIX',
-                    'I have the power of [ _ _ _   _ _ _   _ _ _ _ _ ] on my side!': 'GOD AND ANIME',
-                    }
-                choice = random.choice(list(options.items()))
-                embed.description = f"{ctx.author.mention} tried to shoot a police officer but they shot back! **Fill in this sentence to dodge the bullets:**\n\n`{choice[0]}`"
-                await ctx.send(embed=embed)
+            options = {
+                '[ _ _ _ _ ] an ambulance! But not for me.': 'CALL',
+                'You\'ll never [ _ _ _ _ ] me alive! *doot*': 'TAKE',
+                '*dodges bullets like in The [ _ _ _ _ _ _ ]*': 'MATRIX',
+                'I have the power of [ _ _ _   _ _ _   _ _ _ _ _ ] on my side!': 'GOD AND ANIME',
+            }
+            choice = random.choice(list(options.items()))
+            embed.description = f"{ctx.author.mention} tried to shoot a police officer but they shot back! **Fill in this sentence to dodge the bullets:**\n\n`{choice[0]}`"
+            await ctx.send(embed=embed)
+            
+            try:
+                await self.bot.wait_for('message',timeout=20.0,check=lambda m: m.content.upper() == choice[1] and m.author == ctx.author and m.channel == ctx.channel)
+            except asyncio.TimeoutError:
+                random_number = random.randint(1,50) * pp.multiplier["multiplier"]
                 
-                try:
-                    await self.bot.wait_for('message',timeout=20.0,check=lambda m: m.content.upper() == choice[1] and m.author == ctx.author and m.channel == ctx.channel)
-                except asyncio.TimeoutError:
-                    random_number = random.randint(1,50) * pp.multiplier["multiplier"]
-                    
                 if pp.size > 50 * pp.multiplier["multiplier"]:
                     pp.size -= random_number
                     await pp.update()

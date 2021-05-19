@@ -51,7 +51,7 @@ class shop(commands.Cog):
         if item.item_name not in [i.item_name.lower() for i in await shop.items()]:
             embed.description = f'{ctx.author.mention}, **`"{item.item_name}"`** is not something for sale at the moment. Check out `pp shop` to see what\'s currently available'
             return await ctx.send(embed=embed)
-                                
+        
         if amount == 'max':
             amount = pp.size // await item.price(self.bot, pp)
         try:

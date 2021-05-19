@@ -4,7 +4,6 @@ import userdata as ud
 import os
 import toml
 import asyncio
-from importlib import reload
 
 #prefixes
 intents = discord.Intents.default()

@@ -43,7 +43,6 @@ class important(commands.Cog):
                 pp = await ud.Pp.fetch(user.id)
                 if not pp:
                     return await ud.handle_exception(ctx,f'{user.mention} doesn\'t have a {ppname}.')
-                user = user
             else:
                 user = ctx.author
                 pp = await ud.Pp.fetch(user.id)

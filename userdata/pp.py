@@ -1,7 +1,6 @@
 import asyncpg
 import toml
 import aiohttp
-import json
 from discord.ext import commands
 
 
@@ -10,7 +9,7 @@ with open("./config.toml") as f:
 
 class Pp:
 
-    def __init__(self, user_id=None, **kwargs):
+    def __init__(self, user_id=None):
         self.user_id = user_id
     
     def __bool__(self):
