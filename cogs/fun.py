@@ -101,7 +101,6 @@ class animals(commands.Cog):
             
             ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
             
-            pp2 = await ud.Pp.fetch(user.id, get_multiplier=False)
             if not await ud.Pp.fetch(user.id):
                 return await ud.handle_exception(ctx,f'{user.mention} doesn\'t have a {ppname}.')
             

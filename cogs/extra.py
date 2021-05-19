@@ -71,6 +71,7 @@ class extra(commands.Cog):
                 'begone beggar',
                 'No.',
                 'no wtf?',
+                'try being a little ""cooler" next time',
             ])
             combo = {
                 'obama':quote,
@@ -98,6 +99,7 @@ class extra(commands.Cog):
                 'your mom':random.choice(['you want WHAT?', 'im saving my pp for your dad']),
                 'ur daughter':quote,
                 'Big Man Tyrone':'Every 60 seconds in Africa a minute passes.',
+                'speed':quote,
             }
             responce = random.choice(list(combo.items()))
             if random.randrange(0, 5)!=1:

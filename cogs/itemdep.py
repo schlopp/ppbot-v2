@@ -119,7 +119,44 @@ class fishing(commands.Cog):
                 await pp.update()
                 embed.description = f"You avoid the bullet and loot the police officer. You find **{random_number} inches!**"
                 return await ctx.send(embed=embed)
-
+    
+    @commands.command()
+    @commands.bot_has_permissions(send_messages=True, embed_links=True)
+    @ud.has_pp()
+    async def snort(self, ctx):
+        async with ud.Inv(ctx.author.id) as inv:
+            if not inv['happy flour']:
+                raise ud.ItemRequired(f"dude, what the hell are you gonna snort? You don't have any **happy flour**! You need that item to use this command. Check if its for sale at the shop!")
+            
+            situation = random.choice([
+                "your girlfriend",
+                "a gang member",
+                "your dad",
+                "a local bartender",
+                "a pigeon",
+                "your stupid wife karen who was at jake's apartment last night for 'business reasons'",
+                "that son of a bitch who always steals your chocolate",
+                "pp bot",
+                "a thief",
+                ])
+            action = random.choice([
+                "sucking",
+                "eating",
+                "playing",
+                "having a nice convorsation about elephants",
+                "stealing"
+            ])
+            other = random.choice([
+                "with your dog",
+                "and also ",
+                "while on drugs",
+                "without having voted for pp bot on top.gg",
+                "outside your daughter's house",
+                "on your grave",
+                "with your mother",
+                "with your wife",
+            ])
+            await ctx.send(f"You snort your happy flour and notice {situation} {action} {other}!")
 
 
 def setup(bot):

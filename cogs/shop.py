@@ -31,7 +31,6 @@ class shop(commands.Cog):
             embed.title = "shop"
             embed.description = f'In the shop you can buy items with inches. You currently have **{pp.size}** inches.\n Type `pp buy <amount> <item>` to buy an item. Prices of items may change depending on how many you\'ve bought'
             for i in list(shop.items())[page * 5 - 5:page * 5]:
-                await ctx.send(str(i))
                 embed.add_field(
                     name = f'**{i[0]}** ─ __{i[1]["price"]} inches__ ─ `{i[1]["type"]}`',
                     value=f'{i[1]["description"]}{" | The price of this item depends on your current multiplier" if i[1]["multiplier_dependent"] else ""}',
