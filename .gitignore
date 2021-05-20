@@ -1,3 +1,5 @@
 __pycache__/
-config.toml
+.toml
+!.example
 testing.py
+anticheat.py
