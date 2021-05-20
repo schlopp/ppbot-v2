@@ -1,8 +1,0 @@
-title = 'Pp bot variables'
-
-[admin]
-TOKEN = 'NzM1MTQ3NjMzMDc2ODYzMDI3.XxcBlg.wU0VsyWJX5HFWJ0bmDjshLWl6xs'
-PSQL = 'postgres://postgres:MPIWL32531@localhost:3626/ppbot'
-
-[dbl]
-TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjczNTE0NzYzMzA3Njg2MzAyNyIsImJvdCI6dHJ1ZSwiaWF0IjoxNjE3NDc4NTI0fQ.huBQJEbTtfP2KDlXw5Q5dElupNxL286WW8PFKCtjRqk'

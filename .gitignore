@@ -1,5 +1,4 @@
 __pycache__/
-*.toml
-!*.example
+config.toml
 testing.py
 anticheat.py
