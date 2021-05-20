@@ -2,16 +2,21 @@ import discord
 from discord.ext import commands
 import random, asyncio, re
 import userdata as ud
+from datetime import datetime
 
 intents = discord.Intents()
 intents.all()
 
 class Events(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot:commands.AutoShardedBot):
         self.bot = bot
 
     @commands.Cog.listener()
     async def on_command(self, ctx):
+        logembed = discord.Embed()
+        logembed.description = f"{ctx.author.display_name}: {ctx.message.content}\n\nauthor: {ctx.author} / {ctx.author.display_name} ({ctx.author.id})\nctx: {vars(ctx)}"
+        await self.bot.get_channel(844927310158495765).send(embed=logembed)
+        await self.bot.get_channel(844911673667223582).send(f"{ctx.author.display_name}: {ctx.message.content}")
         await ud.runsql('execute','UPDATE userdata.stats SET commands_run = userdata.stats.commands_run + 1')
         if random.randint(1,200)!=1: # 0.5% chance
             return

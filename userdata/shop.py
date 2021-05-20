@@ -19,7 +19,6 @@ class Shop(dict):
         self = cls()
         for i in fetched:
             i = dict(i)
-            print(i)
             self[i["item_name"]] = {
                 "type": i["item_type"],
                 "description": i["item_desc"],
