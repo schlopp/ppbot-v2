@@ -83,7 +83,7 @@ class important(commands.Cog):
             ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
             embed = await ud.create_embed(ctx)
             pp = await ud.Pp.fetch(ctx.author.id, self.bot)
-            growsize = random.randrange(1, 5) * pp.multiplier["multiplier"]
+            growsize = random.randint(1, 5) * pp.multiplier["multiplier"]
             pp.size += growsize
             embed.description = f'{ctx.author.mention}, your {ppname} grew **{growsize} inches!**'
             await pp.update()

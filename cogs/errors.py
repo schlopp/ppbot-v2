@@ -92,7 +92,7 @@ class CommandErrorHandler(commands.Cog):
             
         else:
             # All other Errors not returned come here. And we can just print the default TraceBack.
-            traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+            #traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
             embed = discord.Embed(colour=discord.Colour(0xff0000))
             embed.title = f"Oopsie {ctx.author.display_name},"
             embed.description = str(error)
