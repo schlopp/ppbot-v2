@@ -115,15 +115,13 @@ class AmountNotEnough(commands.CheckFailure):
 
 def has_pp() -> bool:
     async def predicate(ctx:commands.Context):
-        if await Pp.fetch(ctx.author.id, get_multiplier=False):
-            return True
+        if await Pp.fetch(ctx.author.id, get_multiplier=False): return True
         raise HasNoPP(f"you need a pp first! Get one using `pp new`!")
     return commands.check(predicate) 
 
 def has_no_pp() -> bool:
     async def predicate(ctx:commands.Context):
-        if not await Pp.fetch(ctx.author.id, get_multiplier=False):
-            return True
+        if not await Pp.fetch(ctx.author.id, get_multiplier=False): return True
         raise HasPP(f"you already have a pp, so you can't use this command.")
     return commands.check(predicate)
 
@@ -134,8 +132,7 @@ async def has_sfw_mode(guild_id:int) -> bool:
         await conn.execute('''INSERT INTO userdata.server_settings(guild_id) VALUES($1) ON CONFLICT (guild_id) DO NOTHING;''',guild_id)
         fetched = await conn.fetch('''SELECT sfw FROM userdata.server_settings WHERE guild_id = $1''',guild_id)
     await conn.close()
-    if dict(fetched[0])['sfw']:
-        return True
+    if dict(fetched[0])['sfw']: return True
     return False
 
 async def toggle_sfw_mode(guild_id:int):
