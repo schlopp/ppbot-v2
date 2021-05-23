@@ -78,24 +78,22 @@ async def handle_exception(ctx:commands.Context, exception:str):
 async def get_user_topgg_vote(bot, user_id:int) -> bool:
     """
     Returns whether or not the user has voted on Top.gg. If there's no Top.gg token provided then this will always return `False`.
-    This method doesn't handle timeouts; you are expected to implement them yourself.
     """
 
     # Try and see whether the user has voted
     url = f"https://top.gg/api/bots/{bot.user.id}/check"
-    session: aiohttp.ClientSession = aiohttp.ClientSession()
-    
-    async with session.get(url, params={"userId": user_id}, headers={"Authorization": config["dbl"]["TOKEN"]}) as r:
-        try:
-            data = await r.json()
-        except Exception:
-            await session.close()
-            return False
-        if r.status != 200:
-            await session.close()
-            return False
-    
-    await session.close()
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, params={"userId": user_id}, headers={"Authorization": config["dbl"]["TOKEN"]}) as r:
+            try:
+                data = await r.json()
+            
+            except Exception:
+                return False
+            
+            if r.status != 200:
+                return False
+
     return bool(data.get("voted", False))
 
 

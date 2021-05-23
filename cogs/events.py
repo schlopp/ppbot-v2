@@ -10,9 +10,9 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_command(self, ctx):
         await ud.runsql('execute','UPDATE userdata.stats SET commands_run = userdata.stats.commands_run + 1')
-        if random.randint(1,200)!=1: # 0.5% chance
+        if random.randint(1,200) != 1: # 0.5% chance
             return
-        #event is triggered
+
         await asyncio.sleep(1)
         string = random.choice([
             'pp bot time',
@@ -23,6 +23,7 @@ class Events(commands.Cog):
             'cool kids',
             'human rights',
             ])
+
         event = ud.Event(ctx.channel.id,string[::-1])
         await event.create()
         embed = discord.Embed(colour=discord.Colour(random.choice([0x008000, 0xffa500, 0xffff00])),title='**EVENT**')
