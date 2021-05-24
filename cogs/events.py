@@ -48,7 +48,7 @@ class Events(commands.Cog):
             ])
         
         event = new_event(ctx.channel.id, string[::-1])
-        embed = discord.Embed(colour=discord.Colour(random.choice([0x008000, 0xffa500, 0xffff00])),title='**EVENT**')
+        embed = discord.Embed(colour=discord.Colour(random.choice([0x008000, 0xffa500, 0xffff00])), title='**EVENT**')
 
         embed.description = 'A random event has been triggered!'
         embed.add_field(name='Reverse!',value=f'Type **`{string}`** backwards')
