@@ -30,8 +30,8 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_command(self, ctx):
         await ud.runsql('execute','UPDATE userdata.stats SET commands_run = userdata.stats.commands_run + 1')
-        if random.randint(1,5) != 1: # 0.5% chance
-            return
+        #if random.randint(1,5) != 1: # 0.5% chance
+        #    return
 
         await asyncio.sleep(1)
         string = random.choice([
