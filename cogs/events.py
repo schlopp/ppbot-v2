@@ -85,6 +85,8 @@ class Events(commands.Cog):
         try:
             self.events[ctx.channel.id].pop(string[::-1], None)
         except IndexError:
+            pass
+        return
             
     
     @commands.Cog.listener()
