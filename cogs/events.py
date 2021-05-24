@@ -82,7 +82,10 @@ class Events(commands.Cog):
                 embed.add_field(name='🥉 third place', value=f'{third.name} wins {size} inches!',inline=False)
         
         await ctx.send(embed=embed)
-        return await event.delete()
+        try:
+            self.events[ctx.channel.id].pop(string[::-1], None)
+        except IndexError:
+            
     
     @commands.Cog.listener()
     @commands.has_permissions(send_messages=True)
@@ -96,22 +99,24 @@ class Events(commands.Cog):
         if message.content.lower() not in self.events[message.channel.id].keys(): return
 
         event = self.events[message.channel.id][message.content.lower()]
-        pp = await ud.Pp.fetch(message.author.id)
+        author = message.author.id
+        pp = await ud.Pp.fetch(author)
 
         if not pp: raise ud.HasNoPP(f"you need a pp first! Get one using `pp new`!")
 
-        if message.author.id in event.values():
+        if author in event.values():
             await message.channel.send(f'{message.author.mention} dude you cant enter the compition twice lmao')
             return
         
-        if not event["first"]: event["first"] = message.author.id
-        elif not event["second"]: event["second"] = message.author.id
-        elif not event["third"]: event["third"] = message.author.id
+        if not event["first"]: event["first"] = author
+        elif not event["second"]: event["second"] = author
+        elif not event["third"]: event["third"] = author
         else:
             await message.channel.send(f'{message.author.mention} should\'ve been faster')
             return
-
-        return await message.channel.send(f'{message.author.mention} got {place.replace("_"," ")}!')
+        
+        position = {v: k for k, v in self.events.items()}[author]
+        return await message.channel.send(f'{message.author.mention} got {position} place!')
 
 def setup(bot):
     bot.add_cog(Events(bot))
