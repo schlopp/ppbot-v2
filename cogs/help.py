@@ -33,49 +33,49 @@ class helping(commands.Cog):
         embed.add_field(
             name   = "**pp commands**",
             value  = """
-[`new, show @user, grow, rename`](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=2147863616)
+`new, show @user, grow, rename`
             """,
         inline = True
         )
         embed.add_field(
             name   = "**Shop commands**",
             value  = """
-[`shop, buy <amount> <item>`](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=2147863616)
+`shop, buy <amount> <item>`
             """,
         inline = True
         )
         embed.add_field(
             name   = "**Gambling commands**",
             value  = """
-[`gamble <amount>`](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=2147863616)
+`gamble <amount>`
             """,
         inline = True
         )
         embed.add_field(
             name   = "**Fun commands**",
             value  = """
-[`cat, dog, fox, redpanda, panda, meme, compare @user, percentage <thing>, snort`](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=2147863616)
+`cat, dog, fox, redpanda, panda, meme, compare @user, percentage <thing>, snort`
             """,
         inline = True
         )
         embed.add_field(
             name   = "**Extra economy commands**",
             value  = """
-[`hospital, fish, hunt, beg, daily`](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=2147863616)
+`hospital, fish, hunt, beg, daily`
             """,
         inline = True
         )
         embed.add_field(
             name   = "**Utility commands**",
             value  = """
-[`sfwtoggle, leaderboard @user, suggest, github, vote`](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=2147863616)
+`sfwtoggle, leaderboard @user, suggest, github, vote`
             """,
         inline = True
         )
         embed.add_field(
             name   = "**Help commands**",
             value  = """
-[`help, invite, support`](https://discord.com/oauth2/authorize?client_id=735147633076863027&scope=bot&permissions=2147863616)
+`help, invite, support`
             """,
         inline = True
         )
