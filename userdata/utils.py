@@ -5,6 +5,7 @@ import aiohttp
 import random
 from userdata import Pp
 from discord.ext import commands
+import re
 
 with open("./config.toml") as f:
     config = toml.loads(f.read())
@@ -151,3 +152,27 @@ def human_format(num:int):
         magnitude += 1
         num /= 1000.0
     return '{}{}'.format('{:f}'.format(num).rstrip('0').rstrip('.'), ['', 'K', 'M', 'B', 'T'][magnitude])
+
+def deepdict(o):
+    if hasattr(o, '__dict__'):
+        o = vars(o)
+        
+    elif isinstance(o, asyncpg.Record):
+        o = dict(o)
+    
+    if isinstance(o, dict):
+        {key: deepdict(value) for key, value in o.items()}
+    
+    elif isinstance(o, list):
+        o = [deepdict(i) for i in o]
+    
+    return o
+
+def clean_code(code:str):
+    if re.search(r'^```(.|\s)*```$', code):
+        print(code)
+        return code.split('\n',1)[1].strip()[:-3]
+    if re.search(r'^`.*`$', code):
+        print(code)
+        return code.strip()[1:-1]
+    return code.strip()

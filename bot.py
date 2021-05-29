@@ -8,6 +8,8 @@ import asyncio
 #prefixes
 intents = discord.Intents.default()
 intents.reactions = True
+#discord.abc.Messageable.send = ud.send
+
 bot = commands.AutoShardedBot(
     command_prefix=[
         'pp ',
@@ -122,7 +124,7 @@ async def status(ctx, *, informationthatineed):
 
 @bot.command()
 async def ping(ctx):
-    await ctx.send(f'🏓 pong! Latency: `{round(bot.latency, 8)}ms`')
+    await ctx.send(f'🏓 pong! Latency: `{round(bot.latency*1000, 8)}ms`')
     
 @bot.command()
 async def invite(ctx):

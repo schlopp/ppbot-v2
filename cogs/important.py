@@ -19,7 +19,7 @@ class important(commands.Cog):
     @ud.has_no_pp()
     async def new(self, ctx):
         async with ctx.typing():
-            ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
+            ppname = 'Personal Pet' if await ud.has_sfw_mode(getattr(ctx.guild, 'id', 1))  else 'pp'
             embed = await ud.create_embed(ctx)
             await ud.Pp(ctx.author.id).create()
             embed.description = f"{ctx.author.mention}, New {ppname} created!"
@@ -32,7 +32,8 @@ class important(commands.Cog):
     @ud.has_pp()
     async def show(self, ctx, user:discord.Member=None):
         async with ctx.typing():
-            ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
+            sfwmode = await ud.has_sfw_mode(getattr(ctx.guild, 'id', 1))
+            ppname = 'Personal Pet' if sfwmode else 'pp'
             embed = await ud.create_embed(ctx, include_tip=False)
             
             if user:
@@ -47,7 +48,7 @@ class important(commands.Cog):
             if user.id == 339170260064141322:
                 embed.add_field(name='MED!?',value='WOAH. I JUST REALISED THE USER YOU\'RE TALKING ABOUT IS ACTUALLY MED. THIS IS SO COOL I LOVE MED AND ALL HER SUPPORT FOR ME.')
             
-            if await ud.has_sfw_mode(ctx.guild.id):
+            if sfwmode:
                 length = pp.size // 100
                 dog:list = [
                     f'  __  {(" " * length)[:20]}   _',
@@ -80,7 +81,7 @@ class important(commands.Cog):
     @ud.has_pp()
     async def grow(self, ctx):
         async with ctx.typing():
-            ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
+            ppname = 'Personal Pet' if await ud.has_sfw_mode(getattr(ctx.guild, 'id', 1))  else 'pp'
             embed = await ud.create_embed(ctx)
             pp = await ud.Pp.fetch(ctx.author.id, self.bot)
             growsize = random.randint(1, 5) * pp.multiplier["multiplier"]
@@ -96,7 +97,7 @@ class important(commands.Cog):
     @ud.has_pp()
     async def rename(self, ctx):
         async with ctx.typing():
-            ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
+            ppname = 'Personal Pet' if await ud.has_sfw_mode(getattr(ctx.guild, 'id', 1))  else 'pp'
             embed = await ud.create_embed(ctx)
             pp = await ud.Pp.fetch(ctx.author.id)
             embed.description = f"What will your {ppname}'s new name be?"

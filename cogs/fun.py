@@ -99,7 +99,7 @@ class animals(commands.Cog):
             if user == ctx.author:
                 return await ud.handle_exception(ctx,'Wha- How would you compare yourself to yourself?')
             
-            ppname = 'Personal Pet' if await ud.has_sfw_mode(ctx.guild.id) else 'pp'
+            ppname = 'Personal Pet' if await ud.has_sfw_mode(getattr(ctx.guild, 'id', 1)) else 'pp'
             
             if not await ud.Pp.fetch(user.id):
                 return await ud.handle_exception(ctx,f'{user.mention} doesn\'t have a {ppname}.')

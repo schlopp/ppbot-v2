@@ -23,7 +23,7 @@ class important(commands.Cog):
     @commands.bot_has_permissions(send_messages=True, embed_links=True)
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def sfwmode(self, ctx):
-        sfw_mode = await ud.has_sfw_mode(ctx.guild.id)
+        sfw_mode = await ud.has_sfw_mode(getattr(ctx.guild, 'id', 1)) 
         await ud.toggle_sfw_mode(ctx.guild.id)
         if sfw_mode:
             return await ctx.send(embed=discord.Embed(description='Disabled family friendly mode!'))
