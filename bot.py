@@ -121,7 +121,6 @@ async def status(ctx, *, informationthatineed):
     await bot.change_presence(activity=discord.Game(name=informationthatineed))
     await message.add_reaction('👌')
 
-
 @bot.command()
 async def ping(ctx):
     await ctx.send(f'🏓 pong! Latency: `{round(bot.latency*1000, 8)}ms`')
