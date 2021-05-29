@@ -39,8 +39,7 @@ class Inv(dict):
                 updatevalues.append((key,value))
                 
         if insertvalues:
-            await conn.execute(
-                f'''INSERT INTO userdata.inv(user_id, item_name, amount) VALUES {insertvalues.rstrip(',')}''')
+            await conn.execute(f'''INSERT INTO userdata.inv(user_id, item_name, amount) VALUES {insertvalues.rstrip(',')}''')
             
         for i in updatevalues:
             await conn.execute('''
