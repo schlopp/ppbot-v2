@@ -170,9 +170,7 @@ def deepdict(o):
 
 def clean_code(code:str):
     if re.search(r'^```(.|\s)*```$', code):
-        print(code)
         return code.split('\n',1)[1].strip()[:-3]
     if re.search(r'^`.*`$', code):
-        print(code)
         return code.strip()[1:-1]
     return code.strip()

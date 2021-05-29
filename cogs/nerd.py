@@ -11,13 +11,16 @@ import aiohttp
 from discord.ext import commands
 from datetime import datetime
 import contextlib
+import traceback
+import toml
 
 
 class Nerd(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
-
+        with open("./config.toml") as f:
+            self.config = toml.loads(f.read())
 
     @commands.command()
     @commands.is_owner()
@@ -151,6 +154,7 @@ class Nerd(commands.Cog):
                 "channel": ctx.channel,
                 "guild": ctx.guild,
                 "author": ctx.author,
+                "ctx": ctx,
                 "ud": ud,
             }
 
@@ -164,18 +168,23 @@ class Nerd(commands.Cog):
 
                     obj = await local_variables["func"]()
                     result = f"{stdout.getvalue()}\n-- {obj}"
-                    time_passed = datetime.now() - start_time
-                    if len(result) > 1500:
-                        txtfile = io.StringIO()
-                        txtfile.write(result)
-                        txtfile.seek(0)
-                        return await ctx.send(f"Executed in **{round(time_passed.total_seconds(), 3)}** seconds.", file=discord.File(txtfile, "result.py"))
-                    return await ctx.send(f"Executed in **{round(time_passed.total_seconds(), 3)}** seconds.\n```py\n{result}```")
-                    return await ctx.send(embed=discord.Embed(description=result))
             except Exception as e:
-                result = f"```py\n{e.__traceback__}\n\n{e}```"
-                return await ctx.send(embed=discord.Embed(description=result))
+                result = f"{traceback.format_exc()}\n\n{e}"
 
+            time_passed = datetime.now() - start_time
+            if len(result) > 1500:
+                txtfile = io.StringIO()
+                txtfile.write(result)
+                txtfile.seek(0)
+                return await ctx.send(
+                    f"Executed in **{round(time_passed.total_seconds(), 3)}** seconds.",
+                    file=discord.File(txtfile, "result.py")
+                    )
+
+            await ctx.send(
+                f"Executed in **{round(time_passed.total_seconds(), 3)}** seconds.",
+                embed=discord.Embed(description=f'```py\n{result}```')
+                )
 
 def setup(bot):
     bot.add_cog(Nerd(bot))
