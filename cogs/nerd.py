@@ -66,7 +66,7 @@ class Nerd(commands.Cog):
         async with ctx.typing():
             def check(m):
                 return m.author == ctx.author
-            item = item.lower()
+            item_name = item_name.lower()
             await asyncio.sleep(.1)
         await ctx.send('What\'s the item type?')
         try:
@@ -81,7 +81,7 @@ class Nerd(commands.Cog):
             await ctx.send('Is the item multiplier dependant?')
             x = await self.bot.wait_for('message', timeout=120.0, check=check)
             multiplierDependant = x == 'yes'
-            await ud.Shop.add_item(item_name,item_type,item_desc,default_price,multiplierDependant)
+            await ud.Shop.add_item(item_name, item_type, item_desc,default_price, multiplierDependant)
             await ctx.send('Process completed.')
         except asyncio.TimeoutError:
             await ctx.send('Slowpoke.')
@@ -156,6 +156,7 @@ class Nerd(commands.Cog):
                 "author": ctx.author,
                 "ctx": ctx,
                 "ud": ud,
+                "asyncio": asyncio,
             }
 
             stdout = io.StringIO()
