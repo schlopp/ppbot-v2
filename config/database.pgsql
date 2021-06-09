@@ -44,5 +44,5 @@ CREATE TABLE IF NOT EXISTS items(
     recipes json,
     buffs json,
     lore text[],
-    PRIMARY KEY (id)
+    PRIMARY KEY (name, id)
 );
