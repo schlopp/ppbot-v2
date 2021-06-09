@@ -1,0 +1,34 @@
+{
+    "ITEM_ID_AS_UPPER_SNAKE_CASE": {
+        "name": "item name no capital letters",
+        "id": "ITEM_ID_AS_UPPER_SNAKE_CASE",
+        "type": "ITEM_TYPE_AS_UPPER_SNAKE_CASE",
+        "rarity": "ITEM_RARITY_AS_UPPER_SNAKE_CASE",
+        "cost": 1234,
+        "description": "item description",
+        "lore": [
+            "A bit of background about the item.",
+            "Maybe some hints as to what the item does"
+        ],
+        "usage": [
+            "This item grants access to the **command name** command.",
+            "This item is used to brew the **example potion** potion.",
+            "This item gives you a **buff name** buff for 30 minutes."
+        ]
+    },
+
+    "WOBBLY_FISHING_ROD": {
+        "name": "Wobbly fishing rod",
+        "id": "WOBBLY_FISHING_ROD",
+        "type": "TOOL",
+        "rarity": "COMMON",
+        "cost": 50,
+        "description": "We all gotta start somewhere.",
+        "lore": [
+            "This rod kinda looks like it'd break first fling"
+        ],
+        "usage": [
+            "This item grants access to the **fish** command."
+        ]
+    }
+}
