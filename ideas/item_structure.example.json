@@ -1,7 +1,6 @@
 {
-    "ITEM_ID_AS_UPPER_SNAKE_CASE":{
-        "name":"Item name",
-        "id":"ITEM_ID_AS_UPPER_SNAKE_CASE",
+    "item name no caps":{
+        "name":"item name no caps",
         "for_sale":true,
         "requires":{
             "id":"FISHING",
@@ -15,18 +14,17 @@
         "description":"item description",
         "emoji":"❓",
         "recipe":{
-            "REQUIRED_ITEM_ID_AS_UPPER_SNAKE_CASE":69
+            "required item name no caps":69
         },
         "usage":[
             "USAGE_ID_AS_UPPER_SNAKE_CASE"
         ],
         "recipes":{
-            "RECIPE_ITEM_ID_AS_UPPER_SNAKE_CASE":10
+            "required item name no caps":10
         },
         "buffs":{
-            "BUFF_ID_AS_UPPER_SNAKE_CASE":{
-                "name":"Buff name",
-                "id":"BUFF_ID_AS_UPPER_SNAKE_CASE",
+            "buff name no caps":{
+                "name":"buff name no caps",
                 "value":1
             }
         },
@@ -35,9 +33,8 @@
             "Maybe some hints as to what the item does"
         ]
     },
-    "WOBBLY_FISHING_ROD":{
-        "name":"Wobbly fishing rod",
-        "id":"WOBBLY_FISHING_ROD",
+    "wobbly fishing rod":{
+        "name":"wobbly fishing rod",
         "for_sale":true,
         "requires":null,
         "type":"TOOL",
@@ -52,16 +49,15 @@
             "FISHING"
         ],
         "recipes":{
-            "STURDY_FISHING_ROD":5
+            "sturdy fishing rod":5
         },
         "buffs":null,
         "lore":[
             "This rod kinda looks like it'd break first fling"
         ]
     },
-    "STURDY_FISHING_ROD":{
-        "name":"Sturdy fishing rod",
-        "id":"STURDY_FISHING_ROD",
+    "sturdy fishing rod":{
+        "name":"sturdy fishing rod",
         "for_sale":true,
         "requires":[
             {
@@ -77,18 +73,14 @@
         "description":"Atleast it won't break upon impact",
         "emoji":"🎣",
         "recipe":{
-            "WOBBLY_FISHING_ROD":5
+            "wobbly fishing rod":5
         },
         "usage":[
             "FISHING"
         ],
         "recipes":null,
         "buffs":{
-            "GOOD_CATCH":{
-                "name":"Good catch",
-                "id":"GOOD_CATCH",
-                "value":1
-            }
+            "good catch":1
         },
         "lore":[
             "I never knew taping a few low quality fishing rods together would actually work"
