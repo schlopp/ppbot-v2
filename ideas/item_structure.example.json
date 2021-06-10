@@ -2,10 +2,12 @@
     "item name no caps":{
         "name":"item name no caps",
         "for_sale":true,
-        "requires":{
-            "id":"FISHING",
-            "value":99
-        },
+        "requires":[
+            {
+                "name":"FISHING",
+                "value":99
+            }
+        ],
         "type":"ITEM_TYPE_AS_UPPER_SNAKE_CASE",
         "rarity":"ITEM_RARITY_AS_UPPER_SNAKE_CASE",
         "buy":100,
@@ -17,7 +19,7 @@
             "required item name no caps":69
         },
         "usage":[
-            "USAGE_ID_AS_UPPER_SNAKE_CASE"
+            "USAGE_NAME_AS_UPPER_SNAKE_CASE"
         ],
         "recipes":{
             "required item name no caps":10
@@ -61,7 +63,7 @@
         "for_sale":true,
         "requires":[
             {
-                "id":"FISHING",
+                "name":"FISHING",
                 "value":3
             }
         ],

@@ -27,3 +27,11 @@ CREATE TABLE IF NOT EXISTS items(
     lore text[],
     PRIMARY KEY (name)
 );
+
+
+CREATE TABLE IF NOT EXISTS user_inventory(
+    user_id BIGINT NOT NULL,
+    name text NOT NULL,
+    amount INT NOT NULL,
+    PRIMARY KEY (user_id, name)
+);
