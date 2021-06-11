@@ -1,1 +1,1 @@
-from cogs.utils.checks.requirements import RequirementNotMet, required
+from cogs.utils.checks.requirements import ItemRequirementNotMet, SkillRequirementNotMet, has_item, has_skill

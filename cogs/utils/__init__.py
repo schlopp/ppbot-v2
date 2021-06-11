@@ -1,1 +1,1 @@
-import cogs.utils.checks
+from cogs.utils import checks
