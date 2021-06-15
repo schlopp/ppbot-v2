@@ -17,6 +17,17 @@ class Lore:
 
     def __repr__(self):
         return f'<Lore description="{self.description}", story={self.story}>'
+    
+    @classmethod
+    def from_json(cls, json:str):
+        json = jsonloads(json)
+        return cls(json['description'], json['story'])
+
+    def to_json(self) -> dict:
+        return {
+            'description': self.description,
+            'story': self.story,
+        }
 
 class ShopSettings:
     """
@@ -36,12 +47,12 @@ class ShopSettings:
         json = jsonloads(json)
         return cls(json['for_sale'], buy=json['buy'], sell=json['sell'])
 
-    def to_json(self) -> str:
-        return jsondumps({
+    def to_json(self) -> dict:
+        return {
             'for_sale': self.for_sale,
             'buy': self.buy,
             'sell': self.sell,
-        })
+        }
 
 class Item:
     """
@@ -69,6 +80,22 @@ class Item:
     def __repr__(self):
         variables = [f'{k}=\'{v}\'' if isinstance(v, str) else f'{k}={v}' for k, v in vars(self).items()]
         return '<Item {}>'.format(', '.join(variables))
+
+    def to_json(self) -> dict:
+        return {
+            "name": self.name,
+            "requires": self.requires,
+            "shopsettings": self.shopsettings.to_json(),
+            "recipe": self.recipe,
+            "type": self.type,
+            "rarity": self.rarity,
+            "auctionable": self.auctionable,
+            "emoji": self.emoji,
+            "used_for": self.used_for,
+            "recipes": self.recipes,
+            "buffs": self.buffs,
+            "lore": self.lore.to_json(),
+        }
 
     async def create(self):
         buffs = self.buffs if self.buffs is None else []
