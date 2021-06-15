@@ -1,5 +1,6 @@
 import typing
 from json import loads as jsonloads
+from json import dumps as jsondumps
 
 class Dict(dict):
     """
@@ -13,6 +14,9 @@ class Dict(dict):
     def from_json(cls, json:str):
         return cls(jsonloads(json))
     
+    def to_json(self) -> str:
+        return jsondumps(self)
+
     def __repr__(self):
         return '<Dict {}>'.format({k:v for k, v in self.items()})
     

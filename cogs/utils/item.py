@@ -23,11 +23,14 @@ class Lore:
         json = jsonloads(json)
         return cls(json['description'], json['story'])
 
-    def to_json(self) -> dict:
+    def to_dict(self) -> dict:
         return {
             'description': self.description,
             'story': self.story,
         }
+    
+    def to_json(self) -> str:
+        return jsondumps(self.to_dict())
 
 class ShopSettings:
     """
@@ -47,12 +50,15 @@ class ShopSettings:
         json = jsonloads(json)
         return cls(json['for_sale'], buy=json['buy'], sell=json['sell'])
 
-    def to_json(self) -> dict:
+    def to_dict(self) -> dict:
         return {
             'for_sale': self.for_sale,
             'buy': self.buy,
             'sell': self.sell,
         }
+
+    def to_json(self) -> str:
+        return jsondumps(self.to_dict())
 
 class Item:
     """
@@ -81,7 +87,7 @@ class Item:
         variables = [f'{k}=\'{v}\'' if isinstance(v, str) else f'{k}={v}' for k, v in vars(self).items()]
         return '<Item {}>'.format(', '.join(variables))
 
-    def to_json(self) -> dict:
+    def to_dict(self) -> dict:
         return {
             "name": self.name,
             "requires": self.requires,
@@ -96,6 +102,9 @@ class Item:
             "buffs": self.buffs,
             "lore": self.lore.to_json(),
         }
+    
+    def to_json(self) -> str:
+        return jsondumps(self.to_dict())
 
     async def create(self):
         buffs = self.buffs if self.buffs is None else []
@@ -104,9 +113,9 @@ class Item:
                 INSERT INTO items
                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
                 ON CONFLICT (name) DO NOTHING;''',
-                self.name, jsondumps(self.requires), self.type,
+                self.name, self.requires.to_json(), self.type,
                 self.rarity, self.auctionable, self.lore.description,
-                self.emoji, self.used_for, jsondumps(self.recipe),
-                jsondumps(self.recipes), buffs, self.shopsettings.to_json(),
+                self.emoji, self.used_for, self.recipe.to_json(),
+                self.recipes.to_json(), buffs, self.shopsettings.to_json(),
                 self.lore.story
                 )
