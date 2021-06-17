@@ -67,9 +67,10 @@ class Item:
 
     def __init__(
                 self, name:str, *, requires:typing.Optional[Dict]=Dict({}), type:str, shopsettings:ShopSettings,
-                rarity:str, auctionable:bool, emoji:typing.Union[str],
+                rarity:str, auctionable:bool, emoji:str,
                 recipe:typing.Optional[Dict]=Dict({}), used_for:typing.Optional[typing.List[str]]=Dict({}),
-                recipes:typing.Optional[Dict]=Dict({}), buffs:typing.Optional[typing.List[Dict]]=[], lore:Lore):
+                recipes:typing.Optional[Dict]=Dict({}), buffs:typing.Optional[typing.List[Dict]]=[], lore:Lore,
+                amount:typing.Optional[int]=None):
         self.name = name
         self.requires = requires
         self.shopsettings = shopsettings
@@ -82,6 +83,7 @@ class Item:
         self.recipes = recipes
         self.buffs = buffs
         self.lore = lore
+        self.amount = amount
     
     def __repr__(self):
         variables = [f'{k}=\'{v}\'' if isinstance(v, str) else f'{k}={v}' for k, v in vars(self).items()]
@@ -101,6 +103,7 @@ class Item:
             "recipes": self.recipes,
             "buffs": self.buffs,
             "lore": self.lore.to_json(),
+            "amount": self.amount,
         }
     
     def to_json(self) -> str:
