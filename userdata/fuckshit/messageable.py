@@ -146,9 +146,9 @@ def send_files(
             components=components,
         )
 
-discord.http.HTTPClient.send_message = send_message
-discord.http.HTTPClient.send_multipart_helper = send_multipart_helper
-discord.http.HTTPClient.send_files = send_files
+#discord.http.HTTPClient.send_message = send_message
+#discord.http.HTTPClient.send_multipart_helper = send_multipart_helper
+#discord.http.HTTPClient.send_files = send_files
 
 async def send(
             self, content=None, *, tts=False,
@@ -292,4 +292,4 @@ async def send(
             await ret.delete(delay=delete_after)
         return ret
 
-discord.abc.Messageable.send = send
+#discord.abc.Messageable.send = send

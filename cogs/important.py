@@ -50,7 +50,7 @@ class important(commands.Cog):
             
             if sfwmode:
                 length = pp.size // 100
-                dog:list = [
+                dog = [
                     f'  __  {(" " * length)[:20]}   _',
                     f'o\'\')}}_{("_" * length)[:20]}__//',
                     f' ` _/ {(" " * length)[:20]}   )',

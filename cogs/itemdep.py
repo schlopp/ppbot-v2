@@ -92,12 +92,12 @@ class fishing(commands.Cog):
             try:
                 await self.bot.wait_for('message',timeout=20.0,check=lambda m: m.content.upper() == choice[1] and m.author == ctx.author and m.channel == ctx.channel)
             except asyncio.TimeoutError:
-                random_number = random.randint(1,50) * pp.multiplier["multiplier"]
+                random_number = random.randint(1,50)
                 
                 if pp.size > 50 * pp.multiplier["multiplier"]:
-                    pp.size -= random_number
+                    pp.size -= random_number * pp.multiplier["multiplier"]
                     await pp.update()
-                    embed.description = f"**Too slow!** The police officer shoots you and takes **{random_number} inches** from your corpse. The correct word was `{choice[1]}`"
+                    embed.description = f"**Too slow!** The police officer shoots you and takes **{random_number * pp.multiplier['multiplier']} inches** from your corpse. The correct word was `{choice[1]}`"
                 else:
                     embed.description = f"**Too slow!** The police officer shoots you and realises your pp is so small it's not even worth taking. The correct word was `{choice[1]}`"
                 return await ctx.send(embed=embed)
@@ -110,14 +110,14 @@ class fishing(commands.Cog):
                     ]
                 choice = random.choice(options)
                 inv[choice] += 1
-                pp.size += random_number
+                pp.size += random_number * pp.multiplier["multiplier"]
                 await pp.update()
-                embed.description = f"You avoid the bullet and loot the police officer. You find **{random_number} inches** and **1 {choice}!**"
+                embed.description = f"You avoid the bullet and loot the police officer. You find **{random_number * pp.multiplier['multiplier']} inches** and **1 {choice}!**"
                 
             else:
                 pp.size += random_number
                 await pp.update()
-                embed.description = f"You avoid the bullet and loot the police officer. You find **{random_number} inches!**"
+                embed.description = f"You avoid the bullet and loot the police officer. You find **{random_number * pp.multiplier['multiplier']} inches!**"
                 return await ctx.send(embed=embed)
     
     @commands.command()

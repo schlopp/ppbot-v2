@@ -88,7 +88,7 @@ class important(commands.Cog):
     @commands.bot_has_permissions(send_messages=True)
     async def suggest(self, ctx, *, suggestion:str):
         async with ctx.typing():
-            channel = self.bot.get_channel(816777533089513490)
+            channel = self.bot.get_channel(851794403650830347)
             embed = discord.Embed()
             embed.description = suggestion
             embed.set_footer(text=f'Suggestion from {ctx.author} ({ctx.author.id})')
