@@ -21,7 +21,9 @@ CREATE TABLE IF NOT EXISTS items(
     recipe JSONB DEFAULT '{}',
     recipes JSONB DEFAULT '{}',
     buffs JSONB[] DEFAULT '{}',
-    shopsettings JSONB NOT NULL,
+    shop_for_sale BOOL NOT NULL,
+    shop_buy INT NOT NULL,
+    shop_sell INT NOT NULL,
     story TEXT[] DEFAULT '{}'
 );
 
