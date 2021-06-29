@@ -12,7 +12,7 @@ class TestingCommands(vbu.Cog):
         Testing command 1
         """
 
-        await ctx.send("You cast your rod.. but nothing happens? Weird. Almost like this is just a test command!")
+        await ctx.send("You cast your rod.. but nothing happens? Weird. Almost like this is just a test command!", components=vbu.MessageComponents(vbu.ActionRow(vbu.Button('test!','HELLO'))))
     
     @_test1.error
     async def _test1_error(self, ctx:vbu.Context, error):
