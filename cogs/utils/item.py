@@ -37,7 +37,7 @@ class ShopSettings:
     Shop settings
     """
 
-    def __init__(self, for_sale:bool, *, buy:typing.Optional[int]=0, sell:typing.Optional[int]=0):
+    def __init__(self, for_sale:bool, buy:typing.Optional[int]=0, sell:typing.Optional[int]=0):
         self.for_sale = for_sale
         self.buy = buy
         self.sell = sell
@@ -93,7 +93,9 @@ class Item:
         return {
             "name": self.name,
             "requires": self.requires,
-            "shopsettings": self.shopsettings.to_json(),
+            "shop_for_sale": self.shopsettings.for_sale,
+            "shop_buy": self.shopsettings.buy,
+            "shop_sell": self.shopsettings.sell,
             "recipe": self.recipe,
             "type": self.type,
             "rarity": self.rarity,
@@ -114,11 +116,12 @@ class Item:
         async with vbu.DatabaseConnection() as db:
             await db('''
                 INSERT INTO items
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
                 ON CONFLICT (name) DO NOTHING;''',
                 self.name, self.requires.to_json(), self.type,
                 self.rarity, self.auctionable, self.lore.description,
                 self.emoji, self.used_for, self.recipe.to_json(),
-                self.recipes.to_json(), buffs, self.shopsettings.to_json(),
+                self.recipes.to_json(), buffs, self.shopsettings.for_sale,
+                self.shopsettings.buy, self.shopsettings.sell,
                 self.lore.story
                 )
