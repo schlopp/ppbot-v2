@@ -1,5 +1,6 @@
 import typing
 import discord
+import asyncpg
 import voxelbotutils as vbu
 from json import dumps as jsondumps
 from json import loads as jsonloads
@@ -89,6 +90,26 @@ class Item:
         variables = [f'{k}=\'{v}\'' if isinstance(v, str) else f'{k}={v}' for k, v in vars(self).items()]
         return '<Item {}>'.format(', '.join(variables))
 
+    @classmethod
+    def from_record(cls, record:asyncpg.Record):
+        return cls(
+            record['name'],
+            requires=Dict.from_json(record['requires']),
+            type=record['type'],
+            shopsettings=ShopSettings(record['shop_for_sale'], record['shop_buy'], record['shop_sell']),
+            rarity=record['rarity'],
+            auctionable=record['auctionable'],
+            emoji=record['emoji'],
+            recipe=Dict.from_json(record['recipe']),
+            used_for=record['used_for'],
+            recipes=Dict.from_json(record['recipes']),
+            buffs=[Dict.from_json(i) for i in record['buffs']],
+            lore=Lore(
+                record['description'],
+                record['story'],
+            ),
+        )
+
     def to_dict(self) -> dict:
         return {
             "name": self.name,
@@ -111,17 +132,16 @@ class Item:
     def to_json(self) -> str:
         return jsondumps(self.to_dict())
 
-    async def create(self):
+    async def create(self, db:vbu.DatabaseConnection):
         buffs = self.buffs if self.buffs is None else []
-        async with vbu.DatabaseConnection() as db:
-            await db('''
-                INSERT INTO items
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
-                ON CONFLICT (name) DO NOTHING;''',
-                self.name, self.requires.to_json(), self.type,
-                self.rarity, self.auctionable, self.lore.description,
-                self.emoji, self.used_for, self.recipe.to_json(),
-                self.recipes.to_json(), buffs, self.shopsettings.for_sale,
-                self.shopsettings.buy, self.shopsettings.sell,
-                self.lore.story
-                )
+        await db('''
+            INSERT INTO items
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+            ON CONFLICT (name) DO NOTHING;''',
+            self.name, self.requires.to_json(), self.type,
+            self.rarity, self.auctionable, self.lore.description,
+            self.emoji, self.used_for, self.recipe.to_json(),
+            self.recipes.to_json(), buffs, self.shopsettings.for_sale,
+            self.shopsettings.buy, self.shopsettings.sell,
+            self.lore.story
+            )
