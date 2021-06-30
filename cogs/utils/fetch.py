@@ -8,7 +8,7 @@ class ItemNotFoundError(Exception):
     Raised when a item is not found in the database.
     """
 
-async def fetch_item(item_name:str):
+async def fetch_item(item_name:str, db:vbu.DatabaseConnection):
     """
     Fetch an item from the database.
     This function is a coroutine.
@@ -20,29 +20,12 @@ async def fetch_item(item_name:str):
     raises :class:`ItemNotFoundError` when the item is not found in the database.
     """
 
-    async with vbu.DatabaseConnection() as db:
-        rows = await db('''SELECT * FROM items WHERE name=$1''', item_name)
-        if not rows:
-            raise ItemNotFoundError(f"Item '{item_name}' not found in the database.")
+    rows = await db('''SELECT * FROM items WHERE name=$1''', item_name)
+    if not rows:
+        raise ItemNotFoundError(f"Item '{item_name}' not found in the database.")
 
-        row = rows[0]
-        return Item(
-            row['name'],
-            requires=Dict.from_json(row['requires']),
-            type=row['type'],
-            shopsettings=ShopSettings(row['shop_for_sale'], row['shop_buy'], row['shop_sell']),
-            rarity=row['rarity'],
-            auctionable=row['auctionable'],
-            emoji=row['emoji'],
-            recipe=Dict.from_json(row['recipe']),
-            used_for=row['used_for'],
-            recipes=Dict.from_json(row['recipes']),
-            buffs=[Dict.from_json(i) for i in row['buffs']],
-            lore=Lore(
-                row['description'],
-                row['story'],
-            ),
-        )
+    row = rows[0]
+    return Item.from_record(row)
 
 async def fetch_items(db:vbu.DatabaseConnection, for_sale:typing.Optional[bool]=None, auctionable:typing.Optional[bool]=None):
     """
@@ -68,23 +51,4 @@ async def fetch_items(db:vbu.DatabaseConnection, for_sale:typing.Optional[bool]=
     else:
         rows = await db('''SELECT * FROM items WHERE shop_for_sale = $1''', for_sale)
 
-
-    return [
-        Item(
-            row['name'],
-            requires=Dict.from_json(row['requires']),
-            type=row['type'],
-            shopsettings=ShopSettings(row['shop_for_sale'], row['shop_buy'], row['shop_sell']),
-            rarity=row['rarity'],
-            auctionable=row['auctionable'],
-            emoji=row['emoji'],
-            recipe=Dict.from_json(row['recipe']),
-            used_for=row['used_for'],
-            recipes=Dict.from_json(row['recipes']),
-            buffs=[Dict.from_json(i) for i in row['buffs']],
-            lore=Lore(
-                row['description'],
-                row['story'],
-            ),
-        ) for row in rows
-    ]
+    return [Item.from_record(row) for row in rows]
