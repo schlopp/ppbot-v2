@@ -12,6 +12,7 @@ class Shop(vbu.Cog):
         """
         Shoppy woppy
         """
+
         pass
 
 
