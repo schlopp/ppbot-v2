@@ -4,7 +4,8 @@ import asyncpg
 import voxelbotutils as vbu
 from json import dumps as jsondumps
 from json import loads as jsonloads
-from cogs.utils import Dict
+from cogs.utils.dict import Dict
+from cogs.utils.readable import int_to_roman
 
 
 class Lore:
@@ -69,7 +70,7 @@ class Item:
     def __init__(
                 self, name:str, *, requires:typing.Optional[Dict]=Dict({}), type:str, shopsettings:ShopSettings,
                 rarity:str, auctionable:bool, emoji:str,
-                recipe:typing.Optional[Dict]=Dict({}), used_for:typing.Optional[typing.List[str]]=Dict({}),
+                recipe:typing.Optional[Dict]=Dict({}), used_for:typing.Optional[typing.List[str]]=[],
                 recipes:typing.Optional[Dict]=Dict({}), buffs:typing.Optional[typing.List[Dict]]=[], lore:Lore,
                 amount:typing.Optional[int]=None):
         self.name = name
@@ -87,7 +88,7 @@ class Item:
         self.amount = amount
     
     def __repr__(self):
-        variables = [f'{k}=\'{v}\'' if isinstance(v, str) else f'{k}={v}' for k, v in vars(self).items()]
+        variables = [f"{k}='{v}'" if isinstance(v, str) else f'{k}={v}' for k, v in vars(self).items()]
         return '<Item {}>'.format(', '.join(variables))
 
     @classmethod
@@ -131,6 +132,12 @@ class Item:
     
     def to_json(self) -> str:
         return jsondumps(self.to_dict())
+
+    def pretty_requirements(self) -> typing.List[str]:
+        """
+        Make dem requirements pretty roman numerals
+        """
+        return [f'{k.lower().title()} {int_to_roman(v)}' for k, v in self.requires.items()]
 
     async def create(self, db:vbu.DatabaseConnection):
         buffs = self.buffs if self.buffs is None else []
