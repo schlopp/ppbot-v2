@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS items(
     rarity TEXT NOT NULL,
     auctionable boolean DEFAULT False,
     description text NOT NULL,
-    emoji TEXT NOT NULL,
+    emoji BIGINT NOT NULL,
     used_for TEXT[] DEFAULT '{}',
     recipe JSONB DEFAULT '{}',
     recipes JSONB DEFAULT '{}',
