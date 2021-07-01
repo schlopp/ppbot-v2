@@ -7,6 +7,9 @@ from discord.ext import commands
 
 class Visual(vbu.Cog):
 
+    def __init__(self, bot:vbu.Bot):
+        super().__init__(bot)
+
     @vbu.command(name='inventory', aliases=['inv', 'items', 'storage'])
     async def _display_inventory(self, ctx:vbu.Context, member:typing.Optional[discord.Member]=None):
         """
@@ -34,9 +37,9 @@ class Visual(vbu.Cog):
         def formatter(menu, items):
             output = []
             for item in items:
-                output.append(f'{item.emoji} **{item.name}** ─ {item.amount}\n{item.type} ─ {item.lore.description}')
+                output.append(f'{self.bot.get_emoji(item.emoji)} **{item.name}** ─ {item.amount}\n{item.type} ─ {item.lore.description}')
             output_string = "\n\n".join(output)
-            embed = vbu.Embed(title=f"**{member.display_name}'s inventory**")
+            embed = vbu.Embed(title=f"{member.display_name}'s inventory")
             embed.add_field('Items', output_string)
             embed.set_footer(f'Page {menu.current_page + 1}/{menu.max_pages}')
             return embed
