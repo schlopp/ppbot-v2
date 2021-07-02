@@ -49,21 +49,24 @@ class Shop(vbu.Cog):
                 )
                 
                 embed.set_thumbnail(self.bot.get_emoji(item.emoji).url)
-                embed.description = f'''
-                {item.lore.description}
-                
-                > {story_string}
-                > - {name}
-
-                **AUCTIONABLE:** [{'Yes' if item.auctionable else 'No'}]({link})
-                **FOR SALE:** [{'Yes' if item.shopsettings.for_sale else 'No'}]({link})
-                '''
-
+                footer_item_name = "".join(item.name.split()[0])
+                embed.set_footer(f'{ctx.prefix}buy {footer_item_name} [amount]/["max"] | {ctx.prefix}iteminfo {footer_item_name}')
+                embed.description = ''.join(
+                    (
+                        f'{item.lore.description}\n\n> {story_string}\n> - {name}\n\n',
+                        f'**AUCTIONABLE:** [{"Yes" if item.auctionable else "No"}]({link})\n',
+                        f'**FOR SALE:** [{"Yes" if item.shopsettings.for_sale else "No"}]({link})',
+                    )
+                )
                 if item.shopsettings.for_sale:
-                    embed.description += "\n**BUY:** [{0.sell} inches]({1})\n**SELL:** [{0.sell} inches]({1})".format(item.shopsettings, link)
+                    embed.description += "\n**BUY:** [{0.buy} inches]({1})\n**SELL:** [{0.sell} inches]({1})".format(item.shopsettings, link)
                 
+                if item.used_for:
+                    embed.add_field('usage:', '- '+'\n- '.join(item.pretty_usage()))
+
                 if item.requires:
-                    embed.add_field('shit you need to use this', ', '.join(item.pretty_requirements()))
+                    embed.add_field('Skills requires:', ', '.join(item.pretty_requirements()))
+                
                 
                 return await ctx.send(embed=embed)
 
@@ -72,9 +75,13 @@ class Shop(vbu.Cog):
             item: utils.Item
             for item in items:
                 story_string = "\n".join(item.lore.story)
-                item_description = '{0} **{1.name}** ─ {1.shopsettings.buy} inches'
-                item_description += '\n[{1.type}](https://www.youtube.com/watch?v=FP23VU01fz8)'
-                item_description += ' ─ {1.lore.description}\n*{2}*'
+                item_description = ''.join(
+                    (
+                        '{0} **{1.name}** ─ {1.shopsettings.buy} inches\n',
+                        '[{1.type}](https://www.youtube.com/watch?v=FP23VU01fz8)',
+                        ' ─ {1.lore.description}\n*{2}*',
+                    )
+                )
                 output.append(item_description.format(self.bot.get_emoji(item.emoji), item, story_string))
             output_string = "\n\n\n"+"\n\n".join(output)
             embed = vbu.Embed()
