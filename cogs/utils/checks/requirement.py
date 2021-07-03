@@ -1,4 +1,5 @@
 import typing
+
 import voxelbotutils as vbu
 from discord.ext import commands
 
@@ -13,6 +14,7 @@ class SkillRequirementNotMet(commands.CheckFailure):
         self.required_level = required_level
         self.current_level = current_level
 
+
 class ItemRequirementNotMet(commands.CheckFailure):
     """
     Generic error for when a item requirement isn't met.
@@ -20,6 +22,7 @@ class ItemRequirementNotMet(commands.CheckFailure):
 
     def __init__(self, item_name):
         self.item_name = item_name
+
 
 class UsageRequirementNotMet(commands.CheckFailure):
     """
@@ -29,12 +32,13 @@ class UsageRequirementNotMet(commands.CheckFailure):
     def __init__(self, usage):
         self.usage = usage
 
-def has_skill(name:str, level:int):
+
+def has_skill(name: str, level: int):
     """
     Check if user has specific skill.
     """
 
-    async def predicate(ctx:vbu.Context):
+    async def predicate(ctx: vbu.Context):
         async with vbu.DatabaseConnection() as db:
             fetched = await db('''
                 SELECT level FROM user_skill
@@ -46,12 +50,13 @@ def has_skill(name:str, level:int):
         return True
     return commands.check(predicate)
 
-def has_item(name:str):
+
+def has_item(name: str):
     """
     Check if user has specific item.
     """
 
-    async def predicate(ctx:vbu.Context):
+    async def predicate(ctx: vbu.Context):
         async with vbu.DatabaseConnection() as db:
             fetched = await db('''
                 SELECT * FROM user_inventory
@@ -61,12 +66,13 @@ def has_item(name:str):
             return True
     return commands.check(predicate)
 
-def has_item_with_usage(usage:typing.Optional['str']):
+
+def has_item_with_usage(usage: typing.Optional[str]):
     """
     Check if user has an item with a specific usage.
     """
 
-    async def predicate(ctx:vbu.Context):
+    async def predicate(ctx: vbu.Context):
         async with vbu.DatabaseConnection() as db:
             fetched = await db('''
                 SELECT name FROM user_inventory

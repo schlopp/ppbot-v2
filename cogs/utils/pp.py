@@ -1,4 +1,5 @@
 import typing
+
 import voxelbotutils as vbu
 from dataclasses import dataclass
 
@@ -11,9 +12,8 @@ class Pp:
     multiplier: typing.Optional[float] = 1.0
 
     def __init__(
-        self, user_id: int, name: typing.Optional[str] = 'Unnamed Pp',
-        amount: typing.Optional[int] = 0, multiplier: typing.Optional[float] = 1.0,
-    ):
+            self, user_id: int, name: typing.Optional[str] = 'Unnamed Pp',
+            amount: typing.Optional[int] = 0, multiplier: typing.Optional[float] = 1.0):
         self.user_id = user_id
         self.name = name
         self.amount = amount
