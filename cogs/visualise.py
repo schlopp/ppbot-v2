@@ -26,8 +26,8 @@ class Visual(vbu.Cog):
             inventory = await db('''SELECT name, amount FROM user_inventory WHERE user_id = $1 AND amount > 0''', member.id)
             if not inventory:
                 if member == ctx.author:
-                    return await ctx.send('You have no items lmao get good <:LULW:854752425348694016>')
-                return await ctx.send(f'**{member.display_name}** legit has no items <:LULW:854752425348694016>')
+                    return await ctx.reply('You have no items lmao get good <:LULW:854752425348694016>', mention_author=False)
+                return await ctx.reply(f'**{member.display_name}** legit has no items <:LULW:854752425348694016>', mention_author=False)
 
             items = []
             inventory_names = [i['name'] for i in inventory]

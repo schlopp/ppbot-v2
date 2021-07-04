@@ -38,7 +38,7 @@ class TestingCommands(vbu.Cog):
                 with vbu.Embed(use_random_colour=True) as embed:
                     embed.set_author(name=f'{pp.name} ({user.display_name}\'s pp)')
                     embed.description = f'size: {pp.size} inches\nmultiplier: {pp.multiplier}x'
-                return await ctx.send(embed=embed)
+                return await ctx.reply(embed=embed, mention_author=False)
     
     @vbu.command(name='name')
     async def _rename_pp_command(self, ctx: vbu.Context, name: str):
@@ -46,7 +46,7 @@ class TestingCommands(vbu.Cog):
             async with utils.Pp.fetch(db, ctx.author.id) as pp:
                 name = (name[:30] + '..') if len(name) > 32 else name
                 pp.name = name
-                return await ctx.send(f'Renamed your pp to **{name}**!')
+                return await ctx.reply(f'Renamed your pp to **{name}**!', mention_author=False)
     
     @vbu.command(name='grow')
     @vbu.cooldown.cooldown(1, 10)
@@ -55,16 +55,16 @@ class TestingCommands(vbu.Cog):
             async with utils.Pp.fetch(db, ctx.author.id) as pp:
                 growth = round(random.randint(1,10) * pp.multiplier)
                 pp.size += growth
-                return await ctx.send(f'Your pp grew **{growth}** inches!')
+                return await ctx.reply(f'Your pp grew **{growth}** inches!', mention_author=False)
     
     @vbu.command(name='multiply')
     async def _multiply_pp_command(self, ctx: vbu.Context):
         async with vbu.DatabaseConnection() as db:
             async with utils.Pp.fetch(db, ctx.author.id) as pp:
                 if round(50 * pp.multiplier) > pp.size:
-                    return await ctx.send(f'You need **{round(50 * pp.multiplier) - pp.size}** more inches!')
+                    return await ctx.reply(f'You need **{round(50 * pp.multiplier) - pp.size}** more inches!', mention_author=False)
                 pp.multiplier += 0.05
-                return await ctx.send(f'Your multiplier is now **{pp.multiplier}x**!')
+                return await ctx.relpy(f'Your multiplier is now **{pp.multiplier}x**!', mention_author=False)
 
 
 def setup(bot: vbu.Bot):
