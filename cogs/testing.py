@@ -56,6 +56,15 @@ class TestingCommands(vbu.Cog):
                 growth = round(random.randint(1,10) * pp.multiplier)
                 pp.size += growth
                 return await ctx.send(f'Your pp grew **{growth}** inches!')
+    
+    @vbu.command(name='multiply')
+    async def _multiply_pp_command(self, ctx: vbu.Context):
+        async with vbu.DatabaseConnection() as db:
+            async with utils.Pp.fetch(db, ctx.author.id) as pp:
+                if round(50 * pp.multiplier) > pp.size:
+                    return await ctx.send(f'You need **{round(50 * pp.multiplier) - pp.size}** more inches!')
+                pp.multiplier += 0.05
+                return await ctx.send(f'Your multiplier is now **{pp.multiplier}x**!')
 
 
 def setup(bot: vbu.Bot):
