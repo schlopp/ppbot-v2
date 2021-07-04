@@ -13,6 +13,7 @@ class Shop(vbu.Cog):
         super().__init__(bot)
         self.items: typing.List[utils.Item] = []
         self.load_items.start()
+        self.item_not_exist = 'cmonbruh that item doesn\'t exist what are you DOING'
 
     @tasks.loop(hours=1)
     async def load_items(self):
@@ -22,7 +23,7 @@ class Shop(vbu.Cog):
     def cog_unload(self):
         self.load_items.cancel()
 
-    def find_match(self, item_name: str):
+    def find_match(self, item_name: str) -> typing.Union[utils.Item, None]:
         for item in self.items:
             if ''.join(item_name.split()) in ''.join(item.name.split()):
                 return item
@@ -37,7 +38,7 @@ class Shop(vbu.Cog):
         if item:
             item = self.find_match(item)
             if not item:
-                return await ctx.send('cmonbruh that item doesn\'t exist what are you DOING')
+                return await ctx.reply(self.item_not_exist, mention_author=False)
 
             with vbu.Embed(title=item.name, use_random_colour=True) as embed:
                 story_string = "\n> ".join(item.lore.story)
@@ -69,7 +70,7 @@ class Shop(vbu.Cog):
                 if item.requires:
                     embed.add_field('Skills requires:', ', '.join(item.pretty_requirements()))
 
-                return await ctx.send(embed=embed)
+                return await ctx.reply(embed=embed, mention_author=False)
 
         def formatter(menu, items):
             output = []
@@ -92,6 +93,54 @@ class Shop(vbu.Cog):
 
         p = vbu.Paginator(self.items, per_page=3, formatter=formatter, remove_reaction=True)
         await p.start(ctx, timeout=30)
+
+    @vbu.command(name='buy')
+    async def _buy_command(self, ctx: vbu.Context, *, item_name:str):
+        """
+        buy some shit from the shop mhm
+        """
+        async with vbu.DatabaseConnection() as db:
+            async with utils.Pp.fetch(db, ctx.author.id, True) as pp:
+                item_name_split = item_name.split()
+                if len(item_name_split) > 1:
+                    if item_name_split[-1] in ['all', 'max', 'maximum', 'everything']:
+                        item = self.find_match(''.join(item_name_split[:-1]))
+                        if not item:
+                            return await ctx.reply(self.item_not_exist, mention_author=False)
+                        amount = pp.size // item.shopsettings.buy
+
+                    elif item_name_split[-1].isdigit():
+                        await ctx.send(''.join(item_name_split[:-1]))
+                        item = self.find_match(''.join(item_name_split[:-1]))
+                        if not item:
+                            return await ctx.reply(self.item_not_exist, mention_author=False)
+                        amount = int(item_name_split[-1])
+
+                    else:
+                        item = self.find_match(item_name)
+                        if not item:
+                            return await ctx.reply(self.item_not_exist, mention_author=False)
+                        amount = 1
+                else:
+                    amount = 1
+                    item = self.find_match(item_name)
+                    if not item:
+                        return await ctx.reply(self.item_not_exist, mention_author=False)
+
+                if amount < 1:
+                    return await ctx.reply(f'Imagine buying less than 1 of an item', mention_author=False)
+
+                if item.shopsettings.buy > pp.size:
+                    return await ctx.reply(f'Yeah no your pp is about **{item.shopsettings.buy * amount - pp.size} inches** too short for this item', mention_author=False)
+
+                await db('''INSERT INTO user_inventory VALUES ($1, $2, $3) ON CONFLICT (user_id, name) DO UPDATE
+                    SET amount = user_inventory.amount + $3''', ctx.author.id, item.name, amount)
+                pp.size -= item.shopsettings.buy * amount
+
+                with vbu.Embed() as embed:
+                    embed.set_author_to_user(ctx.author, use_nick=True)
+                    embed.description = f'Aight here\'s your {amount} **{item.name}** for **{item.shopsettings.buy * amount} inches**'
+                    return await ctx.reply(embed=embed, mention_author=False)
 
 
 def setup(bot: vbu.Bot):
