@@ -1,17 +1,19 @@
 import typing
 import discord
+
 import voxelbotutils as vbu
-from cogs import utils
 from discord.ext import commands
+
+from cogs import utils
 
 
 class Visual(vbu.Cog):
 
-    def __init__(self, bot:vbu.Bot):
+    def __init__(self, bot: vbu.Bot):
         super().__init__(bot)
 
     @vbu.command(name='inventory', aliases=['inv', 'items', 'storage'])
-    async def _display_inventory(self, ctx:vbu.Context, member:typing.Optional[discord.Member]=None):
+    async def _display_inventory(self, ctx: vbu.Context, member: typing.Optional[discord.Member] = None):
         """
         Check what's in your inventory
         """
@@ -19,9 +21,9 @@ class Visual(vbu.Cog):
         await ctx.trigger_typing()
         if member is None:
             member = ctx.author
-        
+
         async with vbu.DatabaseConnection() as db:
-            inventory = await db('''SELECT name, amount FROM user_inventory WHERE user_id = $1 AND amount > 0''', member.id)            
+            inventory = await db('''SELECT name, amount FROM user_inventory WHERE user_id = $1 AND amount > 0''', member.id)
             if not inventory:
                 if member == ctx.author:
                     return await ctx.send('You have no items lmao get good <:LULW:854752425348694016>')
@@ -47,6 +49,7 @@ class Visual(vbu.Cog):
         p = vbu.Paginator(items, per_page=5, formatter=formatter, remove_reaction=True)
         await p.start(ctx, timeout=30)
 
-def setup(bot:vbu.Bot):
+
+def setup(bot: vbu.Bot):
     x = Visual(bot)
     bot.add_cog(x)

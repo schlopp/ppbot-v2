@@ -1,8 +1,8 @@
-def int_to_roman(n: int):
+def int_to_roman(n: int) -> str:
     """
-    Convert an int to a roman numeral. Works well enough
+    Convert an int to a roman numeral. Works well enough.
     """
-    
+
     val = [
         1000, 900, 500,
         400, 100, 90,
@@ -19,7 +19,7 @@ def int_to_roman(n: int):
     ]
     roman_n = ""
     i = 0
-    while  n > 0:
+    while n > 0:
         for _ in range(n // val[i]):
             roman_n += syb[i]
             n -= val[i]

@@ -8,6 +8,7 @@ class ItemNotFoundError(Exception):
     Raised when a item is not found in the database.
     """
 
+
 async def fetch_item(item_name: str, db: vbu.DatabaseConnection) -> Item:
     """
     Fetch an item from the database.
@@ -27,11 +28,10 @@ async def fetch_item(item_name: str, db: vbu.DatabaseConnection) -> Item:
     row = rows[0]
     return Item.from_record(row)
 
+
 async def fetch_items(
-        db: vbu.DatabaseConnection,
-        for_sale: typing.Optional[bool] = None,
-        auctionable: typing.Optional[bool] = None,
-    ) -> typing.List[Item]:
+        db: vbu.DatabaseConnection, for_sale: typing.Optional[bool] = None,
+        auctionable: typing.Optional[bool] = None) -> typing.List[Item]:
     """
     Fetch multiple items from the database.
     This function is a coroutine.

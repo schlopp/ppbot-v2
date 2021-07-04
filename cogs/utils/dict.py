@@ -1,6 +1,5 @@
 import typing
-from json import loads as jsonloads
-from json import dumps as jsondumps
+from json import loads as jsonloads, dumps as jsondumps
 
 
 class Dict(dict):
