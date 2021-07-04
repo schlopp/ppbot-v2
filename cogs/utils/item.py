@@ -1,12 +1,13 @@
-import asyncpg
-import discord
 import random
 import typing
+from json import dumps as jsondumps, loads as jsonloads
+
+import asyncpg
+import discord
 import voxelbotutils as vbu
+
 from cogs.utils.dict import Dict
 from cogs.utils.readable import int_to_roman
-from json import dumps as jsondumps
-from json import loads as jsonloads
 
 
 class Lore:
