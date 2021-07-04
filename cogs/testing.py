@@ -53,7 +53,7 @@ class TestingCommands(vbu.Cog):
     async def _grow_pp_command(self, ctx: vbu.Context):
         async with vbu.DatabaseConnection() as db:
             async with utils.Pp.fetch(db, ctx.author.id) as pp:
-                growth = round(random.randint(1,10) * pp.multiplier)
+                growth = round(random.randint(1,100) * pp.multiplier)
                 pp.size += growth
                 return await ctx.reply(f'Your pp grew **{growth}** inches!', mention_author=False)
     
