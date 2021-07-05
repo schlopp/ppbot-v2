@@ -44,20 +44,12 @@ class Economy(vbu.Cog):
 
             with vbu.Embed(title=item.name, use_random_colour=True) as embed:
                 story_string = "\n> ".join(item.lore.story)
-                name = random.choice(
-                    [
-                        'Obama',
-                        'Jesus',
-                        'Local bitchboy',
-                        'Average pp bot enjoyer',
-                    ]
-                )
 
                 embed.set_thumbnail(self.bot.get_emoji(item.emoji).url)
                 footer_item_name = "".join(item.name.split()[0])
                 embed.set_footer(f'{ctx.prefix}buy {footer_item_name} [amount]/["max"] | {ctx.prefix}iteminfo {footer_item_name}')
                 embed.description = '\n'.join((
-                    f'{item.lore.description}\n\n> {story_string}\n> - {name}\n',
+                    f'{item.lore.description}\n\n> {story_string}\n> - {utils.random_name()}\n',
                     f'**AUCTIONABLE:** [{"Yes" if item.auctionable else "No"}]({self.link})',
                     f'**FOR SALE:** [{"Yes" if item.shopsettings.for_sale else "No"}]({self.link})',
                     ))
@@ -101,6 +93,7 @@ class Economy(vbu.Cog):
         """
         buy some shit from the shop mhm
         """
+
         async with vbu.DatabaseConnection() as db:
             async with utils.Pp.fetch(db, ctx.author.id, True) as pp:
                 item_name_split = item_name.split()
@@ -148,7 +141,7 @@ class Economy(vbu.Cog):
     @vbu.command(name='show', aliases=['display', 'get', 'view'])
     async def _display_pp_command(self, ctx: vbu.Context, user: typing.Optional[discord.Member] = None):
         """
-        Use this command to view your pp
+        Show that bad boy to the whole wide world
         """
         user = user or ctx.author
         async with vbu.DatabaseConnection() as db:
@@ -160,6 +153,38 @@ class Economy(vbu.Cog):
                     f'Inventory: [type `{ctx.prefix}inv`]({self.link})',
                     ))
                 return await ctx.reply(embed=embed, mention_author=False)
+    
+    @vbu.command(name='beg', aliases=['plead'])
+    async def _beg_command(self, ctx: vbu.Context):
+        """
+        Beg for some inches like the dirty drifter you are
+        """
+        
+        async with vbu.DatabaseConnection() as db:
+            async with utils.Pp.fetch(db, ctx.author.id):
+                if random.randint(0,1): # haha no inches for you
+                    quote = random.choice([
+                        'ew poor',
+                        'don\'t touch my pp',
+                        'my wife has a bigger pp than you',
+                        'I\'m not donating to someone with such a tiny pp',
+                        'Cringe tiny pp',
+                        'beg harder',
+                        'People with a small pp make me scared',
+                        'Don\'t touch me poor person',
+                        'Get a job',
+                        'Oh my.. Did you really just beg for my pp? I\'m offended',
+                        'No you',
+                        'I don\'t speak poor',
+                        'You should take a shower',
+                        'I love my wife... I love my wife... I love my wife..',
+                        'Drink some water',
+                        'Begone beggar',
+                        'No.',
+                        'Oh hell nah I\'m not giving you my inches',
+                        'Try being a little "cooler" next time',
+                    ])
+                    return await ctx.reply(f'{utils.random_name()}: {quote}', mention_author=False)
 
 
 def setup(bot: vbu.Bot):
