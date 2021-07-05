@@ -53,7 +53,7 @@ class TestingCommands(vbu.Cog):
             async with utils.Pp.fetch(db, ctx.author.id) as pp:
                 if round(50 * pp.multiplier) > pp.size:
                     return await ctx.reply(f'You need **{round(50 * pp.multiplier) - pp.size}** more inches!', mention_author=False)
-                pp.multiplier += 0.05
+                pp.multiplier = round(pp.multiplier + 0.05, 2)
                 return await ctx.reply(f'Your multiplier is now **{pp.multiplier}x**!', mention_author=False)
 
 
