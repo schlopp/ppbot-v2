@@ -156,7 +156,7 @@ class Economy(vbu.Cog):
                 with vbu.Embed(use_random_colour=True) as embed:
                     embed.set_author(name=f'{pp.name} ({user.display_name}\'s pp)')
                     embed.description = '\n'.join((
-                    f'8{("=" * (pp.size // 50))[:400]}D\n\n**Stats:**\nSize: {pp.size} inches\nMultiplier: {pp.multiplier}x',
+                    f'```ini\n[ 8{("=" * (pp.size // 50))[:400]}D ]```\n**Stats:**\nSize: {pp.size} inches\nMultiplier: {pp.multiplier}x',
                     f'Inventory: [type `{ctx.prefix}inv`]({self.link})',
                     ))
                 return await ctx.reply(embed=embed, mention_author=False)
