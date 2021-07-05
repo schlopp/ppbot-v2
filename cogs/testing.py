@@ -54,7 +54,7 @@ class TestingCommands(vbu.Cog):
                 if round(50 * pp.multiplier) > pp.size:
                     return await ctx.reply(f'You need **{round(50 * pp.multiplier) - pp.size}** more inches!', mention_author=False)
                 pp.multiplier += 0.05
-                return await ctx.relpy(f'Your multiplier is now **{pp.multiplier}x**!', mention_author=False)
+                return await ctx.reply(f'Your multiplier is now **{pp.multiplier}x**!', mention_author=False)
 
 
 def setup(bot: vbu.Bot):
