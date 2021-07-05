@@ -1,3 +1,6 @@
+import random
+
+
 def int_to_roman(n: int) -> str:
     """
     Convert an int to a roman numeral. Works well enough.
@@ -25,3 +28,30 @@ def int_to_roman(n: int) -> str:
             n -= val[i]
         i += 1
     return roman_n
+
+def random_name() -> str:
+    return random.choice([
+        'Obama',
+        'Dick roberts',
+        'Johnny from Johhny Johhny yes papa',
+        'Shrek',
+        'Caleb',
+        'Bob',
+        'Walter',
+        'Napoleon bonaparte',
+        'Bob ross',
+        'Thanos',
+        'Don vito',
+        'Bill cosby',
+        'Your step-sis',
+        'Pp god',
+        'Random guy',
+        'Genie',
+        'Your mom',
+        'Your daughter',
+        'Big Man Tyrone',
+        'Vin Diesel',
+        'Ben Shapiro',
+        'Local bitchboy',
+        'Average pp bot enjoyer',
+    ])

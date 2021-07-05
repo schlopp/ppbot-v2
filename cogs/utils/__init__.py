@@ -6,4 +6,4 @@ from cogs.utils.item import ShopSettings
 from cogs.utils.item import Item
 from cogs.utils.fetch import ItemNotFoundError
 from cogs.utils.fetch import fetch_item, fetch_items
-from cogs.utils.readable import int_to_roman
+from cogs.utils.readable import int_to_roman, random_name
