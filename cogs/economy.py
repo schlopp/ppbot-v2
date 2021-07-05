@@ -2,18 +2,20 @@ import typing
 import random
 
 import voxelbotutils as vbu
+import discord
 from discord.ext import tasks
 
 from cogs import utils
 
 
-class Shop(vbu.Cog):
+class Economy(vbu.Cog):
 
     def __init__(self, bot: vbu.Bot):
         super().__init__(bot)
         self.items: typing.List[utils.Item] = []
         self.load_items.start()
         self.item_not_exist = 'cmonbruh that item doesn\'t exist what are you DOING'
+        self.link = 'https://www.youtube.com/watch?v=FP23VU01fz8'
 
     @tasks.loop(hours=1)
     async def load_items(self):
@@ -29,12 +31,12 @@ class Shop(vbu.Cog):
                 return item
 
     @vbu.command(name='shop', aliases=['store', 'itemshop'])
+    @vbu.cooldown.cooldown(1, 10)
     async def _shop_command(self, ctx: vbu.Context, *, item: typing.Optional[str] = None):
         """
         Buy some shit innit
         """
 
-        link = "https://www.youtube.com/watch?v=FP23VU01fz8"
         if item:
             item = self.find_match(item)
             if not item:
@@ -54,15 +56,14 @@ class Shop(vbu.Cog):
                 embed.set_thumbnail(self.bot.get_emoji(item.emoji).url)
                 footer_item_name = "".join(item.name.split()[0])
                 embed.set_footer(f'{ctx.prefix}buy {footer_item_name} [amount]/["max"] | {ctx.prefix}iteminfo {footer_item_name}')
-                embed.description = ''.join(
-                    (
-                        f'{item.lore.description}\n\n> {story_string}\n> - {name}\n\n',
-                        f'**AUCTIONABLE:** [{"Yes" if item.auctionable else "No"}]({link})\n',
-                        f'**FOR SALE:** [{"Yes" if item.shopsettings.for_sale else "No"}]({link})',
-                    )
-                )
+                embed.description = '\n'.join((
+                    f'{item.lore.description}\n\n> {story_string}\n> - {name}\n',
+                    f'**AUCTIONABLE:** [{"Yes" if item.auctionable else "No"}]({self.link})',
+                    f'**FOR SALE:** [{"Yes" if item.shopsettings.for_sale else "No"}]({self.link})',
+                    ))
+
                 if item.shopsettings.for_sale:
-                    embed.description += "\n**BUY:** [{0.buy} inches]({1})\n**SELL:** [{0.sell} inches]({1})".format(item.shopsettings, link)
+                    embed.description += "\n**BUY:** [{0.buy} inches]({1})\n**SELL:** [{0.sell} inches]({1})".format(item.shopsettings, self.link)
 
                 if item.used_for:
                     embed.add_field('usage:', '- ' + '\n- '.join(item.pretty_usage()))
@@ -95,6 +96,7 @@ class Shop(vbu.Cog):
         await p.start(ctx, timeout=30)
 
     @vbu.command(name='buy')
+    @vbu.cooldown.cooldown(1, 10)
     async def _buy_command(self, ctx: vbu.Context, *, item_name:str):
         """
         buy some shit from the shop mhm
@@ -133,7 +135,8 @@ class Shop(vbu.Cog):
                 if item.shopsettings.buy > pp.size:
                     return await ctx.reply(f'Yeah no your pp is about **{item.shopsettings.buy * amount - pp.size} inches** too short for this item', mention_author=False)
 
-                await db('''INSERT INTO user_inventory VALUES ($1, $2, $3) ON CONFLICT (user_id, name) DO UPDATE
+                await db('''
+                    INSERT INTO user_inventory VALUES ($1, $2, $3) ON CONFLICT (user_id, name) DO UPDATE
                     SET amount = user_inventory.amount + $3''', ctx.author.id, item.name, amount)
                 pp.size -= item.shopsettings.buy * amount
 
@@ -142,7 +145,23 @@ class Shop(vbu.Cog):
                     embed.description = f'Aight here\'s your {amount} **{item.name}** for **{item.shopsettings.buy * amount} inches**'
                     return await ctx.reply(embed=embed, mention_author=False)
 
+    @vbu.command(name='show', aliases=['display', 'get', 'view'])
+    async def _display_pp_command(self, ctx: vbu.Context, user: typing.Optional[discord.Member] = None):
+        """
+        Use this command to view your pp
+        """
+        user = user or ctx.author
+        async with vbu.DatabaseConnection() as db:
+            async with utils.Pp.fetch(db, user.id, False) as pp:
+                with vbu.Embed(use_random_colour=True) as embed:
+                    embed.set_author(name=f'{pp.name} ({user.display_name}\'s pp)')
+                    embed.description = '\n'.join((
+                    f'8{("=" * (pp.size // 50))[:400]}D\n\n**Stats:**\nSize: {pp.size} inches\nMultiplier: {pp.multiplier}x',
+                    f'Inventory: [type `{ctx.prefix}inv`]({self.link})',
+                    ))
+                return await ctx.reply(embed=embed, mention_author=False)
+
 
 def setup(bot: vbu.Bot):
-    x = Shop(bot)
+    x = Economy(bot)
     bot.add_cog(x)
