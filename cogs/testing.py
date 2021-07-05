@@ -29,19 +29,9 @@ class TestingCommands(vbu.Cog):
         async with vbu.DatabaseConnection() as db:
             await db('''DELETE FROM items WHERE name = $1''', 'god himself lmao')
             await item.create(db)
-
-    @vbu.command(name='show')
-    async def _get_pp_command(self, ctx: vbu.Context, user: typing.Optional[discord.Member] = None):
-        user = user or ctx.author
-        async with vbu.DatabaseConnection() as db:
-            async with utils.Pp.fetch(db, user.id, False) as pp:
-                with vbu.Embed(use_random_colour=True) as embed:
-                    embed.set_author(name=f'{pp.name} ({user.display_name}\'s pp)')
-                    embed.description = f'size: {pp.size} inches\nmultiplier: {pp.multiplier}x'
-                return await ctx.reply(embed=embed, mention_author=False)
     
     @vbu.command(name='name')
-    async def _rename_pp_command(self, ctx: vbu.Context, name: str):
+    async def _rename_pp_command(self, ctx: vbu.Context, *, name: str):
         async with vbu.DatabaseConnection() as db:
             async with utils.Pp.fetch(db, ctx.author.id) as pp:
                 name = (name[:30] + '..') if len(name) > 32 else name
