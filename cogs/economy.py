@@ -103,40 +103,40 @@ class Economy(vbu.Cog):
                         item = self.find_match(''.join(item_name_split[:-1]))
                         if not item:
                             return await ctx.reply(self.item_not_exist, mention_author=False)
-                        amount = pp.size // item.shopsettings.buy
+                        item.amount = pp.size // item.shopsettings.buy
 
                     elif item_name_split[-1].isdigit():
                         await ctx.send(''.join(item_name_split[:-1]))
                         item = self.find_match(''.join(item_name_split[:-1]))
                         if not item:
                             return await ctx.reply(self.item_not_exist, mention_author=False)
-                        amount = int(item_name_split[-1])
+                        item.amount = int(item_name_split[-1])
 
                     else:
                         item = self.find_match(item_name)
                         if not item:
                             return await ctx.reply(self.item_not_exist, mention_author=False)
-                        amount = 1
+                        item.amount = 1
                 else:
-                    amount = 1
                     item = self.find_match(item_name)
                     if not item:
                         return await ctx.reply(self.item_not_exist, mention_author=False)
+                    item.amount = 1
 
-                if amount < 1:
+                if item.amount < 1:
                     return await ctx.reply(f'Imagine buying less than 1 of an item', mention_author=False)
 
                 if item.shopsettings.buy > pp.size:
-                    return await ctx.reply(f'Yeah no your pp is about **{item.shopsettings.buy * amount - pp.size} inches** too short for this item', mention_author=False)
+                    return await ctx.reply(f'Yeah no your pp is about **{item.shopsettings.buy * item.amount - pp.size} inches** too short for this item', mention_author=False)
 
                 await db('''
                     INSERT INTO user_inventory VALUES ($1, $2, $3) ON CONFLICT (user_id, name) DO UPDATE
-                    SET amount = user_inventory.amount + $3''', ctx.author.id, item.name, amount)
-                pp.size -= item.shopsettings.buy * amount
+                    SET amount = user_inventory.amount + $3''', ctx.author.id, item.name, item.amount)
+                pp.size -= item.shopsettings.buy * item.amount
 
                 with vbu.Embed() as embed:
                     embed.set_author_to_user(ctx.author, use_nick=True)
-                    embed.description = f'Aight here\'s your {amount} **{item.name}** for **{item.shopsettings.buy * amount} inches**'
+                    embed.description = f'Aight here\'s {utils.readable_list(bot=self.bot, items=[item])} for **{item.shopsettings.buy * item.amount} inches**'
                     return await ctx.reply(embed=embed, mention_author=False)
 
     @vbu.command(name='show', aliases=['display', 'get', 'view'])
@@ -163,6 +163,10 @@ class Economy(vbu.Cog):
         
         async with vbu.DatabaseConnection() as db:
             async with utils.Pp.fetch(db, ctx.author.id):
+                with vbu.Embed(use_random_colour=True) as embed:
+                    person = utils.random_name(include_url=True)
+                    embed.set_author(name=person[0], icon_url=person[1])
+
                 if random.randint(0,1): # haha no inches for you
                     quote = random.choice([
                         'ew poor',
@@ -185,11 +189,9 @@ class Economy(vbu.Cog):
                         'Oh hell nah I\'m not giving you my inches',
                         'Try being a little "cooler" next time',
                     ])
-                    with vbu.Embed(use_random_colour=True) as embed:
-                        embed.set_author(name=utils.random_name())
-                        embed.description = f'“{quote}”'
-                        embed.timestamp = datetime.utcnow()
-                        return await ctx.reply(embed=embed, mention_author=False)
+
+                    embed.description = f'“{quote}”'
+                    return await ctx.reply(embed=embed, mention_author=False)
                 
                 return await ctx.send('yeah whatever take my inches')
 
