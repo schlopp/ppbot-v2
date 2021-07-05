@@ -41,7 +41,7 @@ def random_name() -> str:
         'Napoleon bonaparte',
         'Bob ross',
         'Thanos',
-        'Don vito',
+        'Don Vito',
         'Bill cosby',
         'Your step-sis',
         'Pp god',
@@ -52,6 +52,6 @@ def random_name() -> str:
         'Big Man Tyrone',
         'Vin Diesel',
         'Ben Shapiro',
-        'Local bitchboy',
+        'Local bitch-boy',
         'Average pp bot enjoyer',
     ])
