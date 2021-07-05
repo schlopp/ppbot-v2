@@ -37,7 +37,7 @@ class Pp:
         self.user_id = user_id
         self.name = name
         self.size = size
-        self.multiplier = multiplier
+        self.multiplier = round(multiplier, 2)
 
     @classmethod
     def fetch(cls, db: vbu.DatabaseConnection, user_id: int, update: typing.Optional[bool] = True):
