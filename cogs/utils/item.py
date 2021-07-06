@@ -156,7 +156,7 @@ class Item:
         """
         
         return [
-            f"{k.lower().title()} {int_to_roman(v)}" for k, v in self.requires.items()
+            f"{k.title()} {int_to_roman(v)}" for k, v in self.requires.items()
         ]
 
     def pretty_usage(self) -> typing.List[str]:
