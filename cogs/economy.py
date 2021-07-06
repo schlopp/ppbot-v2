@@ -20,7 +20,7 @@ class Economy(vbu.Cog):
         self.item_not_exist = 'cmonbruh that item doesn\'t exist what are you DOING'
         self.link = 'https://www.youtube.com/watch?v=FP23VU01fz8'
 
-    @tasks.loop(hours=1)
+    @tasks.loop(minutes=10)
     async def load_items(self):
         async with vbu.DatabaseConnection() as db:
             self.shop_items = await utils.fetch_items(db, for_sale=True)
@@ -30,7 +30,7 @@ class Economy(vbu.Cog):
     def cog_unload(self):
         self.load_items.cancel()
 
-    def find_shop_match(self, item_name: str) -> typing.Union[utils.Item, None]:
+    def find_shop_match(self, item_name: str) -> typing.Optional[utils.Item]:
         for item in self.shop_items:
             if ''.join(item_name.split()) in ''.join(item.name.split()):
                 return item
@@ -162,7 +162,7 @@ class Economy(vbu.Cog):
 
             items = []
             inventory_names = [i['name'] for i in inventory]
-            for item in await utils.fetch_items(db):
+            for item in self.items:
                 if item.name in inventory_names:
                     item.amount = [i['amount'] for i in inventory if i['name'] == item.name][0]
                     items.append(item)
