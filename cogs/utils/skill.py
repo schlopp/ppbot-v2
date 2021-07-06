@@ -15,6 +15,6 @@ def get_level_by_exp(experience: int) -> int:
 
 async def update_skill(db: vbu.DatabaseConnection, user_id: int, skill_name: str, experience: int):
     await db('''
-    INSERT INTO user_skill (user_id, name, experience) VALUES ($1, $2, $3)
-    ON CONFLICT (user_id, name) DO UPDATE SET experience = user_skill.experience + $3
-    ''', user_id, skill_name, experience)
+        INSERT INTO user_skill (user_id, name, experience) VALUES ($1, $2, $3)
+        ON CONFLICT (user_id, name) DO UPDATE SET experience = user_skill.experience + $3
+        ''', user_id, skill_name, experience)
