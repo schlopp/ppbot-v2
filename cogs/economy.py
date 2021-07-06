@@ -13,6 +13,8 @@ class Economy(vbu.Cog):
 
     def __init__(self, bot: vbu.Bot):
         super().__init__(bot)
+        self.shop_items: typing.List[utils.Item] = []
+        self.auction_items: typing.List[utils.Item] = []
         self.items: typing.List[utils.Item] = []
         self.load_items.start()
         self.item_not_exist = 'cmonbruh that item doesn\'t exist what are you DOING'
@@ -21,13 +23,15 @@ class Economy(vbu.Cog):
     @tasks.loop(hours=1)
     async def load_items(self):
         async with vbu.DatabaseConnection() as db:
-            self.items = await utils.fetch_items(db, for_sale=True)
+            self.shop_items = await utils.fetch_items(db, for_sale=True)
+            self.auction_items = await utils.fetch_items(db, auctionable=True)
+            self.items = await utils.fetch_items(db)
 
     def cog_unload(self):
         self.load_items.cancel()
 
-    def find_match(self, item_name: str) -> typing.Union[utils.Item, None]:
-        for item in self.items:
+    def find_shop_match(self, item_name: str) -> typing.Union[utils.Item, None]:
+        for item in self.shop_items:
             if ''.join(item_name.split()) in ''.join(item.name.split()):
                 return item
 
@@ -39,7 +43,7 @@ class Economy(vbu.Cog):
         """
 
         if item:
-            item = self.find_match(item)
+            item = self.find_shop_match(item)
             if not item:
                 return await ctx.reply(self.item_not_exist, mention_author=False)
 
@@ -85,7 +89,7 @@ class Economy(vbu.Cog):
             embed.set_footer(f'Page {menu.current_page + 1}/{menu.max_pages}')
             return embed
 
-        p = vbu.Paginator(self.items, per_page=3, formatter=formatter, remove_reaction=True)
+        p = vbu.Paginator(self.shop_items, per_page=3, formatter=formatter, remove_reaction=True)
         await p.start(ctx, timeout=30)
 
     @vbu.command(name='buy')
@@ -138,6 +142,43 @@ class Economy(vbu.Cog):
                     embed.set_author_to_user(ctx.author, use_nick=True)
                     embed.description = f'Aight here\'s {utils.readable_list(bot=self.bot, items=[item])} for **{item.shopsettings.buy * item.amount} inches**'
                     return await ctx.reply(embed=embed, mention_author=False)
+
+    @vbu.command(name='inventory', aliases=['inv', 'items', 'storage'])
+    async def _display_inventory(self, ctx: vbu.Context, member: typing.Optional[discord.Member] = None):
+        """
+        Check what's in your inventory
+        """
+
+        await ctx.trigger_typing()
+        if member is None:
+            member = ctx.author
+
+        async with vbu.DatabaseConnection() as db:
+            inventory = await db('''SELECT name, amount FROM user_inventory WHERE user_id = $1 AND amount > 0''', member.id)
+            if not inventory:
+                if member == ctx.author:
+                    return await ctx.reply('You have no items lmao get good <:LULW:854752425348694016>', mention_author=False)
+                return await ctx.reply(f'**{member.display_name}** legit has no items <:LULW:854752425348694016>', mention_author=False)
+
+            items = []
+            inventory_names = [i['name'] for i in inventory]
+            for item in await utils.fetch_items(db):
+                if item.name in inventory_names:
+                    item.amount = [i['amount'] for i in inventory if i['name'] == item.name][0]
+                    items.append(item)
+
+        def formatter(menu, items):
+            output = []
+            for item in items:
+                output.append(f'{self.bot.get_emoji(item.emoji)} **{item.name}** ─ {item.amount}\n{item.type} ─ {item.lore.description}')
+            output_string = "\n\n".join(output)
+            embed = vbu.Embed(title=f"{member.display_name}'s inventory")
+            embed.add_field('Items', output_string)
+            embed.set_footer(f'Page {menu.current_page + 1}/{menu.max_pages}')
+            return embed
+
+        p = vbu.Paginator(items, per_page=5, formatter=formatter, remove_reaction=True)
+        await p.start(ctx, timeout=30)
 
     @vbu.command(name='show', aliases=['display', 'get', 'view'])
     async def _display_pp_command(self, ctx: vbu.Context, user: typing.Optional[discord.Member] = None):
