@@ -32,7 +32,7 @@ def int_to_roman(n: int) -> str:
         i += 1
     return roman_n
 
-def readable_list(*, bot: vbu.Bot, size: typing.Optional[int] = None, items: typing.Optional[list] = None):
+def readable_list(bot: vbu.Bot, size: typing.Optional[int] = None, items: typing.Optional[list] = None):
     if items:
         readable_items = [f'a {bot.get_emoji(i.emoji)} **{i.name}**' if i.amount == 1 else f'{i.amount} {bot.get_emoji(i.emoji)} **{i.name}**s' for i in items]
         
