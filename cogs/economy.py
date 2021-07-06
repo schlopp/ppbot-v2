@@ -41,7 +41,8 @@ class Economy(vbu.Cog):
         """
         Buy some shit innit
         """
-
+        
+        await ctx.trigger_typing()
         if item:
             item = self.find_shop_match(item)
             if not item:
@@ -99,6 +100,7 @@ class Economy(vbu.Cog):
         buy some shit from the shop mhm
         """
 
+        await ctx.trigger_typing()
         async with vbu.DatabaseConnection() as db:
             async with utils.Pp.fetch(db, ctx.author.id, True) as pp:
                 item_name_split = item_name.split()
@@ -150,9 +152,7 @@ class Economy(vbu.Cog):
         """
 
         await ctx.trigger_typing()
-        if member is None:
-            member = ctx.author
-
+        member = member or ctx.author
         async with vbu.DatabaseConnection() as db:
             inventory = await db('''SELECT name, amount FROM user_inventory WHERE user_id = $1 AND amount > 0''', member.id)
             if not inventory:
@@ -185,6 +185,8 @@ class Economy(vbu.Cog):
         """
         Show that bad boy to the whole wide world
         """
+
+        await ctx.trigger_typing()
         user = user or ctx.author
         async with vbu.DatabaseConnection() as db:
             async with utils.Pp.fetch(db, user.id, False) as pp:
@@ -202,6 +204,7 @@ class Economy(vbu.Cog):
         Beg for some inches like the dirty drifter you are
         """
         
+        await ctx.trigger_typing()
         async with vbu.DatabaseConnection() as db:
             async with utils.Pp.fetch(db, ctx.author.id):
                 with vbu.Embed(use_random_colour=True) as embed:
@@ -210,12 +213,12 @@ class Economy(vbu.Cog):
 
                 if random.randint(0,1): # haha no inches for you
                     quote = random.choice([
-                        'ew poor',
-                        'don\'t touch my pp',
-                        'my wife has a bigger pp than you',
-                        'I\'m not donating to someone with such a tiny pp',
+                        'Ew poor person, step away from me please. I need to wash my hands now',
+                        'Don\'t touch my pp you freak, what do think you\'re doing???',
+                        'My wife has a bigger pp than you I\'m not giving you shit',
+                        'I\'m not donating to someone with such a tiny pp oh my god please go away',
                         'Cringe tiny pp',
-                        'beg harder',
+                        'beg harder daddy',
                         'People with a small pp make me scared',
                         'Don\'t touch me poor person',
                         'Get a job',
@@ -233,8 +236,24 @@ class Economy(vbu.Cog):
 
                     embed.description = f'“{quote}”'
                     return await ctx.reply(embed=embed, mention_author=False)
-                
-                return await ctx.send('yeah whatever take my inches')
+
+                quote = random.choice([
+                    'Your pp is so small I feel bad, take {0}, now go away',
+                    'Yeah whatever mate take {0}',
+                    'You\'re so annoying, here, have {0}. Now scram! Skedaddle!',
+                ])
+                growth = random.randint(1, 10)
+                exp_growth = random.randint(1, 5)
+                embed.set_footer(f'+{exp_growth} begging EXP')
+
+                if random.randint(0,1):
+                    item = random.choice([i for i in self.shop_items if i.shopsettings.buy < 500])
+                    item.amount = random.randint(1, 2)
+                    embed.description = f'“{quote.format(utils.readable_list(self.bot, size=growth, items=[item]))}”'
+                    return await ctx.reply(embed=embed, mention_author=False)
+
+                embed.description = f'“{quote.format(utils.readable_list(self.bot, size=growth))}”'
+                return await ctx.reply(embed=embed, mention_author=False)
 
 
 def setup(bot: vbu.Bot):
