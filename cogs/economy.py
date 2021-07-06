@@ -206,12 +206,12 @@ class Economy(vbu.Cog):
         
         await ctx.trigger_typing()
         async with vbu.DatabaseConnection() as db:
-            async with utils.Pp.fetch(db, ctx.author.id):
+            async with utils.Pp.fetch(db, ctx.author.id) as pp:
                 with vbu.Embed(use_random_colour=True) as embed:
                     person = utils.random_name(include_url=True)
                     embed.set_author(name=person[0], icon_url=person[1])
 
-                if random.randint(0,1): # haha no inches for you
+                if not random.randint(0, 3): # haha no inches for you
                     quote = random.choice([
                         'Ew poor person, step away from me please. I need to wash my hands now',
                         'Don\'t touch my pp you freak, what do think you\'re doing???',
@@ -242,8 +242,13 @@ class Economy(vbu.Cog):
                     'Yeah whatever mate take {0}',
                     'You\'re so annoying, here, have {0}. Now scram! Skedaddle!',
                 ])
+
                 growth = random.randint(1, 10)
+                pp.size += growth
+
                 exp_growth = random.randint(1, 5)
+                await utils.update_skill(db, ctx.author.id, 'BEGGING', experience=exp_growth)
+
                 embed.set_footer(f'+{exp_growth} begging EXP')
 
                 if random.randint(0,1):
