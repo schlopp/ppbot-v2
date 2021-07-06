@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS user_inventory(
 CREATE TABLE IF NOT EXISTS user_skill(
     user_id BIGINT NOT NULL,
     name TEXT NOT NULL,
-    level INT NOT NULL,
+    level INT DEFAULT 0,
     experience BIGINT NOT NULL,
     PRIMARY KEY (user_id, name)
 );
