@@ -64,10 +64,10 @@ class Economy(vbu.Cog):
             ''', user_id, name, experience)
 
         self.skills[(user_id, name)] = {
-            'user_id': v['user_id'],
-            'name': v['name'],
-            'level': utils.get_level_by_exp(v['experience']),
-            'experience': v['experience'],
+            'user_id': v[0]['user_id'],
+            'name': v[0]['name'],
+            'level': utils.get_level_by_exp(v[0]['experience']),
+            'experience': v[0]['experience'],
         }
 
     @vbu.command(name='shop', aliases=['store', 'itemshop'])
