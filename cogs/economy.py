@@ -19,6 +19,7 @@ class Economy(vbu.Cog):
         self.load_items.start()
         self.item_not_exist = 'cmonbruh that item doesn\'t exist what are you DOING'
         self.link = 'https://www.youtube.com/watch?v=FP23VU01fz8'
+        self.skills = {}
 
     @tasks.loop(minutes=10)
     async def load_items(self):
@@ -34,6 +35,32 @@ class Economy(vbu.Cog):
         for item in self.shop_items:
             if ''.join(item_name.split()) in ''.join(item.name.split()):
                 return item
+    
+    async def get_cached_skill(self, db: vbu.DatabaseConnection, user_id: int, name: str):
+        if (user_id, name) in self.skills:
+            return self.skills[(user_id, name)]
+        v = await db('''SELECT * FROM user_skill WHERE user_id = $1 AND name = $2''', user_id, name)
+        self.skills[(user_id, name)] = {
+            'user_id': v['user_id'],
+            'name': v['name'],
+            'level': utils.get_level_by_exp(v['experience']),
+            'experience': v['experience'],
+        }
+        return self.skills[(user_id, name)]
+    
+    async def update_cached_skill(self, db: vbu.DatabaseConnection, user_id: int, name: str, experience: int):
+        v = await db('''
+            INSERT INTO user_skill (user_id, name, experience) VALUES ($1, $2, $3)
+            ON CONFLICT (user_id, name) DO UPDATE SET experience = user_skill.experience + $3
+            RETURNING *
+            ''', user_id, name, experience)
+
+        self.skills[(user_id, name)] = {
+            'user_id': v['user_id'],
+            'name': v['name'],
+            'level': utils.get_level_by_exp(v['experience']),
+            'experience': v['experience'],
+        }
 
     @vbu.command(name='shop', aliases=['store', 'itemshop'])
     @vbu.cooldown.cooldown(1, 10)
@@ -106,25 +133,25 @@ class Economy(vbu.Cog):
                 item_name_split = item_name.split()
                 if len(item_name_split) > 1:
                     if item_name_split[-1] in ['all', 'max', 'maximum', 'everything']:
-                        item = self.find_match(''.join(item_name_split[:-1]))
+                        item = self.find_shop_match(''.join(item_name_split[:-1]))
                         if not item:
                             return await ctx.reply(self.item_not_exist, mention_author=False)
                         item.amount = pp.size // item.shopsettings.buy
 
                     elif item_name_split[-1].isdigit():
                         await ctx.send(''.join(item_name_split[:-1]))
-                        item = self.find_match(''.join(item_name_split[:-1]))
+                        item = self.find_shop_match(''.join(item_name_split[:-1]))
                         if not item:
                             return await ctx.reply(self.item_not_exist, mention_author=False)
                         item.amount = int(item_name_split[-1])
 
                     else:
-                        item = self.find_match(item_name)
+                        item = self.find_shop_match(item_name)
                         if not item:
                             return await ctx.reply(self.item_not_exist, mention_author=False)
                         item.amount = 1
                 else:
-                    item = self.find_match(item_name)
+                    item = self.find_shop_match(item_name)
                     if not item:
                         return await ctx.reply(self.item_not_exist, mention_author=False)
                     item.amount = 1
@@ -246,10 +273,11 @@ class Economy(vbu.Cog):
                 growth = random.randint(1, 10)
                 pp.size += growth
 
-                exp_growth = random.randint(1, 5)
+                exp_growth = random.randint(10, 16)
                 await utils.update_skill(db, ctx.author.id, 'BEGGING', experience=exp_growth)
 
-                embed.set_footer(f'+{exp_growth} begging EXP')
+                skill = self.get_cached_skill(db, ctx.author.id, "BEGGING")
+                embed.set_footer(f'+{exp_growth} begging EXP (level {skill["level"]})')
 
                 if random.randint(0,1):
                     item = random.choice([i for i in self.shop_items if i.shopsettings.buy < 500])
