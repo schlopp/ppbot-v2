@@ -40,12 +40,20 @@ class Economy(vbu.Cog):
         if (user_id, name) in self.skills:
             return self.skills[(user_id, name)]
         v = await db('''SELECT * FROM user_skill WHERE user_id = $1 AND name = $2''', user_id, name)
-        self.skills[(user_id, name)] = {
-            'user_id': v['user_id'],
-            'name': v['name'],
-            'level': utils.get_level_by_exp(v['experience']),
-            'experience': v['experience'],
-        }
+        if v:
+            self.skills[(user_id, name)] = {
+                'user_id': v['user_id'],
+                'name': v['name'],
+                'level': utils.get_level_by_exp(v['experience']),
+                'experience': v['experience'],
+            }
+        else:
+            self.skills[(user_id, name)] = {
+                'user_id': user_id,
+                'name': name,
+                'level': utils.get_level_by_exp(0),
+                'experience': 0,
+            }
         return self.skills[(user_id, name)]
     
     async def update_cached_skill(self, db: vbu.DatabaseConnection, user_id: int, name: str, experience: int):
