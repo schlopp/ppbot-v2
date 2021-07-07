@@ -42,10 +42,10 @@ class Economy(vbu.Cog):
         v = await db('''SELECT * FROM user_skill WHERE user_id = $1 AND name = $2''', user_id, name)
         if v:
             self.skills[(user_id, name)] = {
-                'user_id': v['user_id'],
-                'name': v['name'],
-                'level': utils.get_level_by_exp(v['experience']),
-                'experience': v['experience'],
+                'user_id': v[0]['user_id'],
+                'name': v[0]['name'],
+                'level': utils.get_level_by_exp(v[0]['experience']),
+                'experience': v[0]['experience'],
             }
         else:
             self.skills[(user_id, name)] = {
