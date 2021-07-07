@@ -263,7 +263,7 @@ class Economy(vbu.Cog):
 
                 m: vbu.InteractionMessageable = await ctx.reply('Where are you begging?', components=components, mention_author=False)
                 try:
-                    p = await self.bot.wait_for("component_interaction", check=lambda p: p.message.id == m.id, timeout=15)
+                    p = await self.bot.wait_for("component_interaction", check=lambda p: p.message.id == m.id and p.user.id == ctx.author.id, timeout=15)
                 except asyncio.TimeoutError:
                     await m.edit(components=None)
                     return await ctx.send('Dude stop just pick a location why are you being so slow')
