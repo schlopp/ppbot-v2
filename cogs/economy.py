@@ -1,5 +1,6 @@
 import typing
 import random
+import string
 from datetime import datetime
 
 import voxelbotutils as vbu
@@ -248,6 +249,15 @@ class Economy(vbu.Cog):
                 with vbu.Embed(use_random_colour=True) as embed:
                     person = utils.random_name(include_url=True)
                     embed.set_author(name=person[0], icon_url=person[1])
+                    embed.description = "**Where are you begging?**"
+                
+                menu_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+                options = [
+                    vbu.SelectOption('under a bridge', 'BRIDGE', 'If you wanna get good at begging you gotta start somewhere.', emoji='😔')
+                    ]
+                components = vbu.MessageComponents(
+                    vbu.ActionRow(vbu.SelectMenu(menu_id, options, 'Select a location.', 1, 1))
+                )
 
                 if not random.randint(0, 3): # haha no inches for you
                     quote = random.choice([
