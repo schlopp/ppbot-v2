@@ -258,6 +258,7 @@ class Economy(vbu.Cog):
                 components = vbu.MessageComponents(
                     vbu.ActionRow(vbu.SelectMenu(menu_id, options, 'Select a location.', 1, 1))
                 )
+                await ctx.send(embed=embed, components=components)
 
                 if not random.randint(0, 3): # haha no inches for you
                     quote = random.choice([
