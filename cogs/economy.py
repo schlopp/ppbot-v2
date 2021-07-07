@@ -1,3 +1,4 @@
+import asyncio
 import typing
 import random
 import string
@@ -249,50 +250,73 @@ class Economy(vbu.Cog):
                 with vbu.Embed(use_random_colour=True) as embed:
                     person = utils.random_name(include_url=True)
                     embed.set_author(name=person[0], icon_url=person[1])
-                    embed.description = "**Where are you begging?**"
                 
-                menu_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-                options = [
-                    vbu.SelectOption('under a bridge', 'BRIDGE', description='Nobody said begging was easy.', emoji='😔')
-                    ]
+                
+                skill = await self.get_cached_skill(db, ctx.author.id, 'BEGGING')
+                options = [vbu.SelectOption('Under a bridge', 'BRIDGE', description='Nobody said begging was easy.', emoji='😔')]
+                if skill['level'] > 0:
+                    options.append(vbu.SelectOption('Farmer\'s market', 'MARKET', description='Time to annoy those fucking farmers', emoji='🧑‍🌾'))
+
                 components = vbu.MessageComponents(
-                    vbu.ActionRow(vbu.SelectMenu(menu_id, options, 'Select a location.', 1, 1))
+                    vbu.ActionRow(vbu.SelectMenu('SELECT_LOCATION', options, 'Select a location.', 1, 1))
                 )
-                await ctx.send(embed=embed, components=components)
+
+                m: vbu.InteractionMessageable = await ctx.reply('Where are you begging?', components=components, mention_author=False)
+                try:
+                    p = await self.bot.wait_for("component_interaction", check=lambda p: p.message.id == m.id, timeout=15)
+                except asyncio.TimeoutError:
+                    await m.edit(components=None)
+                    return await ctx.send('Dude stop just pick a location why are you being so slow')
+
+                await p.ack()
+                await ctx.send(p.values)
 
                 if not random.randint(0, 3): # haha no inches for you
-                    quote = random.choice([
-                        'Ew poor person, step away from me please. I need to wash my hands now',
-                        'Don\'t touch my pp you freak, what do think you\'re doing???',
-                        'My wife has a bigger pp than you I\'m not giving you shit',
-                        'I\'m not donating to someone with such a tiny pp oh my god please go away',
-                        'Cringe tiny pp',
-                        'beg harder daddy',
-                        'People with a small pp make me scared',
-                        'Don\'t touch me poor person',
-                        'Get a job',
-                        'Oh my.. Did you really just beg for my pp? I\'m offended',
-                        'No you',
-                        'I don\'t speak poor',
-                        'You should take a shower',
-                        'I love my wife... I love my wife... I love my wife..',
-                        'Drink some water',
-                        'Begone beggar',
-                        'No.',
-                        'Oh hell nah I\'m not giving you my inches',
-                        'Try being a little "cooler" next time',
-                    ])
+                    if p.values[0] == 'BRIDGE':
+                        quote = random.choice([
+                            'Ew poor person, step away from me please. I need to wash my hands now',
+                            'Don\'t touch my pp you freak, what do think you\'re doing???',
+                            'My wife has a bigger pp than you I\'m not giving you shit',
+                            'I\'m not donating to someone with such a tiny pp oh my god please go away',
+                            'Cringe tiny pp',
+                            'beg harder daddy',
+                            'People with a small pp make me scared',
+                            'Don\'t touch me poor person',
+                            'Get a job',
+                            'Oh my.. Did you really just beg for my pp? I\'m offended', 
+                            'No you',
+                            'I don\'t speak poor',
+                            'You should take a shower',
+                            'I love my wife... I love my wife... I love my wife..',
+                            'Drink some water',
+                            'Begone beggar',
+                            'No.',
+                            'Oh hell nah I\'m not giving you my inches',
+                            'Try being a little "cooler" next time',
+                        ])
 
-                    embed.description = f'“{quote}”'
-                    return await ctx.reply(embed=embed, mention_author=False)
+                    elif p.values[0] == 'MARKET':
+                        quote = random.choice([
+                            'Step aside silly beggar, I have vegetables to sell',
+                            'Get the fuck out of my sight',
+                            'I\'m trying to sell my vegetables stop bothering me',
+                            'I\'m not giving you anything mate',
+                        ])
+
+                        embed.description = f'“{quote}”'
+                        return await m.edit(content=None, components=None, embed=embed, mention_author=False)
 
                 quote = random.choice([
                     'Your pp is so small I feel bad, take {0}, now go away',
                     'Yeah whatever mate take {0}',
                     'You\'re so annoying, here, have {0}. Now scram! Skedaddle!',
+                    'Eh why not, here\'s {0}. Have a nice day!'
                 ])
 
-                growth = random.randint(1, 10)
+                if p.values[0] == 'BRIDGE':
+                    growth = round(random.randint(1, 10) * pp.multiplier)
+                elif p.values[0] == 'MARKET':
+                    growth = round(random.randint(10, 20) * pp.multiplier)
                 pp.size += growth
 
                 exp_growth = random.randint(10, 16)
@@ -305,10 +329,10 @@ class Economy(vbu.Cog):
                     item = random.choice([i for i in self.shop_items if i.shopsettings.buy < 500])
                     item.amount = random.randint(1, 2)
                     embed.description = f'“{quote.format(utils.readable_list(self.bot, size=growth, items=[item]))}”'
-                    return await ctx.reply(embed=embed, mention_author=False)
+                    return await m.edit(content=None, components=None, embed=embed, mention_author=False)
 
                 embed.description = f'“{quote.format(utils.readable_list(self.bot, size=growth))}”'
-                return await ctx.reply(embed=embed, mention_author=False)
+                return await m.edit(content=None, components=None, embed=embed, mention_author=False)
 
 
 def setup(bot: vbu.Bot):
