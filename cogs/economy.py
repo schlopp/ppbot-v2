@@ -276,7 +276,7 @@ class Economy(vbu.Cog):
                 exp_growth = random.randint(10, 16)
                 await utils.update_skill(db, ctx.author.id, 'BEGGING', experience=exp_growth)
 
-                skill = self.get_cached_skill(db, ctx.author.id, "BEGGING")
+                skill = await self.get_cached_skill(db, ctx.author.id, "BEGGING")
                 embed.set_footer(f'+{exp_growth} begging EXP (level {skill["level"]})')
 
                 if random.randint(0,1):
