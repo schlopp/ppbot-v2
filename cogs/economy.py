@@ -233,7 +233,7 @@ class Economy(vbu.Cog):
                     ))
                     v = await db('''SELECT name, experience FROM user_skill WHERE user_id = $1 AND experience > 0''', ctx.author.id)
                     if v:
-                        embed.add_field('Skills', '\n'.join(f"{v[0]['name'].title()}: {utils.get_level_by_exp(v[0]['experience'])} ({v[0]['experience']} EXP)"))
+                        embed.add_field('Skills', '\n'.join([f"{v[0]['name'].title()}: {utils.get_level_by_exp(v[0]['experience'])} ({v[0]['experience']} EXP)"]))
                 return await ctx.reply(embed=embed, mention_author=False)
     
     @vbu.command(name='beg', aliases=['plead'])
