@@ -253,7 +253,7 @@ class Economy(vbu.Cog):
                 
                 menu_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
                 options = [
-                    vbu.SelectOption('under a bridge', 'BRIDGE', 'If you wanna get good at begging you gotta start somewhere.', emoji='😔')
+                    vbu.SelectOption('under a bridge', 'BRIDGE', description='If you wanna get good at begging you gotta start somewhere.', emoji='😔')
                     ]
                 components = vbu.MessageComponents(
                     vbu.ActionRow(vbu.SelectMenu(menu_id, options, 'Select a location.', 1, 1))
