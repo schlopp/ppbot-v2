@@ -269,8 +269,6 @@ class Economy(vbu.Cog):
                     return await ctx.send('Dude stop just pick a location why are you being so slow')
 
                 await p.ack()
-                await ctx.send(p.values)
-
                 if not random.randint(0, 3): # haha no inches for you
                     if p.values[0] == 'BRIDGE':
                         quote = random.choice([
