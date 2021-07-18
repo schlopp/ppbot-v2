@@ -115,7 +115,7 @@ class fishing(commands.Cog):
                 embed.description = f"You avoid the bullet and loot the police officer. You find **{random_number * pp.multiplier['multiplier']} inches** and **1 {choice}!**"
                 
             else:
-                pp.size += random_number
+                pp.size += random_number * pp.multiplier["multiplier"]
                 await pp.update()
                 embed.description = f"You avoid the bullet and loot the police officer. You find **{random_number * pp.multiplier['multiplier']} inches!**"
                 return await ctx.send(embed=embed)

@@ -47,7 +47,9 @@ class important(commands.Cog):
             embed.title = f"{pp.name} ({user.display_name}'s {ppname})"
             if user.id == 339170260064141322:
                 embed.add_field(name='MED!?',value='WOAH. I JUST REALISED THE USER YOU\'RE TALKING ABOUT IS ACTUALLY MED. THIS IS SO COOL I LOVE MED AND ALL HER SUPPORT FOR ME.')
-            
+            elif user.id == 351762383351447553:
+                embed.add_field(name='SCAMMER RANK', value='Honestly, I fucking hate you noah. How the fuck did you get three blackjacks in a row AND double king? I\'m crying right now and it\'s your fault. Thanks.')
+
             if sfwmode:
                 length = pp.size // 100
                 dog = [
@@ -86,7 +88,7 @@ class important(commands.Cog):
             pp = await ud.Pp.fetch(ctx.author.id, self.bot)
             growsize = random.randint(1, 5) * pp.multiplier["multiplier"]
             pp.size += growsize
-            embed.description = f'{ctx.author.mention}, your {ppname} grew **{growsize} inches!**'
+            embed.description = f'{ctx.author.mention}, your {ppname} grew **[{growsize}](https://www.youtube.com/watch?v=FP23VU01fz8) inches!**'
             await pp.update()
         return await ctx.send(embed=embed)
 
