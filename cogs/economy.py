@@ -253,56 +253,69 @@ class Economy(vbu.Cog):
                 
                 
                 skill = await self.get_cached_skill(db, ctx.author.id, 'BEGGING')
-                options = [vbu.SelectOption('Under a bridge', 'BRIDGE', description='Nobody said begging was easy.', emoji='😔')]
+                options = [vbu.SelectOption('LEVEL I: Under a bridge', 'BRIDGE', description='Nobody said begging was easy.', emoji='😔')]
+
                 if skill['level'] > 0:
-                    options.append(vbu.SelectOption('Farmer\'s market', 'MARKET', description='Time to annoy those fucking farmers', emoji='🧑‍🌾'))
+                    options.insert(0, vbu.SelectOption('LEVEL II: Farmer\'s market', 'MARKET', description='Time to annoy those fucking farmers', emoji='🧑‍🌾'))
+                if skill['level'] > 1:
+                    options.insert(0, vbu.SelectOption('LEVEL III: City Block', 'BLOCK', description='I\'m sure the residents have some inches to spare', emoji='🏙️'))
+                if skill['level'] > 2:
+                    options.insert(0, vbu.SelectOption('LEVEL IV: Modern Art Auction', 'AUCTION', description='Look at all these rich assholes buying "art", let\'s take advantage of em!', emoji='🏙️'))
 
                 components = vbu.MessageComponents(
                     vbu.ActionRow(vbu.SelectMenu('SELECT_LOCATION', options, 'Select a location.', 1, 1))
                 )
 
-                m: vbu.InteractionMessageable = await ctx.reply('Where are you begging?', components=components, mention_author=False)
+                m: vbu.InteractionMessageable = await ctx.reply('**Where are you begging?**\nLeveling up `Begging` unlocks new locations', components=components, mention_author=False)
                 try:
                     p = await self.bot.wait_for("component_interaction", check=lambda p: p.message.id == m.id and p.user.id == ctx.author.id, timeout=15)
                 except asyncio.TimeoutError:
                     await m.edit(components=None)
-                    return await ctx.send('Dude stop just pick a location why are you being so slow')
+                    return await ctx.send('Please actually choose a location next time, don\'t be so slow nerd')
 
                 await p.ack()
                 if not random.randint(0, 3): # haha no inches for you
-                    if p.values[0] == 'BRIDGE':
-                        quote = random.choice([
-                            'Ew poor person, step away from me please. I need to wash my hands now',
-                            'Don\'t touch my pp you freak, what do think you\'re doing???',
-                            'My wife has a bigger pp than you I\'m not giving you shit',
-                            'I\'m not donating to someone with such a tiny pp oh my god please go away',
-                            'Cringe tiny pp',
-                            'beg harder daddy',
-                            'People with a small pp make me scared',
-                            'Don\'t touch me poor person',
-                            'Get a job',
-                            'Oh my.. Did you really just beg for my pp? I\'m offended', 
-                            'No you',
-                            'I don\'t speak poor',
-                            'You should take a shower',
-                            'I love my wife... I love my wife... I love my wife..',
-                            'Drink some water',
-                            'Begone beggar',
-                            'No.',
-                            'Oh hell nah I\'m not giving you my inches',
-                            'Try being a little "cooler" next time',
-                        ])
+                    quotes = [
+                        'Ew poor person, step away from me please. I need to wash my hands now',
+                        'Don\'t touch my pp you freak, what do think you\'re doing???',
+                        'My wife has a bigger pp than you I\'m not giving you shit',
+                        'I\'m not donating to someone with such a tiny pp oh my god please go away',
+                        'Cringe tiny pp',
+                        'beg harder daddy',
+                        'People with a small pp make me scared',
+                        'Don\'t touch me poor person',
+                        'Get a job',
+                        'Oh my.. Did you really just beg for my pp? I\'m offended', 
+                        'No you',
+                        'I don\'t speak poor',
+                        'You should take a shower',
+                        'I love my wife... I love my wife... I love my wife..',
+                        'Hey, it\'s important to stay hydrated. Drink some water mate, love you',
+                        'Begone beggar',
+                        'No.',
+                        'Oh hell nah I\'m not giving you my inches',
+                        'Try being a little "cooler" next time',
+                        'Get the fuck out of my sight',
+                        'I\'m not giving you anything mate',
+                    ]
 
-                    elif p.values[0] == 'MARKET':
-                        quote = random.choice([
+                    if p.values[0] == 'MARKET':
+                        quotes.append([
                             'Step aside silly beggar, I have vegetables to sell',
-                            'Get the fuck out of my sight',
                             'I\'m trying to sell my vegetables stop bothering me',
-                            'I\'m not giving you anything mate',
+                            'Please just let me sell my fruits in peace',
+                        ])
+                    
+                    elif p.values[1] == 'BLOCK':
+                        quotes.append([
+                            'I\'m so sick of this shit. I spend $4.050 a month on rent and can\'t afford food. Fuck you, you aren\'t getting anything',
+                            'Get off my block',
+                            'Oh go to hell, tourist',
                         ])
 
-                        embed.description = f'“{quote}”'
-                        return await m.edit(content=None, components=None, embed=embed, mention_author=False)
+
+                    embed.description = f'“{random.choice(quotes)}”'
+                    return await m.edit(content=None, components=None, embed=embed)
 
                 quote = random.choice([
                     'Your pp is so small I feel bad, take {0}, now go away',
@@ -311,10 +324,15 @@ class Economy(vbu.Cog):
                     'Eh why not, here\'s {0}. Have a nice day!'
                 ])
 
-                if p.values[0] == 'BRIDGE':
-                    growth = round(random.randint(1, 10) * pp.multiplier)
-                elif p.values[0] == 'MARKET':
+                if p.values[0] == 'MARKET':
                     growth = round(random.randint(10, 20) * pp.multiplier)
+                elif p.values[0] == 'BLOCK':
+                    growth = round(random.randint(20, 40) * pp.multiplier)
+                elif p.values[0] == 'AUCTION':
+                    growth = round(random.randint(40, 80) * pp.multiplier)
+                else:
+                    growth = round(random.randint(80, 160) * pp.multiplier)
+
                 pp.size += growth
 
                 exp_growth = random.randint(10, 16)
@@ -327,10 +345,10 @@ class Economy(vbu.Cog):
                     item = random.choice([i for i in self.shop_items if i.shopsettings.buy < 500])
                     item.amount = random.randint(1, 2)
                     embed.description = f'“{quote.format(utils.readable_list(self.bot, size=growth, items=[item]))}”'
-                    return await m.edit(content=None, components=None, embed=embed, mention_author=False)
+                    return await m.edit(content=None, components=None, embed=embed)
 
                 embed.description = f'“{quote.format(utils.readable_list(self.bot, size=growth))}”'
-                return await m.edit(content=None, components=None, embed=embed, mention_author=False)
+                return await m.edit(content=None, components=None, embed=embed)
 
 
 def setup(bot: vbu.Bot):
