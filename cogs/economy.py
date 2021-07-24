@@ -253,14 +253,14 @@ class Economy(vbu.Cog):
                 
                 
                 skill = await self.get_cached_skill(db, ctx.author.id, 'BEGGING')
-                options = [vbu.SelectOption('LEVEL I: Under a bridge', 'BRIDGE', description='Nobody said begging was easy.', emoji='😔')]
+                options = [vbu.SelectOption('LEVEL 0: Under a bridge', 'BRIDGE', description='Nobody said begging was easy.', emoji='😔')]
 
                 if skill['level'] > 0:
-                    options.insert(0, vbu.SelectOption('LEVEL II: Farmer\'s market', 'MARKET', description='Time to annoy those fucking farmers', emoji='🧑‍🌾'))
+                    options.insert(0, vbu.SelectOption('LEVEL I: Farmer\'s market', 'MARKET', description='Time to annoy those fucking farmers', emoji='🧑‍🌾'))
                 if skill['level'] > 1:
-                    options.insert(0, vbu.SelectOption('LEVEL III: City Block', 'BLOCK', description='I\'m sure the residents have some inches to spare', emoji='🏙️'))
+                    options.insert(0, vbu.SelectOption('LEVEL II: City Block', 'BLOCK', description='I\'m sure the residents have some inches to spare', emoji='🏙️'))
                 if skill['level'] > 2:
-                    options.insert(0, vbu.SelectOption('LEVEL IV: Modern Art Auction', 'AUCTION', description='Look at all these rich assholes buying "art", let\'s take advantage of em!', emoji='🏙️'))
+                    options.insert(0, vbu.SelectOption('LEVEL III: Modern Art Auction', 'AUCTION', description='Look at all these rich assholes buying "art", let\'s take advantage of em!', emoji='🏙️'))
 
                 components = vbu.MessageComponents(
                     vbu.ActionRow(vbu.SelectMenu('SELECT_LOCATION', options, 'Select a location.', 1, 1))
@@ -306,11 +306,26 @@ class Economy(vbu.Cog):
                             'Please just let me sell my fruits in peace',
                         ])
                     
-                    elif p.values[1] == 'BLOCK':
+                    elif p.values[0] == 'BLOCK':
                         quotes.append([
                             'I\'m so sick of this shit. I spend $4.050 a month on rent and can\'t afford food. Fuck you, you aren\'t getting anything',
                             'Get off my block',
                             'Oh go to hell, tourist',
+                        ])
+                    
+                    elif p.values[0] == 'AUCTION':
+                        quotes.append([
+                            'Oh my god get away from me, I\'m WAY too rich to talk to you',
+                            'My dog only drinks bottled water',
+                            'Do you know who I am!? I have money! I\'m important! Get away from me!',
+                            'Stop asking for handouts, I never got help from anyone',
+                            'I don\'t even have any inches! I replaced my pp with gold!',
+                            'I don\'t have any inches to spare, I only have a few billion left. Hey, you know what\'s a good idea? Your kids should WORK for my kids!',
+                            'Oh please, I\'m broke! The gas to fly my private jet is getting expensive'
+                            'GET THE FUCK OUT LMAO. I\'M RICH, BITCH!',
+                            'You\'re wasting your time. Go do poor people things, like paying taxes',
+                            'I refuse to donate to someone with a house worth less than 10 million USD',
+                            'Ew, you\'re way too poor! I\'m gonna go buy a new Bugatti, I\'m getting tired of this Mercedes',
                         ])
 
 
