@@ -12,7 +12,7 @@ class PpWrapper:  # haha condom
         self.update = update
 
     async def __aenter__(self):
-        v = await self.db("""SELECT * FROM user_pp WHERE user_id=$1""", self.user_id)
+        v = await self.db("""SELECT * FROM user_pp WHERE user_id = $1""", self.user_id)
         if not v:
             self.pp = Pp(self.user_id)
         else: 
