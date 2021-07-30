@@ -72,7 +72,7 @@ class BeggingLocations:
     @property
     def quotes(self):
         l = Base.QUOTES.copy()
-        l.append([i.quotes for i in self.locations])
+        l.append([i.specific_quotes for i in self.locations])
         return list(itertools.chain.from_iterable(l))
 
     def to_selectmenu(self):
