@@ -59,7 +59,7 @@ class BeggingLocation:
         return l
     
     def to_selectoption(self):
-        return vbu.SelectOption(f'LEVEL {int_to_roman(self.level)}: {self.name}', self.id, description=self.description, emoji=self.emoji, default=False)
+        return vbu.SelectOption(f'LVL {int_to_roman(self.level)}: {self.name}', self.id, description=self.description, emoji=self.emoji, default=False)
 
 @dataclass
 class BeggingLocations:
