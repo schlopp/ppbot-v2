@@ -237,7 +237,7 @@ class Economy(vbu.Cog):
                     if v:
                         embed.add_field('Skills', '\n'.join([f"{v[0]['name'].title()}: {utils.get_level_by_exp(v[0]['experience'])} ({v[0]['experience']} EXP)"]))
                 return await ctx.reply(embed=embed, mention_author=False)
-    
+
     @vbu.command(name='beg', aliases=['plead'])
     async def _beg_command(self, ctx: vbu.Context):
         """
@@ -253,68 +253,32 @@ class Economy(vbu.Cog):
                 
                 
                 skill = await self.get_cached_skill(db, ctx.author.id, 'BEGGING')
-                options = [vbu.SelectOption('LEVEL 0: Under a bridge', 'BRIDGE', description='Nobody said begging was easy.', emoji='😔')]
-
-                if skill['level'] > 0:
-                    options.insert(0, vbu.SelectOption('LEVEL I: Farmer\'s market', 'MARKET', description='Time to annoy those fucking farmers', emoji='🧑‍🌾'))
-                if skill['level'] > 1:
-                    options.insert(0, vbu.SelectOption('LEVEL II: City Block', 'BLOCK', description='I\'m sure the residents have some inches to spare', emoji='🏙️'))
-                if skill['level'] > 2:
-                    options.insert(0, vbu.SelectOption('LEVEL III: Modern Art Auction', 'AUCTION', description='Look at all these rich assholes buying "art", let\'s take advantage of em!', emoji='🏙️'))
-
-                components = vbu.MessageComponents(
-                    vbu.ActionRow(vbu.SelectMenu('SELECT_LOCATION', options, 'Select a location.', 1, 1))
-                )
-
-                m: vbu.InteractionMessageable = await ctx.reply('**Where are you begging?**\nLeveling up `Begging` unlocks new locations', components=components, mention_author=False)
-                try:
-                    p = await self.bot.wait_for("component_interaction", check=lambda p: p.message.id == m.id and p.user.id == ctx.author.id, timeout=15)
-                except asyncio.TimeoutError:
-                    await m.edit(components=None)
-                    return await ctx.send('Please actually choose a location next time, don\'t be so slow nerd')
-
-                await p.ack()
-                if not random.randint(0, 3): # haha no inches for you
-                    quotes = [
-                        'Ew poor person, step away from me please. I need to wash my hands now',
-                        'Don\'t touch my pp you freak, what do think you\'re doing???',
-                        'My wife has a bigger pp than you I\'m not giving you shit',
-                        'I\'m not donating to someone with such a tiny pp oh my god please go away',
-                        'Cringe tiny pp',
-                        'beg harder daddy',
-                        'People with a small pp make me scared',
-                        'Don\'t touch me poor person',
-                        'Get a job',
-                        'Oh my.. Did you really just beg for my pp? I\'m offended', 
-                        'No you',
-                        'I don\'t speak poor',
-                        'You should take a shower',
-                        'I love my wife... I love my wife... I love my wife..',
-                        'Hey, it\'s important to stay hydrated. Drink some water mate, love you',
-                        'Begone beggar',
-                        'No.',
-                        'Oh hell nah I\'m not giving you my inches',
-                        'Try being a little "cooler" next time',
-                        'Get the fuck out of my sight',
-                        'I\'m not giving you anything mate',
-                    ]
-
-                    if p.values[0] == 'MARKET':
-                        quotes.append([
+                locations = utils.BeggingLocations(
+                    utils.BeggingLocation(
+                        0, 'BRIDGE', '😔', 'Under a Bridge', 'Lmao broke boy go beg with the other homeless', [
+                            'Damn bro I live under a bridge and you\'re asking ME for inches??',
+                            'What did you think was gonna happen when you asked some homeless dude for inches',
+                            'Sorry I spent all my inches on meth'
+                        ]),
+                    utils.BeggingLocation(
+                        1, 'MARKET', '🧑‍🌾', 'Farmer\'s Market', 'Time to annoy those fucking farmers', [
                             'Step aside silly beggar, I have vegetables to sell',
                             'I\'m trying to sell my vegetables stop bothering me',
                             'Please just let me sell my fruits in peace',
-                        ])
-                    
-                    elif p.values[0] == 'BLOCK':
-                        quotes.append([
-                            'I\'m so sick of this shit. I spend $4.050 a month on rent and can\'t afford food. Fuck you, you aren\'t getting anything',
+                        ]),
+                    utils.BeggingLocation(
+                        2, 'BLOCK', '🏙️', 'City Block', '\'m sure the residents have some inches to spare', [
+                            'I\'m so sick of this shit. I spend 4.050 inches a month on rent and can\'t afford food. Fuck you, you aren\'t getting anything',
                             'Get off my block',
                             'Oh go to hell, tourist',
-                        ])
-                    
-                    elif p.values[0] == 'AUCTION':
-                        quotes.append([
+                        ]),
+                    utils.BeggingLocation(
+                        3, 'CLUB', '<a:poledance:870466180253618196>', 'Family-Friendly adult dance club', [
+                            'Just because I don\'t have clothes on doesn\'t mean you can just steal my pp',
+                            'I expect a good show before I give you anything',
+                        ]),
+                    utils.BeggingLocation(
+                        4, 'AUCTION', '🖼️', 'Modern Art Auction', 'Look at all these rich assholes buying "art", let\'s take advantage of em!', [
                             'Oh my god get away from me, I\'m WAY too rich to talk to you',
                             'My dog only drinks bottled water',
                             'Do you know who I am!? I have money! I\'m important! Get away from me!',
@@ -326,35 +290,38 @@ class Economy(vbu.Cog):
                             'You\'re wasting your time. Go do poor people things, like paying taxes',
                             'I refuse to donate to someone with a house worth less than 10 million USD',
                             'Ew, you\'re way too poor! I\'m gonna go buy a new Bugatti, I\'m getting tired of this Mercedes',
-                        ])
+                        ]),
+                )
 
+                components = vbu.MessageComponents(vbu.ActionRow(
+                    locations.to_selectmenu()
+                ))
 
-                    embed.description = f'“{random.choice(quotes)}”'
+                m: vbu.InteractionMessageable = await ctx.reply('**Where are you begging?**\nLeveling up `Begging` unlocks new locations', components=components, mention_author=False)
+                try:
+                    p = await self.bot.wait_for("component_interaction", check=lambda p: p.message.id == m.id and p.user.id == ctx.author.id, timeout=15)
+                except asyncio.TimeoutError:
+                    await m.edit(components=None)
+                    return await ctx.send(f'{ctx.author.mention} you left me on read:pensive:')
+
+                await p.ack()
+                chosen_location = [x for x in locations.locations if x.id == p.values[0]][0]
+                if not random.randint(0, 9): # haha no inches for you
+                    embed.description = f'“{random.choice(chosen_location.quotes)}”'
                     return await m.edit(content=None, components=None, embed=embed)
 
+                exp_growth = random.randint(int(10 * (1 + chosen_location.level / 10)), int(16 * 1 + chosen_location.level / 10))
+                await self.update_cached_skill(db, ctx.author.id, 'BEGGING', exp_growth)
+                skill = await self.get_cached_skill(db, ctx.author.id, 'BEGGING')
+                embed.set_footer(f"+{exp_growth} begging XP (`Begging {skill['level']}`)")
+                
+                growth = random.randint(10 * (1 + chosen_location.level), 20 * ( 1 + chosen_location.level))
                 quote = random.choice([
                     'Your pp is so small I feel bad, take {0}, now go away',
                     'Yeah whatever mate take {0}',
                     'You\'re so annoying, here, have {0}. Now scram! Skedaddle!',
                     'Eh why not, here\'s {0}. Have a nice day!'
                 ])
-
-                if p.values[0] == 'MARKET':
-                    growth = round(random.randint(10, 20) * pp.multiplier)
-                elif p.values[0] == 'BLOCK':
-                    growth = round(random.randint(20, 40) * pp.multiplier)
-                elif p.values[0] == 'AUCTION':
-                    growth = round(random.randint(40, 80) * pp.multiplier)
-                else:
-                    growth = round(random.randint(80, 160) * pp.multiplier)
-
-                pp.size += growth
-
-                exp_growth = random.randint(10, 16)
-                await self.update_cached_skill(db, ctx.author.id, 'BEGGING', exp_growth)
-
-                skill = await self.get_cached_skill(db, ctx.author.id, "BEGGING")
-                embed.set_footer(f'+{exp_growth} begging EXP (level {skill["level"]})')
 
                 if random.randint(0,1):
                     item = random.choice([i for i in self.shop_items if i.shopsettings.buy < 500])
