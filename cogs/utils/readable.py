@@ -30,7 +30,7 @@ def int_to_roman(n: int) -> str:
             roman_n += syb[i]
             n -= val[i]
         i += 1
-    return roman_n
+    return roman_n or '0'
 
 def readable_list(bot: vbu.Bot, size: typing.Optional[int] = None, items: typing.Optional[list] = None):
     if items:
