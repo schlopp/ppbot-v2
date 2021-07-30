@@ -24,7 +24,7 @@ class PpWrapper:  # haha condom
             await self.pp.update(self.db)
 
 
-@dataclass(init=True, repr=True, eq=True, order=True, unsafe_hash=False, frozen=False)
+@dataclass
 class Pp:
     user_id: int
     name: typing.Optional[str] = 'Unnamed Pp'
@@ -38,6 +38,9 @@ class Pp:
         self.name = name
         self.size = size
         self.multiplier = round(multiplier, 2)
+
+    def __lt__(self, other):
+        return self.size < other.size
 
     @classmethod
     def fetch(cls, db: vbu.DatabaseConnection, user_id: int, update: typing.Optional[bool] = True):
