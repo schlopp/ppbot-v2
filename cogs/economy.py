@@ -273,12 +273,12 @@ class Economy(vbu.Cog):
                             'Oh go to hell, tourist',
                         ]),
                     utils.BeggingLocation(
-                        3, 'CLUB', '<a:poledance:870466180253618196>', 'Family-Friendly adult dance club', [
+                        3, 'CLUB', '<a:poledance:870466180253618196>', 'Adult dance club', 'Kids, look away!', [
                             'Just because I don\'t have clothes on doesn\'t mean you can just steal my pp',
                             'I expect a good show before I give you anything',
                         ]),
                     utils.BeggingLocation(
-                        4, 'AUCTION', '🖼️', 'Modern Art Auction', 'Look at all these rich assholes buying "art", let\'s take advantage of em!', [
+                        4, 'AUCTION', '🖼️', 'Art Auction', 'Let\'s scam these rich losers', [
                             'Oh my god get away from me, I\'m WAY too rich to talk to you',
                             'My dog only drinks bottled water',
                             'Do you know who I am!? I have money! I\'m important! Get away from me!',
@@ -301,19 +301,19 @@ class Economy(vbu.Cog):
                 try:
                     p = await self.bot.wait_for("component_interaction", check=lambda p: p.message.id == m.id and p.user.id == ctx.author.id, timeout=15)
                 except asyncio.TimeoutError:
-                    await m.edit(components=None)
+                    await m.edit(components=None, mention_author=False)
                     return await ctx.send(f'{ctx.author.mention} you left me on read:pensive:')
 
                 await p.ack()
                 chosen_location = [x for x in locations.locations if x.id == p.values[0]][0]
                 if not random.randint(0, 9): # haha no inches for you
                     embed.description = f'“{random.choice(chosen_location.quotes)}”'
-                    return await m.edit(content=None, components=None, embed=embed)
+                    return await m.edit(content=None, components=None, embed=embed, mention_author=False)
 
                 exp_growth = random.randint(int(10 * (1 + chosen_location.level / 10)), int(16 * 1 + chosen_location.level / 10))
                 await self.update_cached_skill(db, ctx.author.id, 'BEGGING', exp_growth)
                 skill = await self.get_cached_skill(db, ctx.author.id, 'BEGGING')
-                embed.set_footer(f"+{exp_growth} begging XP (`Begging {skill['level']}`)")
+                embed.set_footer(f"+{exp_growth} begging XP (Begging {utils.int_to_roman(skill['level'])})")
                 
                 growth = random.randint(10 * (1 + chosen_location.level), 20 * ( 1 + chosen_location.level))
                 quote = random.choice([
@@ -327,10 +327,10 @@ class Economy(vbu.Cog):
                     item = random.choice([i for i in self.shop_items if i.shopsettings.buy < 500])
                     item.amount = random.randint(1, 2)
                     embed.description = f'“{quote.format(utils.readable_list(self.bot, size=growth, items=[item]))}”'
-                    return await m.edit(content=None, components=None, embed=embed)
+                    return await m.edit(content=None, components=None, embed=embed, mention_author=False)
 
                 embed.description = f'“{quote.format(utils.readable_list(self.bot, size=growth))}”'
-                return await m.edit(content=None, components=None, embed=embed)
+                return await m.edit(content=None, components=None, embed=embed, mention_author=False)
 
 
 def setup(bot: vbu.Bot):
