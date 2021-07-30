@@ -1,4 +1,5 @@
 from cogs.utils import checks
+from cogs.utils.begginglocation import BeggingLocation, BeggingLocations
 from cogs.utils.pp import Pp
 from cogs.utils.dict import Dict
 from cogs.utils.item import Lore
