@@ -253,7 +253,7 @@ class Economy(vbu.Cog):
                 
                 
                 skill = await self.get_cached_skill(db, ctx.author.id, 'BEGGING')
-                locations = utils.BeggingLocations(
+                locations = utils.BeggingLocations(skill['level'],
                     utils.BeggingLocation(
                         0, 'BRIDGE', '😔', 'Under a Bridge', 'Lmao broke boy go beg with the other homeless', [
                             'Damn bro I live under a bridge and you\'re asking ME for inches??',
@@ -267,7 +267,7 @@ class Economy(vbu.Cog):
                             'Please just let me sell my fruits in peace',
                         ]),
                     utils.BeggingLocation(
-                        2, 'BLOCK', '🏙️', 'City Block', '\'m sure the residents have some inches to spare', [
+                        2, 'BLOCK', '🏙️', 'City Block', 'I\'m sure the residents have some inches to spare', [
                             'I\'m so sick of this shit. I spend 4.050 inches a month on rent and can\'t afford food. Fuck you, you aren\'t getting anything',
                             'Get off my block',
                             'Oh go to hell, tourist',
@@ -304,11 +304,10 @@ class Economy(vbu.Cog):
                     await m.edit(components=None, mention_author=False)
                     return await ctx.send(f'{ctx.author.mention} you left me on read:pensive:')
 
-                await p.ack()
                 chosen_location = [x for x in locations.locations if x.id == p.values[0]][0]
                 if not random.randint(0, 9): # haha no inches for you
-                    embed.description = f'“{random.choice(chosen_location.quotes)}”'
-                    return await m.edit(content=None, components=None, embed=embed, mention_author=False)
+                    embed.description = f'“{random.choice(chosen_location.quotes())}”'
+                    return await p.respond(embed=embed)
 
                 exp_growth = random.randint(int(10 * (1 + chosen_location.level / 10)), int(16 * 1 + chosen_location.level / 10))
                 await self.update_cached_skill(db, ctx.author.id, 'BEGGING', exp_growth)
@@ -327,10 +326,10 @@ class Economy(vbu.Cog):
                     item = random.choice([i for i in self.shop_items if i.shopsettings.buy < 500])
                     item.amount = random.randint(1, 2)
                     embed.description = f'“{quote.format(utils.readable_list(self.bot, size=growth, items=[item]))}”'
-                    return await m.edit(content=None, components=None, embed=embed, mention_author=False)
+                    return await p.respond(embed=embed)
 
                 embed.description = f'“{quote.format(utils.readable_list(self.bot, size=growth))}”'
-                return await m.edit(content=None, components=None, embed=embed, mention_author=False)
+                return await p.respond(embed=embed)
 
 
 def setup(bot: vbu.Bot):
