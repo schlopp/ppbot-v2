@@ -32,7 +32,7 @@ class Base:
             'I\'m not giving you anything mate',
         ]
 
-@dataclass
+@dataclass(init=False, order=True)
 class BeggingLocation:
     level: int
     id: str
@@ -49,9 +49,6 @@ class BeggingLocation:
         self.description = description
         self.specific_quotes = specific_quotes
     
-    def __lt__(self, other):
-        return self.level < other.level
-    
     @property
     def quotes(self):
         l = Base.QUOTES.copy()
@@ -61,15 +58,16 @@ class BeggingLocation:
     def to_selectoption(self):
         return vbu.SelectOption(f'LVL {int_to_roman(self.level)}: {self.name}', self.id, description=self.description, emoji=self.emoji, default=False)
 
-@dataclass
+@dataclass(init=False)
 class BeggingLocations:
-    locations: typing.Iterable[BeggingLocation]
-    quotes: typing.List[str]
+    level: int
+    locations: typing.List[BeggingLocation]
 
-    def __init__(self, *locations: typing.Iterable[BeggingLocation]):
-        self.locations = locations
+    def __init__(self, level: int, *locations: typing.Iterable[BeggingLocation]):
+        print([i for i in locations if i.level <= level].sort(key=lambda x: x.level))
+        self.level = level
+        self.locations = sorted([i for i in locations if i.level <= level], key=lambda x: x.level, reverse=True)
     
-    @property
     def quotes(self):
         l = Base.QUOTES.copy()
         l.append([i.specific_quotes for i in self.locations])
