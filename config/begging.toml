@@ -1,0 +1,122 @@
+[quotes]
+failure = [
+    "Ew poor person, step away from me please. I need to wash my hands now",
+    "Don't touch my pp you freak, what do think you're doing???",
+    "My wife has a bigger pp than you I'm not giving you shit",
+    "I'm not donating to someone with such a tiny pp oh my god please go away",
+    "Cringe tiny pp",
+    "beg harder daddy",
+    "People with a small pp make me scared",
+    "Don't touch me poor person",
+    "Get a job",
+    "Oh my.. Did you really just beg for my pp? I'm offended" ,
+    "No you",
+    "I don't speak poor",
+    "You should take a shower",
+    "I love my wife... I love my wife... I love my wife..",
+    "Hey, it's important to stay hydrated. Drink some water mate, love you",
+    "Begone beggar",
+    "No.",
+    "Oh hell nah I'm not giving you my inches",
+    "Try being a little 'cooler' next time",
+    "Get the fuck out of my sight",
+    "I'm not giving you anything mate",
+]
+success = [ # {0} = reward
+    "Your pp is so small I feel bad, take {0}, now go away",
+    "Yeah whatever mate take {0}",
+    "You're so annoying, here, have {0}. Now scram! Skedaddle!",
+    "Eh why not, here's {0}. Have a nice day",
+    "Here's {0}, go buy yourself something nice"
+]
+
+[[locations]]
+level = 0
+id = "BRIDGE"
+emoji = "😔"
+name = "Under a Bridge"
+description = "Lmao broke boy go beg with the other homeless"
+specific_quotes = [
+    "Damn bro I live under a bridge and you're asking ME for inches??",
+    "What did you think was gonna happen when you asked some homeless dude for inches",
+    "Sorry I spent all my inches on meth",
+]
+
+[[locations]]
+level = 1
+id = "MARKET"
+emoji = "🧑‍🌾"
+name = "Farmer's Market"
+description = "Yeehaw"
+specific_quotes = [
+    "Step aside silly beggar, I have vegetables to sell",
+    "I'm trying to sell my vegetables stop bothering me",
+    "Please just let me sell my fruits in peace",
+]
+
+[[locations]]
+level = 2
+id = "BLOCK"
+emoji = "🏙️"
+name = "City Block"
+description = "I'm sure the residents have some inches to spare"
+specific_quotes = [
+    "I'm so sick of this shit. I spend 4.050 inches a month on rent and can't afford food. Fuck you, you aren't getting anything",
+    "Get off my block",
+    "Oh go to hell, tourist",
+]
+
+[[locations]]
+level = 3
+id = "CLUB"
+emoji = "<a:poledance:870466180253618196>"
+name = "Adult dance club"
+description = "Kids, look away!"
+specific_quotes = [
+    "Just because I don't have clothes on doesn't mean you can just steal my pp",
+    "I expect a good show before I give you anything",
+]
+
+[[locations]]
+level = 4
+id = "AUCTION"
+emoji = "🖼️"
+name = "Art Auction"
+description = "It reeks of tax fraud"
+specific_quotes = [
+    "Oh my god get away from me, I'm WAY too rich to talk to you",
+    "My dog only drinks bottled water",
+    "Do you know who I am!? I have money! I'm important! Get away from me!",
+    "Stop asking for handouts, I never got help from anyone",
+    "I don't even have any inches! I replaced my pp with gold!",
+    "I don't have any inches to spare, I only have a few billion left. Hey, you know what's a good idea? Your kids should WORK for my kids!",
+    "Oh please, I'm broke! The gas to fly my private jet is getting expensive",
+    "GET THE FUCK OUT LMAO. I'M RICH, BITCH!",
+    "You're wasting your time. Go do poor people things, like paying taxes",
+    "I refuse to donate to someone with a house worth less than 10 million USD",
+    "Ew, you're way too poor! I'm gonna go buy a new Bugatti, I'm getting tired of this Mercedes",
+]
+
+[[locations]]
+level = 5
+id = "PUB"
+emoji = "🍺"
+name = "Uncle Joe's Pub"
+description = "Hope he doesn't touch me"
+specific_quotes = [
+    "Buy me a drink first",
+    "I just spent all my money on alcohol, sorry",
+]
+
+[[locations]]
+level = 6
+id = "PARENTS"
+emoji = "👪"
+name = "Your parents"
+description = "They're extremely disappointed"
+specific_quotes = [
+    "I'm disappointed in you",
+    "This is why you aren't our favourite child",
+    "Dont make me pull out the belt you little shit",
+    "If your dad just bought condoms this would've never happened"
+]
