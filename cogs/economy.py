@@ -5,6 +5,7 @@ import string
 from datetime import datetime
 
 import voxelbotutils as vbu
+import toml
 import discord
 from discord.ext import tasks
 
@@ -22,6 +23,7 @@ class Economy(vbu.Cog):
         self.item_not_exist = 'cmonbruh that item doesn\'t exist what are you DOING'
         self.link = 'https://www.youtube.com/watch?v=FP23VU01fz8'
         self.skills = {}
+        self.begging = toml.load("config/begging.toml")
 
     @tasks.loop(minutes=10)
     async def load_items(self):
@@ -250,48 +252,8 @@ class Economy(vbu.Cog):
                 with vbu.Embed(use_random_colour=True) as embed:
                     person = utils.random_name(include_url=True)
                     embed.set_author(name=person[0], icon_url=person[1])
-                
-                
                 skill = await self.get_cached_skill(db, ctx.author.id, 'BEGGING')
-                locations = utils.BeggingLocations(skill['level'],
-                    utils.BeggingLocation(
-                        0, 'BRIDGE', '😔', 'Under a Bridge', 'Lmao broke boy go beg with the other homeless', [
-                            'Damn bro I live under a bridge and you\'re asking ME for inches??',
-                            'What did you think was gonna happen when you asked some homeless dude for inches',
-                            'Sorry I spent all my inches on meth'
-                        ]),
-                    utils.BeggingLocation(
-                        1, 'MARKET', '🧑‍🌾', 'Farmer\'s Market', 'Time to annoy those fucking farmers', [
-                            'Step aside silly beggar, I have vegetables to sell',
-                            'I\'m trying to sell my vegetables stop bothering me',
-                            'Please just let me sell my fruits in peace',
-                        ]),
-                    utils.BeggingLocation(
-                        2, 'BLOCK', '🏙️', 'City Block', 'I\'m sure the residents have some inches to spare', [
-                            'I\'m so sick of this shit. I spend 4.050 inches a month on rent and can\'t afford food. Fuck you, you aren\'t getting anything',
-                            'Get off my block',
-                            'Oh go to hell, tourist',
-                        ]),
-                    utils.BeggingLocation(
-                        3, 'CLUB', '<a:poledance:870466180253618196>', 'Adult dance club', 'Kids, look away!', [
-                            'Just because I don\'t have clothes on doesn\'t mean you can just steal my pp',
-                            'I expect a good show before I give you anything',
-                        ]),
-                    utils.BeggingLocation(
-                        4, 'AUCTION', '🖼️', 'Art Auction', 'Let\'s scam these rich losers', [
-                            'Oh my god get away from me, I\'m WAY too rich to talk to you',
-                            'My dog only drinks bottled water',
-                            'Do you know who I am!? I have money! I\'m important! Get away from me!',
-                            'Stop asking for handouts, I never got help from anyone',
-                            'I don\'t even have any inches! I replaced my pp with gold!',
-                            'I don\'t have any inches to spare, I only have a few billion left. Hey, you know what\'s a good idea? Your kids should WORK for my kids!',
-                            'Oh please, I\'m broke! The gas to fly my private jet is getting expensive'
-                            'GET THE FUCK OUT LMAO. I\'M RICH, BITCH!',
-                            'You\'re wasting your time. Go do poor people things, like paying taxes',
-                            'I refuse to donate to someone with a house worth less than 10 million USD',
-                            'Ew, you\'re way too poor! I\'m gonna go buy a new Bugatti, I\'m getting tired of this Mercedes',
-                        ]),
-                )
+                locations = utils.BeggingLocations(skill['level'], *[utils.BeggingLocation(**i) for i in self.begging['locations']])
 
                 components = vbu.MessageComponents(vbu.ActionRow(
                     locations.to_selectmenu()
@@ -315,12 +277,7 @@ class Economy(vbu.Cog):
                 embed.set_footer(f"+{exp_growth} begging XP (Begging {utils.int_to_roman(skill['level'])})")
                 
                 growth = random.randint(10 * (1 + chosen_location.level), 20 * ( 1 + chosen_location.level))
-                quote = random.choice([
-                    'Your pp is so small I feel bad, take {0}, now go away',
-                    'Yeah whatever mate take {0}',
-                    'You\'re so annoying, here, have {0}. Now scram! Skedaddle!',
-                    'Eh why not, here\'s {0}. Have a nice day!'
-                ])
+                quote = random.choice(self.begging['quotes']['success'])
 
                 if random.randint(0,1):
                     item = random.choice([i for i in self.shop_items if i.shopsettings.buy < 500])

@@ -3,34 +3,13 @@ import itertools
 from dataclasses import dataclass
 
 import voxelbotutils as vbu
+import toml
 
 from cogs.utils.readable import int_to_roman
 
 
 class Base:
-    QUOTES = [
-            'Ew poor person, step away from me please. I need to wash my hands now',
-            'Don\'t touch my pp you freak, what do think you\'re doing???',
-            'My wife has a bigger pp than you I\'m not giving you shit',
-            'I\'m not donating to someone with such a tiny pp oh my god please go away',
-            'Cringe tiny pp',
-            'beg harder daddy',
-            'People with a small pp make me scared',
-            'Don\'t touch me poor person',
-            'Get a job',
-            'Oh my.. Did you really just beg for my pp? I\'m offended', 
-            'No you',
-            'I don\'t speak poor',
-            'You should take a shower',
-            'I love my wife... I love my wife... I love my wife..',
-            'Hey, it\'s important to stay hydrated. Drink some water mate, love you',
-            'Begone beggar',
-            'No.',
-            'Oh hell nah I\'m not giving you my inches',
-            'Try being a little "cooler" next time',
-            'Get the fuck out of my sight',
-            'I\'m not giving you anything mate',
-        ]
+    QUOTES = toml.load('config/begging.toml')['quotes']['failure']
 
 @dataclass(init=False, order=True)
 class BeggingLocation:
