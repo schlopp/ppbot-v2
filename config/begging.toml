@@ -120,3 +120,13 @@ specific_quotes = [
     "Dont make me pull out the belt you little shit",
     "If your dad just bought condoms this would've never happened"
 ]
+
+[[locations]]
+level = 7
+id = "SCHOOL"
+emoji = "🏢"
+name = "At school"
+description = "Maybe Mr. McKno is willing to donate you some inches, wink wonk"
+specific_quotes = [
+    "Go learn instead of asking for inches smh",
+]
