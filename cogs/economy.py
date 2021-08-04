@@ -62,7 +62,7 @@ class Economy(vbu.Cog):
     
     async def update_cached_skill(self, db: vbu.DatabaseConnection, user_id: int, name: str, experience: int):
         v = await db('''
-            INSERT INTO user_skill (user_id, name, experience) VALUES ($1, $2, $3)
+            INSERT INTO user_skill VALUES ($1, $2, $3)
             ON CONFLICT (user_id, name) DO UPDATE SET experience = user_skill.experience + $3
             RETURNING *
             ''', user_id, name, experience)
@@ -255,10 +255,10 @@ class Economy(vbu.Cog):
                 skill = await self.get_cached_skill(db, ctx.author.id, 'BEGGING')
                 locations = utils.BeggingLocations(skill['level'], *[utils.BeggingLocation(**i) for i in self.begging['locations']])
 
+                # build select menu
                 components = vbu.MessageComponents(vbu.ActionRow(
                     locations.to_selectmenu()
                 ))
-
                 m: vbu.InteractionMessageable = await ctx.reply('**Where are you begging?**\nLeveling up `Begging` unlocks new locations', components=components, mention_author=False)
                 try:
                     p = await self.bot.wait_for("component_interaction", check=lambda p: p.message.id == m.id and p.user.id == ctx.author.id, timeout=15)
@@ -267,15 +267,17 @@ class Economy(vbu.Cog):
                     return await ctx.send(f'{ctx.author.mention} you left me on read:pensive:')
 
                 chosen_location = [x for x in locations.locations if x.id == p.values[0]][0]
-                if not random.randint(0, 9): # haha no inches for you
-                    embed.description = f'“{random.choice(chosen_location.quotes())}”'
-                    return await p.respond(embed=embed)
 
-                exp_growth = random.randint(int(10 * (1 + chosen_location.level / 10)), int(16 * 1 + chosen_location.level / 10))
+                # failure
+                if not random.randint(0, 9):
+                    embed.description = f'“{random.choice(chosen_location.quotes)}”'
+                    return await p.respond(embed=embed)
+                
+                # success
+                exp_growth = random.randint(int(10 * (1 + chosen_location.level / 10)), int(16 * (1 + chosen_location.level / 10)))
                 await self.update_cached_skill(db, ctx.author.id, 'BEGGING', exp_growth)
                 skill = await self.get_cached_skill(db, ctx.author.id, 'BEGGING')
                 embed.set_footer(f"+{exp_growth} begging XP (Begging {utils.int_to_roman(skill['level'])})")
-                
                 growth = random.randint(10 * (1 + chosen_location.level), 20 * ( 1 + chosen_location.level))
                 quote = random.choice(self.begging['quotes']['success'])
 
