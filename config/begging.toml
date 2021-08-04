@@ -125,11 +125,8 @@ specific_quotes = [
 level = 7
 id = "SCHOOL"
 emoji = "🏢"
-name = "Your (not) really loved school"
-description = "Go learn to school!"
+name = "At school"
+description = "Maybe Mr. McKno is willing to donate you some inches, wink wonk"
 specific_quotes = [
     "Go learn instead of asking for inches smh",
-    "Imagine not knowing the result of 1+1",
-    "3563665555. Nice number, right? You should know it from your math lessons. Maybe this is your future amount of inches :^)",
-    "Are you already in the first grade as you know how to type a beg command?"
 ]
