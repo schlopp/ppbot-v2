@@ -8,12 +8,12 @@ def get_level_by_exp(experience: int) -> int:
         1_925,  2_925,  4_425,      # 7 8 9
         6_425,  9_925,  14_925,     # 10 11 12
         22_425, 32_425, 47_425,     # 13 14 15
-        67_425, 97,425, 147_425,    # 17 18 19,
+        67_425, 97_425, 147_425,    # 17 18 19
         222_425                     # 20
     ]
-    for i, e in reversed(list(enumerate(exp_per_level))):
-        if experience >= e:
-            return i
+    for n, i in reversed(list(enumerate(exp_per_level))):
+        if i <= experience:
+            return n
 
 async def update_skill(db: vbu.DatabaseConnection, user_id: int, skill_name: str, experience: int):
     await db('''
