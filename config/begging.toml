@@ -129,4 +129,17 @@ name = "At school"
 description = "Maybe Mr. McKno will donate inches, wink wonk"
 specific_quotes = [
     "Go learn instead of asking for inches smh",
+    "Go teach your teacher how to use pp bot!"
+]
+
+[[locations]]
+level = 8
+id = "DISCORD"
+emoji = "🏢"
+name = "pp bot fun club"
+description = "The greatest discord server"
+specific_quotes = [
+    "I hope you're at least a member of this server while asking for inches...?",
+    "Did you know that members of this server receive a higher number of inches?",
+    "Go ask schlopp if he gives you a milf enjoyer role there!"
 ]
