@@ -126,7 +126,7 @@ level = 7
 id = "SCHOOL"
 emoji = "🏢"
 name = "At school"
-description = "Maybe Mr. McKno is willing to donate you some inches, wink wonk"
+description = "Maybe Mr. McKno will donate inches, wink wonk"
 specific_quotes = [
     "Go learn instead of asking for inches smh",
 ]
