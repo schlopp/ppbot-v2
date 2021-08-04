@@ -118,7 +118,7 @@ specific_quotes = [
     "I'm disappointed in you",
     "This is why you aren't our favourite child",
     "Dont make me pull out the belt you little shit",
-    "If your dad just bought condoms this would've never happened"
+    "If your dad just bought condoms this would've never happened",
 ]
 
 [[locations]]
@@ -129,17 +129,15 @@ name = "At school"
 description = "Maybe Mr. McKno will donate inches, wink wonk"
 specific_quotes = [
     "Go learn instead of asking for inches smh",
-    "Go teach your teacher how to use pp bot!"
+    "Not right now sweetheart, I'm busy growing my pp",
 ]
 
 [[locations]]
 level = 8
-id = "DISCORD"
-emoji = "📱"
-name = "pp bot fun club"
-description = "The greatest discord server"
+id = "FURRY"
+emoji = "<:uwu:872504680331227136>"
+name = "Furry Roleplay Server"
+description = "BLEACH MY EYES"
 specific_quotes = [
-    "I hope you're at least a member of this server while asking for inches...?",
-    "Did you know that members of this server receive a higher number of inches?",
-    "Go ask schlopp if he gives you a milf enjoyer role there!"
+    "Rawr ~x3 \*nuzzles\* pounces on you - uwu u so warm<:uwu:872504680331227136>"
 ]
