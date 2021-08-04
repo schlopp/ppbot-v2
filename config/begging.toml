@@ -120,3 +120,16 @@ specific_quotes = [
     "Dont make me pull out the belt you little shit",
     "If your dad just bought condoms this would've never happened"
 ]
+
+[[locations]]
+level = 7
+id = "SCHOOL"
+emoji = "🏢"
+name = "Your (not) really loved school"
+description = "Go learn to school!"
+specific_quotes = [
+    "Go learn instead of asking for inches smh",
+    "Imagine not knowing the result of 1+1",
+    "3563665555. Nice number, right? You should know it from your math lessons. Maybe this is your future amount of inches :^)",
+    "Are you already in the first grade as you know how to type a beg command?"
+]
