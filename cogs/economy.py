@@ -263,7 +263,7 @@ class Economy(vbu.Cog):
                 try:
                     p = await self.bot.wait_for("component_interaction", check=lambda p: p.message.id == m.id and p.user.id == ctx.author.id, timeout=15)
                 except asyncio.TimeoutError:
-                    await m.edit(components=None, mention_author=False)
+                    await m.edit(components=None, allowed_mentions=discord.AllowedMentions.none())
                     return await ctx.send(f'{ctx.author.mention} you left me on read:pensive:')
 
                 chosen_location = [x for x in locations.locations if x.id == p.values[0]][0]
@@ -273,6 +273,47 @@ class Economy(vbu.Cog):
                     embed.description = f'“{random.choice(chosen_location.quotes)}”'
                     return await p.respond(embed=embed)
                 
+                # minigame
+                if 1:#random.randint(0, 9):
+                    await p.ack()
+                    with vbu.Embed(use_random_colour=True) as minigame_embed:
+                        minigame_embed.set_author(name='MINIGAME - FILL IN THE BLANK')
+                        minigame_context = {
+                            'start': 'This is some bullshit story about why this minigame is happening. Yeah. Add this to `utils.BeggingLocation()` later',
+                            'success': 'Some more bullshit about how you won gg bro, also you get a reward: {0}',
+                            'fail': 'Some more bullshit about how you lost L nerd',
+                        }
+
+                        # This should be added to the begging config
+                        sentence = random.choice([
+                            ('Whoever threw that paper, your mom\'s a `[ _ _ _ ]`!', 'HOE'),
+                            ('I have the power of `[ _ _ _   _ _ _   _ _ _ _ _ ]` on my side!', 'GOD AND ANIME'),
+                            ('*dodges bullets like in The `[ _ _ _ _ _ _ ]`*', 'MATRIX'),
+                            ('You\'ll never `[ _ _ _ _ ]` me alive! *doot*', 'TAKE'),
+                        ])
+
+                        minigame_embed.description = f'{minigame_context["start"]}\n\n“{sentence[0]}”'
+                        await m.edit(embed=minigame_embed, content=None, components=None, allowed_mentions=discord.AllowedMentions.none())
+
+                        try:
+                            # Waiting for the correct answer
+                            followup_m = await self.bot.wait_for(
+                                'message', timeout=40.0,
+                                check=lambda m: m.content.upper() == sentence[1] and m.author == ctx.author and m.channel == ctx.channel
+                            )
+
+                        # No responce smh
+                        except asyncio.TimeoutError:
+                            minigame_embed.description = minigame_context['fail']
+                            return await m.edit(embed=minigame_embed, content=f'Respond faster nerd')
+
+                        loot = [random.choice([i for i in self.shop_items if i.shopsettings.buy < 500])]
+                        for i in loot:
+                            i.amount = random.randint(1, 2)
+
+                        minigame_embed.description = minigame_context['success'].format(utils.readable_list(self.bot, items=loot))
+                        return await followup_m.reply(embed=minigame_embed, mention_author=False)
+
                 # success
                 exp_growth = random.randint(int(10 * (1 + chosen_location.level / 10)), int(16 * (1 + chosen_location.level / 10)))
                 await self.update_cached_skill(db, ctx.author.id, 'BEGGING', exp_growth)
@@ -282,9 +323,10 @@ class Economy(vbu.Cog):
                 quote = random.choice(self.begging['quotes']['success'])
 
                 if random.randint(0,1):
-                    item = random.choice([i for i in self.shop_items if i.shopsettings.buy < 500])
-                    item.amount = random.randint(1, 2)
-                    embed.description = f'“{quote.format(utils.readable_list(self.bot, size=growth, items=[item]))}”'
+                    loot = [random.choice([i for i in self.shop_items if i.shopsettings.buy < 500])]
+                    for i in loot:
+                        i.amount = random.randint(1, 2)
+                    embed.description = f'“{quote.format(utils.readable_list(self.bot, size=growth, items=loot))}”'
                     return await p.respond(embed=embed)
 
                 embed.description = f'“{quote.format(utils.readable_list(self.bot, size=growth))}”'
