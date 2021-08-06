@@ -14,7 +14,7 @@ class Lore:
     """
     Lore
     """
-
+    
     def __init__(self, description: str, story: typing.List[str]):
         self.description = description
         self.story = story

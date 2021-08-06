@@ -138,7 +138,7 @@ class Economy(vbu.Cog):
         """
         buy some shit from the shop mhm
         """
-
+        
         await ctx.trigger_typing()
         async with vbu.DatabaseConnection() as db:
             async with utils.Pp.fetch(db, ctx.author.id, True) as pp:
