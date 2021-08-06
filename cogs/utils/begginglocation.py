@@ -43,7 +43,6 @@ class BeggingLocations:
     locations: typing.List[BeggingLocation]
 
     def __init__(self, level: int, *locations: typing.Iterable[BeggingLocation]):
-        print([i for i in locations if i.level <= level].sort(key=lambda x: x.level))
         self.level = level
         self.locations = sorted([i for i in locations if i.level <= level], key=lambda x: x.level, reverse=True)
     
