@@ -38,7 +38,7 @@ def readable_list(bot: vbu.Bot, size: typing.Optional[int] = None, items: typing
         
         if size:
             return ', '.join(readable_items) + f' and **{size} {"inch" if size == 1 else "inches"}**'
-        return ', '.join(readable_items)
+        return ' and '.join(readable_items) if len(readable_items) <= 2 else ', '.join(readable_items)
     
     return  f'**{size} inches**'
 
