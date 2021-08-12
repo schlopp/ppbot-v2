@@ -5,7 +5,7 @@ from dataclasses import dataclass
 import voxelbotutils as vbu
 import toml
 
-from cogs.utils.readable import int_to_roman
+from cogs.utils.readable import roman_numeral
 
 
 class Base:
@@ -18,24 +18,21 @@ class BeggingLocation:
     emoji: str
     name: str
     description: str
-    specific_quotes: typing.List[str]
+    quotes: typing.Dict[str, dict]
 
-    def __init__(self, level: int, id: str, emoji: str, name: str, description: str, specific_quotes: typing.List[str]):
+    def __init__(self, level: int, id: str, emoji: str, name: str, description: str, quotes: typing.Dict[str, dict]):
         self.level = level
         self.id = f'{self.level}-{id}'
         self.emoji = emoji
         self.name = name
         self.description = description
-        self.specific_quotes = specific_quotes
-    
-    @property
-    def quotes(self):
-        l = Base.QUOTES.copy()
-        l.append(self.specific_quotes)
-        return l
+        self.quotes = quotes
+        base_quotes_copy = Base.QUOTES.copy()
+        base_quotes_copy.append(quotes)
+        self.quotes['fail'] = base_quotes_copy
     
     def to_selectoption(self):
-        return vbu.SelectOption(f'LVL {int_to_roman(self.level)}: {self.name}', self.id, description=self.description, emoji=self.emoji, default=False)
+        return vbu.SelectOption(f'LEVEL {roman_numeral(self.level)}: {self.name}', self.id, description=self.description, emoji=self.emoji, default=False)
 
 @dataclass(init=False)
 class BeggingLocations:
@@ -45,10 +42,14 @@ class BeggingLocations:
     def __init__(self, level: int, *locations: typing.Iterable[BeggingLocation]):
         self.level = level
         self.locations = sorted([i for i in locations if i.level <= level], key=lambda x: x.level, reverse=True)
-    
+
+    @property
     def quotes(self):
-        l = Base.QUOTES.copy()
-        l.append([i.specific_quotes for i in self.locations])
+        """
+        Returns a list of quotes for each location with the base quotes appended to it.
+        """
+        l = [i.quotes['fail'] for i in self.locations]
+        l.append(Base.QUOTES)
         return list(itertools.chain.from_iterable(l))
 
     def to_selectmenu(self):
