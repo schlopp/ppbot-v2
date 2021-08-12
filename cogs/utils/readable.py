@@ -4,33 +4,29 @@ import typing
 import voxelbotutils as vbu
 
 
-def int_to_roman(n: int) -> str:
-    """
-    Convert an int to a roman numeral. Works well enough.
-    """
-
-    val = [
-        1000, 900, 500,
-        400, 100, 90,
-        50, 40, 10,
-        9, 5, 4,
-        1,
+# function that takes a number and returns a string of that number in roman numerals
+def roman_numeral(integer: int) -> str:
+    numerals = [
+        ('M', 1000),
+        ('CM', 900),
+        ('D', 500),
+        ('CD', 400),
+        ('C', 100),
+        ('XC', 90),
+        ('L', 50),
+        ('XL', 40),
+        ('X', 10),
+        ('IX', 9),
+        ('V', 5),
+        ('IV', 4),
+        ('I', 1),
     ]
-    syb = [
-        "M", "CM", "D",
-        "CD", "C", "XC",
-        "L", "XL", "X",
-        "IX", "V", "IV",
-        "I",
-    ]
-    roman_n = ""
-    i = 0
-    while n > 0:
-        for _ in range(n // val[i]):
-            roman_n += syb[i]
-            n -= val[i]
-        i += 1
-    return roman_n or '0'
+    result = []
+    for numeral, value in numerals:
+        while integer >= value:
+            result.append(numeral)
+            integer -= value
+    return ''.join(result)
 
 def readable_list(bot: vbu.Bot, size: typing.Optional[int] = None, items: typing.Optional[list] = None):
     if items:
