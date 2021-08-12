@@ -7,7 +7,7 @@ import discord
 import voxelbotutils as vbu
 
 from cogs.utils.dict import Dict
-from cogs.utils.readable import int_to_roman
+from cogs.utils.readable import roman_numeral
 
 
 class Lore:
@@ -156,7 +156,7 @@ class Item:
         """
         
         return [
-            f"{k.title()} {int_to_roman(v)}" for k, v in self.requires.items()
+            f"{k.title()} {roman_numeral(v)}" for k, v in self.requires.items()
         ]
 
     def pretty_usage(self) -> typing.List[str]:
