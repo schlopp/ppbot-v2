@@ -74,6 +74,8 @@ class Economy(vbu.Cog):
             'experience': v[0]['experience'],
         }
 
+        return self.skills[(user_id, name)]
+
     @vbu.command(name='shop', aliases=['store', 'itemshop'])
     @vbu.cooldown.cooldown(1, 10)
     async def _shop_command(self, ctx: vbu.Context, *, item: typing.Optional[str] = None):
@@ -278,47 +280,76 @@ class Economy(vbu.Cog):
                     await p.ack()
                     with vbu.Embed(use_random_colour=True) as minigame_embed:
                         minigame_embed.set_author(name='MINIGAME - FILL IN THE BLANK')
-                        minigame_context = {
-                            'start': 'This is some bullshit story about why this minigame is happening. Yeah. Add this to `utils.BeggingLocation()` later',
-                            'success': 'Some more bullshit about how you won gg bro, also you get a reward: {0}',
-                            'fail': 'Some more bullshit about how you lost L nerd',
-                        }
+
+                        # context, success, and fail messages
+                        context = chosen_location.quotes['minigames']['fillintheblank']['context']
+                        success = chosen_location.quotes['minigames']['fillintheblank']['success']
+                        fail =  chosen_location.quotes['minigames']['fillintheblank']['fail']
+                        
 
                         # This should be added to the begging config
-                        sentence = random.choice([
+                        prompt, answer = random.choice([
                             ('Whoever threw that paper, your mom\'s a `[ _ _ _ ]`!', 'HOE'),
                             ('I have the power of `[ _ _ _   _ _ _   _ _ _ _ _ ]` on my side!', 'GOD AND ANIME'),
                             ('*dodges bullets like in The `[ _ _ _ _ _ _ ]`*', 'MATRIX'),
                             ('You\'ll never `[ _ _ _ _ ]` me alive! *doot*', 'TAKE'),
                         ])
 
-                        minigame_embed.description = f'{minigame_context["start"]}\n\n“{sentence[0]}”'
-                        await m.edit(embed=minigame_embed, content=None, components=None, allowed_mentions=discord.AllowedMentions.none())
+                        # build minigame components
+                        minigame_embed.description = f'{context}\n\nType the missing word in chat.\n“{prompt}”'
 
+                        # edit the original message
+                        await m.edit(
+                            embed=minigame_embed,
+                            content=None, 
+                            components=None,
+                            allowed_mentions=discord.AllowedMentions.none()
+                        )
+                        
+                        # wait for answer
                         try:
-                            # Waiting for the correct answer
                             followup_m = await self.bot.wait_for(
                                 'message', timeout=40.0,
-                                check=lambda m: m.content.upper() == sentence[1] and m.author == ctx.author and m.channel == ctx.channel
+                                check=lambda m: m.content.upper() == answer and m.author == ctx.author and m.channel == ctx.channel
                             )
 
-                        # No responce smh
+                        # timeout
                         except asyncio.TimeoutError:
-                            minigame_embed.description = minigame_context['fail']
-                            return await m.edit(embed=minigame_embed, content=f'Respond faster nerd')
+                            minigame_embed.description = fail
 
+                            # edit the original message
+                            return await m.edit(
+                                embed=minigame_embed,
+                                content=f'Respond faster nerd'
+                            )
+
+                        # some random loot. Need to add a loot table to the config
                         loot = [random.choice([i for i in self.shop_items if i.shopsettings.buy < 500])]
-                        for i in loot:
-                            i.amount = random.randint(1, 2)
 
-                        minigame_embed.description = minigame_context['success'].format(utils.readable_list(self.bot, items=loot))
-                        return await followup_m.reply(embed=minigame_embed, mention_author=False)
+                        # set the amount for every item in `loot` to a random number between 1 and 2
+                        for item in loot:
+                            item.amount = random.randint(1, 2)
+                        
+                        # set the minigame_embed description to the success message
+                        minigame_embed.description = success.format(utils.readable_list(self.bot, items=loot))
+
+                        # reply to the followup message
+                        return await followup_m.reply(
+                            embed=minigame_embed,
+                            mention_author=False
+                        )
 
                 # success
-                exp_growth = random.randint(int(10 * (1 + chosen_location.level / 10)), int(16 * (1 + chosen_location.level / 10)))
-                await self.update_cached_skill(db, ctx.author.id, 'BEGGING', exp_growth)
-                skill = await self.get_cached_skill(db, ctx.author.id, 'BEGGING')
-                embed.set_footer(f"+{exp_growth} begging XP (Begging {utils.int_to_roman(skill['level'])})")
+                exp_growth_calc = lambda n: random.randint(int(10 * (1 + n / 10)), int(16 * (1 + n / 10)))
+                exp_growth = exp_growth_calc(chosen_location.level)
+
+                # update skill with exp growth
+                skill = await self.update_cached_skill(db, ctx.author.id, 'BEGGING', exp_growth)
+
+                # set footer
+                embed.set_footer(
+                    f"+{exp_growth} begging XP (Begging {utils.roman_numeral(skill['level'])})"
+                )
                 growth = random.randint(10 * (1 + chosen_location.level), 20 * ( 1 + chosen_location.level))
                 quote = random.choice(self.begging['quotes']['success'])
 
