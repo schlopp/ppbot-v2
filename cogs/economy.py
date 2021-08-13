@@ -1,4 +1,5 @@
 import asyncio
+import textwrap
 import typing
 import random
 import string
@@ -222,25 +223,60 @@ class Economy(vbu.Cog):
         await p.start(ctx, timeout=30)
 
     @vbu.command(name='show', aliases=['display', 'get', 'view'])
-    async def _display_pp_command(self, ctx: vbu.Context, user: typing.Optional[discord.Member] = None):
+    async def _display_pp_command(self, ctx: vbu.Context, target: typing.Optional[discord.Member] = None):
         """
         Show that bad boy to the whole wide world
         """
 
-        await ctx.trigger_typing()
-        user = user or ctx.author
-        async with vbu.DatabaseConnection() as db:
-            async with utils.Pp.fetch(db, user.id, False) as pp:
-                with vbu.Embed(use_random_colour=True) as embed:
-                    embed.set_author(name=f'{pp.name} ({user.display_name}\'s pp)')
-                    embed.description = '\n'.join((
-                        f'```ini\n[ 8{("=" * (pp.size // 50 + 1))[:400]}D ]```\n**Stats:**\nSize: {pp.size} inches\nMultiplier: {pp.multiplier}x',
-                        f'Inventory: [type `{ctx.prefix}inv`]({self.link})',
-                    ))
-                    v = await db('''SELECT name, experience FROM user_skill WHERE user_id = $1 AND experience > 0''', user)
-                    if v:
-                        embed.add_field('Skills', '\n'.join([f"{v[0]['name'].title()}: {utils.get_level_by_exp(v[0]['experience'])} ({v[0]['experience']} EXP)"]))
-                return await ctx.reply(embed=embed, mention_author=False)
+        async with ctx.typing():
+
+            # The user should be the target or author
+            user = target or ctx.author
+
+            # Database Connection and Pp Instance
+            async with vbu.DatabaseConnection() as db:
+                async with utils.Pp.fetch(db, user.id, False) as pp:
+
+                    # Build the embed
+                    with vbu.Embed(use_random_colour=True) as embed:
+                        embed.set_author(
+                            name=f'{pp.name} ({user.display_name}\'s pp)',
+                        )
+
+                        # Ascii art for the pp
+                        ascii_pp = f"8{('=' * (pp.size // 50 + 1))[:400]}D"
+
+                        # Build the description
+                        description = f'''
+                            ```ini
+                            [ {ascii_pp} ]```
+                            **Stats:**
+                            Size: {pp.size} inches
+                            Multiplier: {pp.multiplier}x
+                            Inventory: [type `{ctx.prefix}inv`]({self.link})
+                        '''
+                        
+                        # Remove those pesky indentations
+                        embed.description = textwrap.dedent(description)
+
+                        # Add the skills
+                        v = await db('''SELECT name, experience FROM user_skill WHERE user_id = $1 AND experience > 0''', user)
+                        if v:
+                            skills = []
+
+                            # Add some nice looking skill text
+                            for skill in v:
+                                experience = skill['experience']
+                                level = utils.get_level_by_exp(experience)
+                                roman_numeral = utils.roman_numeral(level)
+                                skill_name = skill['name'].title()
+                                skills.append(f'{skill_name} {roman_numeral} `{experience} xp`')
+                            
+                            # Add the skills to the embed
+                            embed.add_field('Skills', '\n'.join(skills))
+
+                    # Reply with the embed
+                    return await ctx.reply(embed=embed, mention_author=False)
 
     @vbu.command(name='beg', aliases=['plead'])
     async def _beg_command(self, ctx: vbu.Context):
