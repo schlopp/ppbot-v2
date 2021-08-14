@@ -17,9 +17,6 @@ class Dict(dict):
     def to_json(self) -> str:
         return jsondumps(self)
 
-    def __repr__(self):
-        return f"<Dict {self!r}>"
-
     def __getitem__(self, key):
         try:
             return super().__getitem__(key)
