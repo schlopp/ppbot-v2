@@ -359,8 +359,13 @@ class Economy(vbu.Cog):
                                 content=f'Respond faster nerd'
                             )
 
-                        # some random loot. Need to add a loot table to the config
-                        loot = [random.choice([i for i in self.shop_items if i.shopsettings.buy < 500])]
+                        # some random loot
+                        # ! TODO: add loot table to the begging config
+                        loot = [
+                            random.choice([
+                                i for i in self.shop_items if i.shopsettings.buy < 500
+                            ])
+                        ]
 
                         # set the amount for every item in `loot` to a random number between 1 and 2
                         for item in loot:
@@ -394,11 +399,24 @@ class Economy(vbu.Cog):
 
                 # 50% chance to get a random item(s)
                 if random.randint(0,1):
-                    loot = [random.choice([i for i in self.shop_items if i.shopsettings.buy < 500])]
+                    
+                    # Some random loot
+                    # ! TODO: add loot table to the begging config
+                    loot = [
+                        random.choice([
+                            item for item in self.shop_items if i.shopsettings.buy < 500
+                        ]),
+                    ]
+                    
+                    # Set the amount for every item in `loot` to a random number between 1 and 2
                     for i in loot:
                         i.amount = random.randint(1, 2)
+                    
+                    # Add the loot and quoe to the message
                     embed.description = f'“{quote.format(utils.readable_list(self.bot, size=growth, items=loot))}”'
-                    return await p.respond(embed=embed)
+
+                    # Reply and return!
+                    return await m.edit(embed=embed)
 
                 embed.description = f'“{quote.format(utils.readable_list(self.bot, size=growth))}”'
                 return await p.respond(embed=embed)
