@@ -218,11 +218,12 @@ success = [ # {0} = reward
     [locations.quotes]
         fail = [
             "Rawr ~x3 \\*nuzzles\\* pounces on you - uwu u so warm<:uwu:872504680331227136>",
+            "NYAH OwO \\*nuzzles your buldgywuldgy\\* sowwy queen but I hawve no inchy-winchies to spare👉👈😩",
         ]
 
         [locations.quotes.minigames]
 
             [locations.quotes.minigames.fillintheblank]
                 context = "A 40 year old neckbeard starts petting you and calls you his 'little kitten'. He then proceeds to bark at you, but you can't understand what he's saying."
-                success = "OwO daddy \\*nuts in pants\\* I brought you {0}. Please adopt me UwU"
+                success = "OwO daddy \\*nuts in pants\\* I brought you {0}. Pwease adopt me UwU"
                 fail = ">:3 you weren't fast enough DADDY.. No rewards for youuu owowowowo UwU"
