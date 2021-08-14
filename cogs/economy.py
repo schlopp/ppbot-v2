@@ -376,13 +376,16 @@ class Economy(vbu.Cog):
                         )
 
                 # success! Time to calculate the experience given
-                exp_growth_calc = lambda n: random.randint(int(10 * (1 + n / 10)), int(16 * (1 + n / 10)))
+                exp_growth_calc = lambda n: random.randint(
+                    int(10 * (1 + n / 10)),
+                    int(16 * (1 + n / 10)),
+                )
                 exp_growth = exp_growth_calc(chosen_location.level)
 
                 # update skill with exp growth
                 skill = await self.update_cached_skill(db, ctx.author.id, 'BEGGING', exp_growth)
 
-                # set footer
+                # a nice message to let the user know how much exp they just gained
                 embed.set_footer(
                     f"+{exp_growth} begging XP (Begging {utils.roman_numeral(skill['level'])})"
                 )
