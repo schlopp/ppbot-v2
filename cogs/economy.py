@@ -392,6 +392,7 @@ class Economy(vbu.Cog):
                 growth = random.randint(10 * (1 + chosen_location.level), 20 * ( 1 + chosen_location.level))
                 quote = random.choice(self.begging['quotes']['success'])
 
+                # 50% chance to get a random item(s)
                 if random.randint(0,1):
                     loot = [random.choice([i for i in self.shop_items if i.shopsettings.buy < 500])]
                     for i in loot:
