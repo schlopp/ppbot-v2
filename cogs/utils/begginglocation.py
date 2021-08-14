@@ -18,7 +18,7 @@ class BeggingLocation:
     emoji: str
     name: str
     description: str
-    quotes: typing.Dict[str, dict]
+    quotes: list
 
     def __init__(self, level: int, id: str, emoji: str, name: str, description: str, quotes: typing.Dict[str, dict]):
         self.level = level
@@ -30,7 +30,7 @@ class BeggingLocation:
         base_quotes_copy = Base.QUOTES.copy()
         base_quotes_copy.append(quotes)
         self.quotes['fail'] = base_quotes_copy
-    
+
     def to_selectoption(self):
         return vbu.SelectOption(f'LEVEL {roman_numeral(self.level)}: {self.name}', self.id, description=self.description, emoji=self.emoji, default=False)
 
