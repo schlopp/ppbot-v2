@@ -260,7 +260,7 @@ class Economy(vbu.Cog):
                         embed.description = textwrap.dedent(description)
 
                         # Add the skills
-                        v = await db('''SELECT name, experience FROM user_skill WHERE user_id = $1 AND experience > 0''', user)
+                        v = await db('''SELECT name, experience FROM user_skill WHERE user_id = $1 AND experience > 0''', user.id)
                         if v:
                             skills = []
 
