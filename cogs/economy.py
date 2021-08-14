@@ -377,7 +377,7 @@ class Economy(vbu.Cog):
 
                 # success! Time to calculate the experience given
                 exp_growth_calc = lambda n: random.randint(
-                    int(10 * (1 + n / 10)),
+                    10 + n,
                     int(16 * (1 + n / 10)),
                 )
                 exp_growth = exp_growth_calc(chosen_location.level)
