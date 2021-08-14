@@ -26,7 +26,7 @@ def roman_numeral(integer: int) -> str:
         while integer >= value:
             result.append(numeral)
             integer -= value
-    return ''.join(result)
+    return ''.join(result) or '0'
 
 def readable_list(bot: vbu.Bot, size: typing.Optional[int] = None, items: typing.Optional[list] = None):
     if items:
