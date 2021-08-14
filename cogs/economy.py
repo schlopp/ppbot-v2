@@ -308,11 +308,11 @@ class Economy(vbu.Cog):
 
                 # failure
                 if not random.randint(0, 9):
-                    embed.description = f'“{random.choice(chosen_location.quotes)}”'
+                    embed.description = f'“{random.choice(chosen_location.quotes["fail"])}”'
                     return await p.respond(embed=embed)
                 
                 # minigame
-                if 1:#random.randint(0, 9):
+                if random.randint(0, 9):
                     await p.ack()
                     with vbu.Embed(use_random_colour=True) as minigame_embed:
                         minigame_embed.set_author(name='MINIGAME - FILL IN THE BLANK')
