@@ -372,10 +372,10 @@ class Economy(vbu.Cog):
                         # reply to the followup message
                         return await followup_m.reply(
                             embed=minigame_embed,
-                            mention_author=False
+                            mention_author=False,
                         )
 
-                # success
+                # success! Time to calculate the experience given
                 exp_growth_calc = lambda n: random.randint(int(10 * (1 + n / 10)), int(16 * (1 + n / 10)))
                 exp_growth = exp_growth_calc(chosen_location.level)
 
