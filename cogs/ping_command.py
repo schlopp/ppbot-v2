@@ -9,7 +9,7 @@ class PingCommand(vbu.Cog):
         A sexy lil ping command for the bot.
         """
 
-        await ctx.reply("Pong!", mention_author=False)
+        await ctx.send("Pong!")
 
 
 def setup(bot: vbu.Bot):

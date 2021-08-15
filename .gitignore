@@ -1,6 +1,3 @@
 __pycache__/
 config/config.toml
 config/website.toml
-ideas/
-_*
-local_*
