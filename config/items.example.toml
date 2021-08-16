@@ -2,7 +2,7 @@
     id = "ITEM_ID" # The ID of the item. Must be unique for all items in the [[items]] array (UPPER_SNAKE_CASE).
     type = "TYPE" # The type of the item (UPPER_SNAKE_CASE).
     rarity = "COMMON" # The rarity of the item (UPPER_SNAKE_CASE).
-    emoji = 123456789  # The custom ID of the emoji associated with the item (int).
+    emoji = 123456789 # The custom ID of the emoji associated with the item (int).
     name = "Item name" # The name of the item (string).
     description = "This is the description of the item" # The description of the item (string).
 
