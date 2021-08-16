@@ -2,6 +2,9 @@ import toml
 
 import voxelbotutils as vbu
 
+from cogs import utils
+
+
 class EconomyCommands(vbu.Cog):
 
     def __init__(self, bot: vbu.Bot):
@@ -13,9 +16,15 @@ class EconomyCommands(vbu.Cog):
         except AttributeError:
             pass
         self.bot.items = {
-            "shop": {i["id"]: i for i in data["items"] if i["shop_settings"]["buyable"]},
-            "auction": {i["id"]: i for i in data["items"] if i["shop_settings"]["auctionable"]},
-            "all": {i["id"]: i for i in data["items"]},
+            "shop": {
+                i["id"]: utils.Item.from_dict(i) for i in data["items"] if i["shop_settings"]["buyable"]
+            },
+            "auction": {
+                i["id"]: utils.Item.from_dict(i) for i in data["items"] if i["shop_settings"]["auctionable"]
+            },
+            "all": {
+                i["id"]: utils.Item.from_dict(i) for i in data["items"]
+            },
         }
 
 
