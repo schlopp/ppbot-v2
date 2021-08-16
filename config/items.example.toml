@@ -1,0 +1,35 @@
+[[items]]
+    id = "ITEM_ID" # The ID of the item. Must be unique for all items in the [[items]] array (UPPER_SNAKE_CASE).
+    type = "TYPE" # The type of the item (UPPER_SNAKE_CASE).
+    rarity = "COMMON" # The rarity of the item (UPPER_SNAKE_CASE).
+    emoji = 123456789  # The custom ID of the emoji associated with the item (int).
+    name = "Item name" # The name of the item (string).
+    description = "This is the description of the item" # The description of the item (string).
+
+    [[items.skill_requirements]] # The skill requirements of the item (array).
+        id = "SKILL_ID" # The ID of the skill required. Must be unique for all skills in the [[items.skill_requirements]] array (UPPER_SNAKE_CASE).
+        level = 69 # The level of the skill required.
+
+    [items.shop_settings] # The shop settings of the item.
+        buyable = true # If the item can be bought from the shop (boolean).
+        buy = 100 # The price of the item when bought from the shop (int).
+        sell = 20 # The price of the item when sold to the shop (int).
+
+        auctionable = false # If the item can be auctioned (boolean).
+    
+    [[items.recipe]]
+        id = "REQUIRED_ITEM_ID" # The ID of an item that is required to craft this item. Must be unique for all items in the [[items.recipe]] array (UPPER_SNAKE_CASE).
+        amount = 1 # The amount of the item required to craft this item (int).
+    
+    [items.usage] # The usage of the item.
+
+        [[items.usage.crafting]]
+            id = "CRAFTING_ITEM_ID" # The ID of an item craftable with the item. Must be unique for all items in the [[items.usage.crafting]] array (UPPER_SNAKE_CASE).
+            amount = 69 # The amount of the item required to craft this item (int).
+
+        [[items.usage.brewing]]
+            id = "POTION_OR_BEVERAGE_ID" # The ID of a potion or beverage craftable with the item. Must be unique for all items in the [[items.usage.brewing]] array (UPPER_SNAKE_CASE).
+            amount = 69 # The amount of the item required to brew this potion or beverage (int).
+        
+        [[items.usage.skills]]
+            id = "SKILL_ID" # The ID of the skill that the item is used for. Must be unique for all skills in the [[items.usage.skills]] array (UPPER_SNAKE_CASE).
