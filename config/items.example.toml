@@ -17,19 +17,19 @@
 
         auctionable = false # If the item can be auctioned (boolean).
     
-    [[items.recipe]]
+    [[items.recipe]] # The recipes of the item (array).
         id = "REQUIRED_ITEM_ID" # The ID of an item that is required to craft this item. Must be unique for all items in the [[items.recipe]] array (UPPER_SNAKE_CASE).
         amount = 1 # The amount of the item required to craft this item (int).
     
     [items.usage] # The usage of the item.
 
-        [[items.usage.crafting]]
+        [[items.usage.crafting]] # The crafting recipes involving the item (array).
             id = "CRAFTING_ITEM_ID" # The ID of an item craftable with the item. Must be unique for all items in the [[items.usage.crafting]] array (UPPER_SNAKE_CASE).
             amount = 69 # The amount of the item required to craft this item (int).
 
-        [[items.usage.brewing]]
+        [[items.usage.brewing]] # The brewing recipes involving the item (array).
             id = "POTION_OR_BEVERAGE_ID" # The ID of a potion or beverage craftable with the item. Must be unique for all items in the [[items.usage.brewing]] array (UPPER_SNAKE_CASE).
             amount = 69 # The amount of the item required to brew this potion or beverage (int).
         
-        [[items.usage.skills]]
+        [[items.usage.skills]] # The skills that this item is used for (array).
             id = "SKILL_ID" # The ID of the skill that the item is used for. Must be unique for all skills in the [[items.usage.skills]] array (UPPER_SNAKE_CASE).
