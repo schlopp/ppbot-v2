@@ -75,6 +75,9 @@ bot_support_role_id = 0  # The ID used to determine whether or not the user is p
     [bot_info.links.Vote]
         url = "https://example.com/#your_vote_link"
 
+[help_command]
+    dm_help = false  # Whether or not to DM the user when they request help.
+
 # Used to generate the invite link.
 [oauth]
     enabled = true  # Whether or not an invite link is enabled via the !invite command.
