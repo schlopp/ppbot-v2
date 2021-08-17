@@ -32,7 +32,7 @@ async def update_skill(db: vbu.DatabaseConnection, user_id: int, skill_name: str
 class SkillWrapper: # Not as funny as PpWrapper
 
     def __init__(
-        self, db: vbu.VoxelbotDatabaseConnection,
+        self, db: vbu.DatabaseConnection,
         user_id: int, update_values: typing.Optional[bool] = False
     ):
         self.db = db
