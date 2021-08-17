@@ -12,11 +12,15 @@ class EconomyCommands(vbu.Cog):
         super().__init__(bot)
         
         data = toml.load("config/items.toml")
+
+        # Let's clean some stuff up
         try:
             self.bot.items.clear()
             self.bot.logger.info("Clearing items cache... success")
         except AttributeError:
             self.bot.logger.warn("Clearing items cache... failed - No items cached")
+        
+        # Now let's load the items
         self.bot.items = {
             "shop": {
                 i["id"]: utils.Item.from_dict(i) for i in data["items"] if i["shop_settings"]["buyable"]
