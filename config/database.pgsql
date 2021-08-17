@@ -38,6 +38,6 @@ CREATE TABLE IF NOT EXISTS user_pp(
 CREATE TABLE IF NOT EXISTS user_skill(
     user_id BIGINT NOT NULL,
     name TEXT NOT NULL,
-    experience BIGINT NOT NULL,
+    experience BIGINT DEFAULT 0 NOT NULL,
     PRIMARY KEY (user_id, name)
 );
