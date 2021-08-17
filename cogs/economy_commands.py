@@ -68,7 +68,7 @@ class EconomyCommands(vbu.Cog):
         }
     
     def cog_unload(self):
-        self.update_db_from_user_cache.cancel()
+        self.update_db_from_user_cache.stop()
     
     async def get_user_cache(self, user_id: int, db: typing.Optional[vbu.DatabaseConnection] = None) -> typing.Dict[utils.Skill, utils.Pp]:
 
