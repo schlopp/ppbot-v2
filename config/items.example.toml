@@ -11,7 +11,7 @@
         level = 69 # The level of the skill required.
 
     [items.shop_settings] # The shop settings of the item.
-        buyable = true # If the item can be bought from the shop (boolean).
+        buyable = true # Whether the item can be bought from the shop (boolean).
         buy = 100 # The price of the item when bought from the shop (int).
         sell = 20 # The price of the item when sold to the shop (int).
 
