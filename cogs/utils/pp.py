@@ -7,7 +7,7 @@ import voxelbotutils as vbu
 class PpWrapper: # Haha, condom
 
     def __init__(
-        self, db: vbu.VoxelbotDatabaseConnection,
+        self, db: vbu.DatabaseConnection,
         user_id: int, update_values: typing.Optional[bool] = False
     ):
         self.db = db
