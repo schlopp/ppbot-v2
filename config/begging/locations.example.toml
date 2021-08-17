@@ -29,13 +29,13 @@
             "I'm not sure I can do that",
         ]
 
-        # Specific quotes for specific mini-games.
+        # The mini-games for the user to complete.
         [locations.quotes.minigames]
 
             # All quotes for the fill-in-the-blank mini-game.
-            [locations.quotes.minigames.fillintheblank]
+            [locations.quotes.minigames.fill_in_the_blank]
 
                 approacher = "gameshow host"  # (string) The person approaching the user in this mini-game.
-                context = "A gameshow host approaches you with a question"  # The context leading up to the event.
+                context = "A gameshow host approaches you with a question"  # The context of the mini-game.
                 success = "Good job! You win!"  # (string) The success message for the user. E.g. "gameshow host: 'Good job! You win!'"
                 fail = "Sorry, you lose!"  # (string) The failure message for the user. E.g. "gameshow host: 'Sorry, you lose!'"
