@@ -82,6 +82,14 @@ class SkillUsage:
 
 @dataclass
 class Usage:
+    """
+    Represents the usage of an item.
+
+    Attributes:
+        crafting (`list` of :class:`CraftingUsage`): The crafting recipes involving the parent item.
+        brewing (`list` of :class:`BrewingUsage`): The potion or beverage recipes involving the parent item.
+        skill (`list` of :class:`SkillUsage`): The skills that the parent item is used for.
+    """
     crafting: typing.List[CraftingUsage]
     brewing: typing.List[BrewingUsage]
     skill: typing.List[SkillUsage]
