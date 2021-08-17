@@ -17,6 +17,8 @@ class EconomyCommands(vbu.Cog):
         try:
             self.bot.items.clear()
             self.bot.logger.info("Clearing items cache... success")
+        
+        # No cache to clean? then we don't need to do anything
         except AttributeError:
             self.bot.logger.warn("Clearing items cache... failed - No items cached")
         
