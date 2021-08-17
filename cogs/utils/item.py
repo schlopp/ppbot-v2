@@ -4,11 +4,28 @@ from dataclasses import dataclass
 
 @dataclass
 class SkillRequirements:
+    """
+    Represents the requirements for a skill.
+
+    Attributes:
+        id (`str`): The ID of the skill required. (UPPER_SNAKE_CASE).
+        level (`int`): The level of the skill required.
+    """
+
     id: str
     level: int
 
 @dataclass
 class ShopSettings:
+    """
+    Represents the shop settings. I.e. the price, if it's buyable, if it's auctionable, etc.
+    
+    Attributes:
+        buyable (`bool`): Whether the item can be bought from the shop.
+        buy (`int`): The price of the item when bought from the shop.
+        sell (`int`): The price of the item when sold to the shop.
+    """
+
     buyable: bool
     buy: int
     sell: int
@@ -16,21 +33,51 @@ class ShopSettings:
 
 @dataclass
 class Recipe:
+    """
+    Represents the recipes of an item
+
+    Attributes:
+        id (`str`): The ID of an item that is required to craft the parent item (UPPER_SNAKE_CASE).
+        amount (`int`): The amount of the parent item required to craft said item.
+    """
+
     id: str
     amount: int
 
 @dataclass
 class CraftingUsage:
+    """
+    Represents the crafting recipe involving the parent item.
+
+    Attributes:
+        id (`str`): The ID of an item craftable with the parent item (UPPER_SNAKE_CASE).
+        amount (`int`): The amount of the parent item required to craft said item.
+    """
+
     id: str
     amount: int
 
 @dataclass
 class BrewingUsage:
+    """
+    Represents the brewing recipe involving the parent item.
+
+    Attributes:
+        id (`str`): The ID of a potion or beverage craftable with the parent item (UPPER_SNAKE_CASE).
+        amount (`int`): The amount of the item required to brew said potion or beverage (int).
+    """
+
     id: str
     amount: int
 
 @dataclass
 class SkillUsage:
+    """
+    Represents a skill that the parent item is used for.
+
+    atrributes:
+        id (`str`): The ID of the skill that the parent item is used for (UPPER_SNAKE_CASE).
+    """
     id: str
 
 @dataclass
