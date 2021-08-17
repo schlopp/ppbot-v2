@@ -153,6 +153,7 @@ class BeggingLocations:
         Args:
             location (:class:`BeggingLocation`): The location to add.
         """
+
         self.locations.append(location)
         return self
     
@@ -163,5 +164,6 @@ class BeggingLocations:
         Args:
             location (:class:`BeggingLocation`): The location to remove.
         """
+
         self.locations.remove(location)
         return self
