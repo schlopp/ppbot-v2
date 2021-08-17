@@ -96,6 +96,9 @@ class Usage:
 
     @classmethod
     def from_dict(cls, data: dict):
+        """
+        Loads a :class:`Usage` from a dictionary.
+        """
         return cls(
             [CraftingUsage(**c) for c in data['crafting'] if c],
             [BrewingUsage(**b) for b in data['brewing'] if b],
@@ -104,10 +107,26 @@ class Usage:
 
 @dataclass
 class Item:
+    """
+    Represents an item.
+
+    Attributes:
+        id (`str`): The ID of the item. (UPPER_SNAKE_CASE).
+        type (`str`): The type of the item. (UPPER_SNAKE_CASE).
+        rarity (`str`): The rarity of the item. (UPPER_SNAKE_CASE).
+        emoji (`int` or `str`): The custom ID of the emoji associated with the item.
+        name (`str`): The name of the item.
+        description (`str`): The description of the item.
+        skill_requirements (`list` of :class:`SkillRequirements`): The skill requirements of the item.
+        shop_settings (`list` of :class:`ShopSettings`): The shop settings of the item.
+        recipe (`list` of :class:`Recipe`): The recipe of the item.
+        usage (:class:`Usage`): The usage of the item.
+    """
+
     id: str
     type: str
     rarity: str
-    emoji: typing.Union[int, str]
+    emoji: int
     name: str
     description: str
     skill_requirements: typing.List[SkillRequirements]
@@ -116,7 +135,7 @@ class Item:
     usage: Usage
 
     def __init__(
-        self, id: str, type: str, rarity: str, emoji: typing.Union[int, str],
+        self, id: str, type: str, rarity: str, emoji: int,
         name: str, description: str, skill_requirements: typing.List[SkillRequirements],
         shop_settings: ShopSettings, recipe: typing.List[Recipe],usage: Usage,
     ):
@@ -134,7 +153,10 @@ class Item:
     @classmethod
     def from_dict(cls, data):
         """
-        Loads an Item from a dict.
+        Loads an :class:`Item` from a dictionary. This can be used to load an item from `./config/items.toml`.
+
+        Args:
+            data (`dict`): The dictionary to load the item from.
         """
 
         return cls(
