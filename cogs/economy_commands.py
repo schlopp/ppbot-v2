@@ -64,7 +64,9 @@ class EconomyCommands(vbu.Cog):
         
         # Now we cache the begging information
         self.bot.begging = {
-            "locations": {i['id']: utils.begging.BeggingLocation.from_dict(i) for i in toml.load('config/begging/locations.example.toml')['locations']}
+            "locations": utils.begging.BeggingLocations(
+                *(utils.begging.BeggingLocation.from_dict(i) for i in toml.load('config/begging/locations.example.toml')['locations'])
+            ),
         }
     
     def cog_unload(self):
