@@ -44,6 +44,7 @@ class MiniGames:
     Attributes:
         fill_in_the_blank (:class:`FillInTheBlank`): The fill-in-the-blank minigame
     """
+
     fill_in_the_blank: FillInTheBlank
 
 
@@ -58,6 +59,7 @@ class Quotes:
         fail (`str`): The failure message for the user. E.g. "gameshow host: 'Sorry, you lose!'"
         minigames (:class:`MiniGames`): The mini-games for the user to complete.
     """
+
     success: typing.List[str]
     fail: typing.List[str]
     minigames: MiniGames
