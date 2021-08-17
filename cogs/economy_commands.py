@@ -20,11 +20,11 @@ class EconomyCommands(vbu.Cog):
         # Let's clean some stuff up
         try:
             self.bot.items.clear()
-            self.bot.logger.info("Clearing items cache... success")
+            self.bot.logger.info("   * Clearing items cache... success")
         
         # No cache to clean? then we don't need to do anything
         except AttributeError:
-            self.bot.logger.warn("Clearing items cache... failed - No items cached")
+            self.bot.logger.warn("   * Clearing items cache... failed - No items cached")
         
         # Now let's load the items
         data = toml.load("config/items.toml")
@@ -42,25 +42,25 @@ class EconomyCommands(vbu.Cog):
                 i["id"]: utils.Item.from_dict(i) for i in data["items"]
             },
         }
-        self.bot.logger.info("Caching items... success")
+        self.bot.logger.info("   * Caching items... success")
         
         # No user cache? Let's create it
         if not hasattr(self.bot, "user_cache"):
             self.bot.user_cache = {}
-            self.bot.logger.info("Creating user cache... success")
+            self.bot.logger.info("   * Creating user cache... success")
         
         # Now let's start the update db from user cache task
         self.update_db_from_user_cache.start()
-        self.bot.logger.info("Starting update db from user cache task... success")
+        self.bot.logger.info("   * Starting update db from user cache task... success")
 
         # Now we clean up the begging cache
         try:
             self.bot.begging.clear()
-            self.bot.logger.info("Clearing begging cache... success")
+            self.bot.logger.info("   * Clearing begging cache... success")
         
         # No cache to clean? then we don't need to do anything
         except AttributeError:
-            self.bot.logger.warn("Clearing begging cache... failed - No begging information cached")
+            self.bot.logger.warn("   * Clearing begging cache... failed - No begging information cached")
         
         # Now we cache the begging information
         self.bot.begging = {
