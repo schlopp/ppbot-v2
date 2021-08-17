@@ -16,7 +16,6 @@ class EconomyCommands(vbu.Cog):
     def __init__(self, bot: vbu.Bot):
         super().__init__(bot)
         
-        data = toml.load("config/items.toml")
 
         # Let's clean some stuff up
         try:
@@ -28,6 +27,7 @@ class EconomyCommands(vbu.Cog):
             self.bot.logger.warn("Clearing items cache... failed - No items cached")
         
         # Now let's load the items
+        data = toml.load("config/items.toml")
         self.bot.items = {
             "shop": {
                 # Buyable items
@@ -52,6 +52,20 @@ class EconomyCommands(vbu.Cog):
         # Now let's start the update db from user cache task
         self.update_db_from_user_cache.start()
         self.bot.logger.info("Starting update db from user cache task... success")
+
+        # Now we clean up the begging cache
+        try:
+            self.bot.begging.clear()
+            self.bot.logger.info("Clearing begging cache... success")
+        
+        # No cache to clean? then we don't need to do anything
+        except AttributeError:
+            self.bot.logger.warn("Clearing begging cache... failed - No begging information cached")
+        
+        # Now we cache the begging information
+        self.bot.begging = {
+            "locations": {i['id']: utils.begging.BeggingLocation.from_dict(i) for i in toml.load('config/begging/locations.example.toml')['locations']}
+        }
     
     def cog_unload(self):
         self.update_db_from_user_cache.cancel()
