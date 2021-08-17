@@ -127,3 +127,41 @@ class BeggingLocation:
                 ),
             ),
         )
+
+@dataclass
+class BeggingLocations:
+    """
+    A holder for :class:`BeggingLocation`s
+
+    Attributes:
+        locations (`dict`): A dictionary of locations.
+    """
+
+    locations: typing.List[BeggingLocation]
+
+    def __init__(self, *locations: BeggingLocation):
+        """
+        Args:
+            *locations (:class:`BeggingLocation`): A list of the locations that this holder will hold.
+        """
+        self.locations = list(locations)
+    
+    def add_location(self, location: BeggingLocation):
+        """
+        Adds a :class:`BeggingLocation` to this holder
+
+        Args:
+            location (:class:`BeggingLocation`): The location to add.
+        """
+        self.locations.append(location)
+        return self
+    
+    def remove_location(self, location: BeggingLocation):
+        """
+        Removes a :class:`BeggingLocation` to this holder
+
+        Args:
+            location (:class:`BeggingLocation`): The location to remove.
+        """
+        self.locations.remove(location)
+        return self
