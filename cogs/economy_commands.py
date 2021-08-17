@@ -79,6 +79,9 @@ class EconomyCommands(vbu.Cog):
             # we do a little logging. it's called: "We do a little logging"
             self.bot.logger.info(f"Creating user cache for {user_id}... success")
 
+            # and return the user cache
+            return self.bot.user_cache[user_id]
+
 
 def setup(bot: vbu.Bot):
     x = EconomyCommands(bot)
