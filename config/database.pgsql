@@ -33,3 +33,11 @@ CREATE TABLE IF NOT EXISTS user_pp(
     size BIGINT NOT NULL,
     multiplier FLOAT DEFAULT 1.0 NOT NULL
 );
+
+
+CREATE TABLE IF NOT EXISTS user_skill(
+    user_id BIGINT NOT NULL,
+    name TEXT NOT NULL,
+    experience BIGINT NOT NULL,
+    PRIMARY KEY (user_id, name)
+);
