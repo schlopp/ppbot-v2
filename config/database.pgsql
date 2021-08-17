@@ -25,3 +25,11 @@ CREATE TABLE IF NOT EXISTS channel_list(
     value TEXT,
     PRIMARY KEY (guild_id, channel_id, key)
 );
+
+
+CREATE TABLE IF NOT EXISTS user_pp(
+    user_id BIGINT PRIMARY KEY,
+    name TEXT DEFAULT 'Unnamed pp' NOT NULL,
+    size BIGINT NOT NULL,
+    multiplier FLOAT DEFAULT 1.0 NOT NULL
+);
