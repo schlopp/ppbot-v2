@@ -117,7 +117,7 @@ class EconomyCommands(vbu.Cog):
                     # Update the user's skill
                     await db("""
                         INSERT INTO user_skill VALUES ($1, $2, $3)
-                        ON CONFLICT (user_id, name) DO UPDATE SET experience = user_skill.experience + $3
+                        ON CONFLICT (user_id, name) DO UPDATE SET user_skill = user_skill.experience + $3
                         """, user_id, skill.name, skill.experience
                     )
 
