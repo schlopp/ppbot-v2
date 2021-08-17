@@ -2,7 +2,11 @@ import logging
 import typing
 
 import toml
+
 import voxelbotutils as vbu
+import discord
+from discord.ext import commands, tasks
+
 
 from cogs import utils
 
@@ -44,6 +48,13 @@ class EconomyCommands(vbu.Cog):
         if not hasattr(self.bot, "user_cache"):
             self.bot.user_cache = {}
             self.bot.logger.info("Creating user cache... success")
+        
+        # Now let's start the update db from user cache task
+        self.update_db_from_user_cache.start()
+        self.bot.logger.info("Starting update db from user cache task... success")
+    
+    #def cog_unload(self):
+    #    self.update_db_from_user_cache.cancel()
     
     async def get_user_cache(self, user_id: int, db: typing.Optional[vbu.DatabaseConnection] = None) -> typing.Dict[utils.Skill, utils.Pp]:
 
@@ -57,18 +68,18 @@ class EconomyCommands(vbu.Cog):
 
                 # Get the user's skills
                 user_skills = [
-                    utils.Skill(**i) for i in await db.fetch("SELECT * FROM user_skills WHERE user_id = $1", user_id)
+                    utils.Skill(**i) for i in await db("SELECT * FROM user_skill WHERE user_id = $1", user_id)
                 ]
 
                 # Now let's get the user's pp
                 try:
                     user_pp = utils.Pp(
-                        **await db.fetch("SELECT * FROM user_pp WHERE user_id = $1", user_id)[0]
+                        **(await db("SELECT * FROM user_pp WHERE user_id = $1", user_id))[0]
                     )
                 
                 # apparently the user doesn't have pp? Let's create one
                 except IndexError:
-                    user_pp = utils.Pp()
+                    user_pp = utils.Pp(user_id)
                 
                 # Now we add this to the user cache
                 self.bot.user_cache[user_id] = {
@@ -81,6 +92,47 @@ class EconomyCommands(vbu.Cog):
 
             # and return the user cache
             return self.bot.user_cache[user_id]
+    
+    @tasks.loop(seconds=30.0)
+    async def update_db_from_user_cache(self) -> None:
+        """
+        This task updates the database from the user cache every minute.
+        """
+
+        self.bot.logger.info("Updating database from user cache...")
+    
+        # Establish a connection to the database
+        async with vbu.DatabaseConnection() as db:
+
+            # Iterate through all cached users
+            for user_id, values in self.bot.user_cache.items():
+
+                # Now we unpack the cached values
+                skills, pp = values.values()
+                
+                # Iterate through all of their skills
+                skill: utils.Skill
+                for skill in skills:
+
+                    # Update the user's skill
+                    await db("""
+                        INSERT INTO user_skill VALUES ($1, $2, $3)
+                        ON CONFLICT (user_id, name) DO UPDATE SET experience = user_skill.experience + $3
+                        """, user_id, skill.name, skill.experience
+                    )
+
+                    # Log our update
+                    self.bot.logger.info(f"Updating user cache for {user_id} - {skill.name!r}... success")
+
+                # Update the user's pp
+                await db("""
+                    INSERT INTO user_pp VALUES ($1, $2, $3, $4) ON CONFLICT (user_id) DO UPDATE
+                    SET user_id = $1, name = $2, size = $3, multiplier = $4
+                    """, user_id, pp.name, pp.size, pp.multiplier
+                )
+
+                # Log our update
+                self.bot.logger.info(f"Updating user cache for {user_id}'s pp: {pp.name!r}... success")
 
 
 def setup(bot: vbu.Bot):
