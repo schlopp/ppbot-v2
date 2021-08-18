@@ -7,8 +7,9 @@
 
     [[locations.loot_table]]
         id = "EXAMPLE_LOOT_TABLE"  # (UPPER_SNAKE_CASE) The ID of an item in the loot table. Must be unique for all items in the [[locations.loot_table]] array.
-        weight = 1.0  # (float) The weight of the item in the loot table. A higher weight means the item will be more likely to be chosen or chosen multiple times.
-        limit = 5  # (int) The maximum number of this item that can be dropped from this location.
+        drop_rate = 100  # (int) The drop rate of the item. This is the chance that the item will be dropped.
+        min = 0  # (int) The minimum amount of the item that can be dropped.
+        max = 5  # (int) The maximum number of this item that can be dropped from this location.
     
     # The quotes for the location.
     [locations.quotes]
