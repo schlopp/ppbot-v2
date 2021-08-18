@@ -149,7 +149,7 @@ class Item:
         self.shop_settings = shop_settings
         self.recipe = recipe
         self.usage = usage
-    
+
     @classmethod
     def from_dict(cls, data):
         """
@@ -171,3 +171,30 @@ class Item:
             [Recipe(**r) for r in data['recipe'] if r],
             Usage.from_dict(data['usage']),
         )
+
+
+@dataclass
+class LootableItem(Item):
+    """
+    An item that can be looted, given, received, etc.
+    """
+
+    amount: int = 1
+
+    def __init__(
+        self, id: str, type: str, rarity: str, emoji: int,
+        name: str, description: str, skill_requirements: typing.List[SkillRequirements],
+        shop_settings: ShopSettings, recipe: typing.List[Recipe],usage: Usage,
+        amount: int = 1,
+    ):
+        self.id = id
+        self.type = type
+        self.rarity = rarity
+        self.emoji = emoji
+        self.name = name
+        self.description = description
+        self.skill_requirements = skill_requirements
+        self.shop_settings = shop_settings
+        self.recipe = recipe
+        self.usage = usage
+        self.amount = amount
