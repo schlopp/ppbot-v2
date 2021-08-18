@@ -78,6 +78,7 @@ class SkillUsage:
     atrributes:
         id (`str`): The ID of the skill that the parent item is used for (UPPER_SNAKE_CASE).
     """
+
     id: str
 
 @dataclass
@@ -139,6 +140,20 @@ class Item:
         name: str, description: str, skill_requirements: typing.List[SkillRequirements],
         shop_settings: ShopSettings, recipe: typing.List[Recipe],usage: Usage,
     ):
+        """
+        Args:
+            id (`str`): The ID of the item. (UPPER_SNAKE_CASE).
+            type (`str`): The type of the item. (UPPER_SNAKE_CASE).
+            rarity (`str`): The rarity of the item. (UPPER_SNAKE_CASE).
+            emoji (`int` or `str`): The custom ID of the emoji associated with the item.
+            name (`str`): The name of the item.
+            description (`str`): The description of the item.
+            skill_requirements (`list` of :class:`SkillRequirements`): The skill requirements of the item.
+            shop_settings (`list` of :class:`ShopSettings`): The shop settings of the item.
+            recipe (`list` of :class:`Recipe`): The recipe of the item.
+            usage (:class:`Usage`): The usage of the item.
+            amount (`int`): The amount of the item.
+        """
         self.id = id
         self.type = type
         self.rarity = rarity
@@ -177,6 +192,19 @@ class Item:
 class LootableItem(Item):
     """
     An item that can be looted, given, received, etc.
+
+    Attributes:
+        id (`str`): The ID of the item. (UPPER_SNAKE_CASE).
+        type (`str`): The type of the item. (UPPER_SNAKE_CASE).
+        rarity (`str`): The rarity of the item. (UPPER_SNAKE_CASE).
+        emoji (`int` or `str`): The custom ID of the emoji associated with the item.
+        name (`str`): The name of the item.
+        description (`str`): The description of the item.
+        skill_requirements (`list` of :class:`SkillRequirements`): The skill requirements of the item.
+        shop_settings (`list` of :class:`ShopSettings`): The shop settings of the item.
+        recipe (`list` of :class:`Recipe`): The recipe of the item.
+        usage (:class:`Usage`): The usage of the item.
+        amount (`int`): The amount of the item.
     """
 
     amount: int = 1
@@ -187,6 +215,21 @@ class LootableItem(Item):
         shop_settings: ShopSettings, recipe: typing.List[Recipe],usage: Usage,
         amount: int = 1,
     ):
+        """
+        Args:
+            id (`str`): The ID of the item. (UPPER_SNAKE_CASE).
+            type (`str`): The type of the item. (UPPER_SNAKE_CASE).
+            rarity (`str`): The rarity of the item. (UPPER_SNAKE_CASE).
+            emoji (`int` or `str`): The custom ID of the emoji associated with the item.
+            name (`str`): The name of the item.
+            description (`str`): The description of the item.
+            skill_requirements (`list` of :class:`SkillRequirements`): The skill requirements of the item.
+            shop_settings (`list` of :class:`ShopSettings`): The shop settings of the item.
+            recipe (`list` of :class:`Recipe`): The recipe of the item.
+            usage (:class:`Usage`): The usage of the item.
+            amount (`int`): The amount of the item.
+        """
+
         self.id = id
         self.type = type
         self.rarity = rarity
