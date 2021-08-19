@@ -5,7 +5,7 @@ from dataclasses import dataclass
 @dataclass
 class SkillRequirements:
     """
-    Represents a skill requirements for a given item.
+    Represents a skill requirement for a given item.
 
     Attributes:
         id (`str`): (UPPER_SNAKE_CASE) The ID of the required skill.
@@ -65,8 +65,8 @@ class BrewingUsage:
     Represents a brewing recipe involving the parent item.
 
     Attributes:
-        id (`str`): The ID of a potion or beverage craftable with the parent item (UPPER_SNAKE_CASE).
-        amount (`int`): The amount of the parent item required to brew said potion or beverage (int).
+        id (`str` UPPER_SNAKE_CASE): The ID of a potion or beverage craftable with the parent item.
+        amount (`int`): The amount of the parent item required to brew said potion or beverage.
     """
 
     id: str
@@ -75,10 +75,10 @@ class BrewingUsage:
 @dataclass
 class SkillUsage:
     """
-    Represents a skill that the parent item is used for.
+    Represents a skill requirement for the parent item.
 
     atrributes:
-        id (`str`): The ID of the skill that the parent item is used for (UPPER_SNAKE_CASE).
+        id (`str` UPPER_SNAKE_CASE): The ID of the skill that the parent item is used for.
     """
 
     id: str
@@ -89,10 +89,11 @@ class Usage:
     Represents the usage of an item.
 
     Attributes:
-        crafting (`list` of :class:`CraftingUsage`): The crafting recipes involving the parent item.
-        brewing (`list` of :class:`BrewingUsage`): The potion or beverage recipes involving the parent item.
-        skill (`list` of :class:`SkillUsage`): The skills that the parent item is used for.
+        crafting (`list` of :class:`CraftingUsage`): A list of crafting recipes involving the parent item.
+        brewing (`list` of :class:`BrewingUsage`): A list of brewing recipes involving the parent item.
+        skill (`list` of :class:`SkillUsage`): A list of the skill requirements for the parent item.
     """
+
     crafting: typing.List[CraftingUsage]
     brewing: typing.List[BrewingUsage]
     skill: typing.List[SkillUsage]
@@ -101,7 +102,11 @@ class Usage:
     def from_dict(cls, data: dict):
         """
         Loads a :class:`Usage` from a dictionary.
+
+        Args:
+            data (`dict`): The dictionary to load the :class:`Usage` from.
         """
+
         return cls(
             [CraftingUsage(**c) for c in data['crafting'] if c],
             [BrewingUsage(**b) for b in data['brewing'] if b],
