@@ -1,5 +1,11 @@
+import random
 import typing
+import textwrap
 from dataclasses import dataclass
+
+import voxelbotutils as vbu
+
+from cogs.utils import LootableItem
 
 
 @dataclass
@@ -9,13 +15,34 @@ class LootTableItem:
 
     Attributes:
         id (`str`): The id of the item (UPPER_SNAKE_CASE).
-        weight (`int`): The weight of the item in the loot table. A higher weight means the item will be more likely to be chosen or chosen multiple times.
-        limit (`int`): The maximum number of this item that can be dropped from the parent :class:BeggingLocation.
+        drop_rate (`float`): The drop rate of the item.
+        min (`int`): The minimum amount of the item that can be dropped.
+        max (`int`): The maximum amount of the item that can be dropped.
     """
 
     id: str
-    weight: float
-    limit: int
+    drop_rate: float
+    min: int
+    max: int
+
+
+@dataclass
+class LootTable:
+    """
+    A holder for :class:`LootTableItem`s
+
+    Attributes:
+        items (`list` of :class:`LootTableItem`): The items in the loot table.
+    """
+
+    items: typing.List[LootTableItem]
+
+    def __init__(self, *items: LootTableItem):
+        """
+        Args:
+            items (`list` of :class:`LootTableItem`): The items in the loot table.
+        """
+        self.items = list(items)
 
 
 @dataclass
@@ -64,6 +91,7 @@ class Quotes:
     fail: typing.List[str]
     minigames: MiniGames
 
+
 @dataclass
 class BeggingLocation:
     """
@@ -98,7 +126,7 @@ class BeggingLocation:
         self.emoji = emoji
         self.loot_table = loot_table
         self.quotes = quotes
-    
+
     @classmethod
     def from_dict(cls, data: dict):
         """
@@ -128,6 +156,91 @@ class BeggingLocation:
             ),
         )
 
+    def get_random_loot(self, bot: vbu.Bot, max_items: typing.Optional[int] = None) -> typing.List[LootableItem]:
+        """
+        Gets a random item from the loot table.
+
+        Args:
+            bot (:class:`vbu.Bot`): The bot which has the items cached.
+            max_items (`int`): The maximum number of items to return. If None, all items will be returned.
+
+        Returns:
+            typing.List[:class:`LootableItem`]: The random items.
+        """
+        
+        # The maximum number of items will be the length of the loot table, unless max_items is specified.
+        if max_items is None:
+            max_items = len(self.loot_table)
+        
+        # Create a list of :class:`LootableItem`s, which we'll be returning later.
+        loot: typing.List[LootableItem] = []
+        
+        # Iterate over the loot table.
+        for loot_table_item in self.loot_table:
+            
+            # Stop ourselves from going over the maximum number of items.
+            if len(loot) >= max_items:
+                break
+            
+            # Make a random check to see if we should add the item to the list.
+            if random.random() <= loot_table_item.drop_rate:
+
+                # Get the item from the cache.
+                try:
+                    item = bot.items['all'][loot_table_item.id]
+                
+                # If the item isn't in the cache, we'll raise an exception.
+                except KeyError:
+
+                    # Make a list of all possible causes for the exception.
+                    possible_exception_causes = [
+                        "{} isn't in the cache.",
+                    ]
+
+                    # If the cache doesn't contain the 'all' key, something is wrong.
+                    if not bot.items.has_key('all'):
+                        possible_exception_causes.append("Items not proporly cached, missing 'all' key in `bot.items`.")
+                    
+                    # Else, the item probably doesn't exist.
+                    else:
+                        possible_exception_causes.append("{} doesn't exist.")
+                    
+                    # Add the possible causes together, into a pretty string.
+                    possible_exception_causes = "\n".join([f"- {i}" for i in possible_exception_causes])
+
+                    # Now we format it with the item ID.
+                    possible_exception_causes = possible_exception_causes.format(f'The item with the ID {loot_table_item.id}')
+
+                    # Create a string containing the error message, which soon will be raised.
+                    error_message = textwrap.dedent(
+                        f"""Item '{loot_table_item.id}' not found in `bot.items` cache.
+                        Possible causes:
+                        {possible_exception_causes}"""
+                    )
+
+                    # Raise the exception with the `error_message`.
+                    raise KeyError(error_message)
+
+                # Generate a random number between the item's min and max.
+                amount = random.randint(item.min, item.max)
+
+                # Don't add the item if the amount is 0.
+                if not amount:
+                    continue
+
+                # Create a new :class:`LootableItem` with the item and a random amount.
+                lootable_item = LootableItem.from_item(
+                    item,
+                    amount,
+                )
+
+                # Add the :class:`LootableItem` to the list.
+                loot.append(lootable_item)
+        
+        # Return the list of random :class:`LootableItem`s.
+        return loot
+
+
 @dataclass
 class BeggingLocations:
     """
@@ -145,7 +258,7 @@ class BeggingLocations:
             *locations (:class:`BeggingLocation`): A list of the locations that this holder will hold.
         """
         self.locations = list(locations)
-    
+
     def add_location(self, location: BeggingLocation):
         """
         Adds a :class:`BeggingLocation` to this holder
@@ -156,7 +269,7 @@ class BeggingLocations:
 
         self.locations.append(location)
         return self
-    
+
     def remove_location(self, location: BeggingLocation):
         """
         Removes a :class:`BeggingLocation` to this holder
