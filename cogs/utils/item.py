@@ -5,11 +5,11 @@ from dataclasses import dataclass
 @dataclass
 class SkillRequirements:
     """
-    Represents the requirements for a skill.
+    Represents a skill requirements for a given item.
 
     Attributes:
-        id (`str`): The ID of the skill required. (UPPER_SNAKE_CASE).
-        level (`int`): The level of the skill required.
+        id (`str`): (UPPER_SNAKE_CASE) The ID of the required skill.
+        level (`int`): The level of the required skill.
     """
 
     id: str
@@ -18,26 +18,28 @@ class SkillRequirements:
 @dataclass
 class ShopSettings:
     """
-    Represents the shop settings. I.e. the price, if it's buyable, if it's auctionable, etc.
+    Represents a shop settings. I.e. the price, if it's buyable, if it's auctionable, etc.
     
     Attributes:
         buyable (`bool`): Whether the item can be bought from the shop.
         buy (`int`): The price of the item when bought from the shop.
         sell (`int`): The price of the item when sold to the shop.
+        auctionable (`bool`): Whether the item can be put up for auction.
     """
 
+    auctionable: bool
     buyable: bool
     buy: int
     sell: int
-    auctionable: bool
+
 
 @dataclass
 class Recipe:
     """
-    Represents the recipes of an item
+    Represents a recipes of an item
 
     Attributes:
-        id (`str`): The ID of an item that is required to craft the parent item (UPPER_SNAKE_CASE).
+        id (`str` UPPER_SNAKE_CASE): The ID of an item that is required to craft the parent item.
         amount (`int`): The amount of the parent item required to craft said item.
     """
 
@@ -47,10 +49,10 @@ class Recipe:
 @dataclass
 class CraftingUsage:
     """
-    Represents the crafting recipe involving the parent item.
+    Represents a crafting recipe involving the parent item.
 
     Attributes:
-        id (`str`): The ID of an item craftable with the parent item (UPPER_SNAKE_CASE).
+        id (`str` UPPER_SNAKE_CASE): The ID of an item craftable with the parent item.
         amount (`int`): The amount of the parent item required to craft said item.
     """
 
@@ -60,11 +62,11 @@ class CraftingUsage:
 @dataclass
 class BrewingUsage:
     """
-    Represents the brewing recipe involving the parent item.
+    Represents a brewing recipe involving the parent item.
 
     Attributes:
         id (`str`): The ID of a potion or beverage craftable with the parent item (UPPER_SNAKE_CASE).
-        amount (`int`): The amount of the item required to brew said potion or beverage (int).
+        amount (`int`): The amount of the parent item required to brew said potion or beverage (int).
     """
 
     id: str
