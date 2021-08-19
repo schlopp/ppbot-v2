@@ -241,3 +241,27 @@ class LootableItem(Item):
         self.recipe = recipe
         self.usage = usage
         self.amount = amount
+    
+    @classmethod
+    def from_item(cls, item: Item, amount: int):
+        """
+        Loads a :class:`LootableItem` from an :class:`Item`.
+
+        Args:
+            item (:class:`Item`): The item to load from.
+            amount (`int`): The amount of the item.
+        """
+
+        return cls(
+            item.id,
+            item.type,
+            item.rarity,
+            item.emoji,
+            item.name,
+            item.description,
+            item.skill_requirements,
+            item.shop_settings,
+            item.recipe,
+            item.usage,
+            amount,
+        )
