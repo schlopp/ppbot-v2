@@ -17,7 +17,7 @@ class EconomyCommands(vbu.Cog):
         super().__init__(bot)
         
 
-        # Let's clean some stuff up
+        # Let's clean up the items cache
         try:
             self.bot.items.clear()
             self.bot.logger.info("   * Clearing items cache... success")
@@ -73,6 +73,16 @@ class EconomyCommands(vbu.Cog):
         self.update_db_from_user_cache.cancel()
     
     async def get_user_cache(self, user_id: int, db: typing.Optional[vbu.DatabaseConnection] = None) -> typing.Dict[utils.Skill, utils.Pp]:
+        """
+        Returns user's cached information, if any. Otherwise returns data from the database.
+
+        Args:
+            user_id (`int`): The user's ID.
+            db (:class:`voxelbotutils.DatabaseConnection`, optional): The database connection. Recommened.
+
+        Returns:
+            `dict`: The user's cache.
+        """
 
         # If the user is already cached, return it
         try:
