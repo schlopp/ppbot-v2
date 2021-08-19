@@ -7,7 +7,7 @@
 
     [[locations.loot_table]]
         id = "EXAMPLE_LOOT_TABLE"  # (UPPER_SNAKE_CASE) The ID of an item in the loot table. Must be unique for all items in the [[locations.loot_table]] array.
-        drop_rate = 100  # (int) The drop rate of the item. This is the chance that the item will be dropped.
+        drop_rate = 0.5  # (float) The drop rate of the item. This is the chance that the item will be dropped. This example shows a 50% chance of dropping the item.
         min = 0  # (int) The minimum amount of the item that can be dropped.
         max = 5  # (int) The maximum number of this item that can be dropped from this location.
     
