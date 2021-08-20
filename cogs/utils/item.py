@@ -8,7 +8,7 @@ class SkillRequirements:
     Represents a skill requirement for a given item.
 
     Attributes:
-        id (`str`): (UPPER_SNAKE_CASE) The ID of the required skill.
+        id (`str` UPPER_SNAKE_CASE): The ID of the required skill.
         level (`int`): The level of the required skill.
     """
 
@@ -149,9 +149,9 @@ class Item:
     ):
         """
         Args:
-            id (`str`): The ID of the item. (UPPER_SNAKE_CASE).
-            type (`str`): The type of the item. (UPPER_SNAKE_CASE).
-            rarity (`str`): The rarity of the item. (UPPER_SNAKE_CASE).
+            id (`str` UPPER_SNAKE_CASE): The ID of the item.
+            type (`str` UPPER_SNAKE_CASE): The type of the item..
+            rarity (`str` UPPER_SNAKE_CASE): The rarity of the item.
             emoji (`int` or `str`): The custom ID of the emoji associated with the item.
             name (`str`): The name of the item.
             description (`str`): The description of the item.
@@ -201,16 +201,16 @@ class LootableItem(Item):
     An item that can be looted, given, received, etc.
 
     Attributes:
-        id (`str`): The ID of the item. (UPPER_SNAKE_CASE).
-        type (`str`): The type of the item. (UPPER_SNAKE_CASE).
-        rarity (`str`): The rarity of the item. (UPPER_SNAKE_CASE).
-        emoji (`int` or `str`): The custom ID of the emoji associated with the item.
-        name (`str`): The name of the item.
-        description (`str`): The description of the item.
-        skill_requirements (`list` of :class:`SkillRequirements`): The skill requirements of the item.
-        shop_settings (`list` of :class:`ShopSettings`): The shop settings of the item.
-        recipe (`list` of :class:`Recipe`): The recipe of the item.
-        usage (:class:`Usage`): The usage of the item.
+            id (`str` UPPER_SNAKE_CASE): The ID of the item.
+            type (`str` UPPER_SNAKE_CASE): The type of the item..
+            rarity (`str` UPPER_SNAKE_CASE): The rarity of the item.
+            emoji (`int` or `str`): The custom ID of the emoji associated with the item.
+            name (`str`): The name of the item.
+            description (`str`): The description of the item.
+            skill_requirements (`list` of :class:`SkillRequirements`): The skill requirements of the item.
+            shop_settings (`list` of :class:`ShopSettings`): The shop settings of the item.
+            recipe (`list` of :class:`Recipe`): The recipe of the item.
+            usage (:class:`Usage`): The usage of the item.
         amount (`int`): The amount of the item.
     """
 
@@ -224,9 +224,9 @@ class LootableItem(Item):
     ):
         """
         Args:
-            id (`str`): The ID of the item. (UPPER_SNAKE_CASE).
-            type (`str`): The type of the item. (UPPER_SNAKE_CASE).
-            rarity (`str`): The rarity of the item. (UPPER_SNAKE_CASE).
+            id (`str` UPPER_SNAKE_CASE): The ID of the item.
+            type (`str` UPPER_SNAKE_CASE): The type of the item..
+            rarity (`str` UPPER_SNAKE_CASE): The rarity of the item.
             emoji (`int` or `str`): The custom ID of the emoji associated with the item.
             name (`str`): The name of the item.
             description (`str`): The description of the item.
