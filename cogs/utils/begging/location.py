@@ -14,7 +14,7 @@ class LootTableItem:
     Class that represents a single item in a loot table.
 
     Attributes:
-        id (`str`): The id of the item (UPPER_SNAKE_CASE).
+        id (`str` UPPER_SNAKE_CASE): The id of the item.
         drop_rate (`float`): The drop rate of the item.
         min (`int`): The minimum amount of the item that can be dropped.
         max (`int`): The maximum amount of the item that can be dropped.
@@ -99,7 +99,7 @@ class BeggingLocation:
 
     Attributes:
         level (`int`): The level of the location. This will determine if a user is allowed to use the location. Example: A user with Begging level 0 can't use a level 1 location.
-        id (`str`): (UPPER_SNAKE_CASE) The ID of the location.
+        id (`str` UPPER_SNAKE_CASE): (UPPER_SNAKE_CASE) The ID of the location.
         name (`str`): The name of the location. This will appeal as the label in a select menu.
         description (`str`): The description of the location. This will appear as the description in a select menu.
         emoji (`str`): The emoji that will be used to represent the location. Can also be custom disco emoji, E.g. "<custom_emoji:123456789>"
