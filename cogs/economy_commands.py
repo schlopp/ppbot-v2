@@ -71,11 +71,12 @@ class EconomyCommands(vbu.Cog):
         directory = r"config\begging\locations"
         begging_locations = []
         for filename in os.listdir(directory):
-            begging_locations.append(
-                utils.begging.BeggingLocation.from_dict(
-                    toml.load(os.path.join(directory, filename))
+            if filename.endswith('.toml'):
+                begging_locations.append(
+                    utils.begging.BeggingLocation.from_dict(
+                        toml.load(os.path.join(directory, filename))
+                    )
                 )
-            )
 
         # Put the locations into the bot's begging cache
         self.bot.begging = {
