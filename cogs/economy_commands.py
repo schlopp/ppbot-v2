@@ -1,4 +1,6 @@
 import logging
+import os
+import sys
 import typing
 
 import toml
@@ -15,70 +17,81 @@ class EconomyCommands(vbu.Cog):
 
     def __init__(self, bot: vbu.Bot):
         super().__init__(bot)
-        
 
         # Let's clean up the items cache
         try:
             self.bot.items.clear()
             self.bot.logger.info("   * Clearing items cache... success")
-        
+
         # No cache to clean? then we don't need to do anything
         except AttributeError:
-            self.bot.logger.warn("   * Clearing items cache... failed - No items cached")
-        
+            self.bot.logger.warn(
+                "   * Clearing items cache... failed - No items cached")
+
         # Now let's load the items
-        data = toml.load("config/items.toml")
+        # Load each location from ./config/locations
+        directory = r"config\items"
+        items = []
+        for filename in os.listdir(directory):
+            if filename.endswith(".toml"):
+                items.append(
+                    utils.Item.from_dict(
+                        toml.load(os.path.join(directory, filename))
+                    )
+                )
+
         self.bot.items = {
-            "shop": {
-                # Buyable items
-                i["id"]: utils.Item.from_dict(i) for i in data["items"] if i["shop_settings"]["buyable"]
-            },
-            "auction": {
-                # Auctionable items
-                i["id"]: utils.Item.from_dict(i) for i in data["items"] if i["shop_settings"]["auctionable"]
-            },
-            "all": {
-                # All items
-                i["id"]: utils.Item.from_dict(i) for i in data["items"]
-            },
+            "shop": {i.id: i for i in items if i.shop_settings.buyable},
+            "auction": {i.id: i for i in items if i.shop_settings.auctionable},
+            "all": {i.id: i for i in items},
         }
         self.bot.logger.info("   * Caching items... success")
-        
+
         # No user cache? Let's create it
         if not hasattr(self.bot, "user_cache"):
             self.bot.user_cache = {}
             self.bot.logger.info("   * Creating user cache... success")
-        
+
         # Now let's start the update db from user cache task
         self.update_db_from_user_cache.start()
-        self.bot.logger.info("   * Starting update db from user cache task... success")
+        self.bot.logger.info(
+            "   * Starting update db from user cache task... success")
 
         # Now we clean up the begging cache
         try:
             self.bot.begging.clear()
             self.bot.logger.info("   * Clearing begging cache... success")
-        
+
         # No cache to clean? then we don't need to do anything
         except AttributeError:
-            self.bot.logger.warn("   * Clearing begging cache... failed - No begging information cached")
-        
-        # Now we cache the begging information
+            self.bot.logger.warn(
+                "   * Clearing begging cache... failed - No begging information cached")
+
+        # Load each location from ./config/locations
+        directory = r"config\begging\locations"
+        begging_locations = []
+        for filename in os.listdir(directory):
+            begging_locations.append(
+                utils.begging.BeggingLocation.from_dict(
+                    toml.load(os.path.join(directory, filename))
+                )
+            )
+
+        # Put the locations into the bot's begging cache
         self.bot.begging = {
-            "locations": utils.begging.BeggingLocations(
-                *(utils.begging.BeggingLocation.from_dict(i) for i in toml.load('config/begging/locations.example.toml')['locations'])
-            ),
+            "locations": utils.begging.BeggingLocations(begging_locations),
         }
-    
+
     def cog_unload(self):
         self.update_db_from_user_cache.cancel()
-    
-    async def get_user_cache(self, user_id: int, db: typing.Optional[vbu.DatabaseConnection] = None) -> typing.Dict[utils.Skill, utils.Pp]:
+
+    async def get_user_cache(self, user_id: int, db: typing.Optional[vbu.DatabaseConnection]) -> typing.Dict[utils.Skill, utils.Pp]:
         """
         Returns user's cached information, if any. Otherwise returns data from the database.
 
         Args:
             user_id (`int`): The user's ID.
-            db (:class:`voxelbotutils.DatabaseConnection`, optional): The database connection. Recommened.
+            db (:class:`voxelbotutils.DatabaseConnection`): The database connection.
 
         Returns:
             `dict`: The user's cache.
@@ -87,38 +100,37 @@ class EconomyCommands(vbu.Cog):
         # If the user is already cached, return it
         try:
             return self.bot.user_cache[user_id]
-        
+
         # Otherwise, let's create it
         except KeyError:
-            async with vbu.DatabaseConnection() as db:
+            # Get the user's skills
+            user_skills = [
+                utils.Skill(**i) for i in await db("SELECT * FROM user_skill WHERE user_id = $1", user_id)
+            ]
 
-                # Get the user's skills
-                user_skills = [
-                    utils.Skill(**i) for i in await db("SELECT * FROM user_skill WHERE user_id = $1", user_id)
-                ]
+            # Now let's get the user's pp
+            try:
+                user_pp = utils.Pp(
+                    **(await db("SELECT * FROM user_pp WHERE user_id = $1", user_id))[0]
+                )
 
-                # Now let's get the user's pp
-                try:
-                    user_pp = utils.Pp(
-                        **(await db("SELECT * FROM user_pp WHERE user_id = $1", user_id))[0]
-                    )
-                
-                # apparently the user doesn't have pp? Let's create one
-                except IndexError:
-                    user_pp = utils.Pp(user_id)
-                
-                # Now we add this to the user cache
-                self.bot.user_cache[user_id] = {
-                    "skills": user_skills,
-                    "pp": user_pp,
-                }
-            
+            # apparently the user doesn't have pp? Let's create one
+            except IndexError:
+                user_pp = utils.Pp(user_id)
+
+            # Now we add this to the user cache
+            self.bot.user_cache[user_id] = {
+                "skills": user_skills,
+                "pp": user_pp,
+            }
+
             # we do a little logging. it's called: "We do a little logging"
-            self.bot.logger.info(f"Creating user cache for {user_id}... success")
+            self.bot.logger.info(
+                f"Creating user cache for {user_id}... success")
 
             # and return the user cache
             return self.bot.user_cache[user_id]
-    
+
     @tasks.loop(seconds=30.0)
     async def update_db_from_user_cache(self) -> None:
         """
@@ -126,7 +138,7 @@ class EconomyCommands(vbu.Cog):
         """
 
         self.bot.logger.info("Updating database from user cache...")
-    
+
         # Establish a connection to the database
         async with vbu.DatabaseConnection() as db:
 
@@ -135,7 +147,7 @@ class EconomyCommands(vbu.Cog):
 
                 # Now we unpack the cached values
                 skills, pp = values.values()
-                
+
                 # Iterate through all of their skills
                 skill: utils.Skill
                 for skill in skills:
@@ -148,7 +160,8 @@ class EconomyCommands(vbu.Cog):
                     )
 
                     # Log our update
-                    self.bot.logger.info(f"Updating user cache for {user_id} - {skill.name!r}... success")
+                    self.bot.logger.info(
+                        f"Updating user cache for {user_id} - {skill.name!r}... success")
 
                 # Update the user's pp
                 await db("""
@@ -158,7 +171,17 @@ class EconomyCommands(vbu.Cog):
                 )
 
                 # Log our update
-                self.bot.logger.info(f"Updating user cache for {user_id}'s pp: {pp.name!r}... success")
+                self.bot.logger.info(
+                    f"Updating user cache for {user_id}'s pp: {pp.name!r}... success")
+
+    # Skills
+    @commands.command(name='beg')
+    async def _beg_command(self, ctx: commands.Context):
+        """
+        Level up begging, earn items, and get a large pp in the process!
+        """
+
+        await ctx.send(self.bot.begging["locations"])
 
 
 def setup(bot: vbu.Bot):
