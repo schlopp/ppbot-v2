@@ -6,32 +6,32 @@ name = "rotten wood"  # (string) The name of the item.
 description = "A chunk of wood that has been rotted from a tree, ised to craft a funky guitar." # (string) The description of the item.
 
 # (array) Represents the skill requirements for a given item.
-[[items.skill_requirements]]
+[[skill_requirements]]
     # None
 
 # Represents the shop settings. I.e. the price, if it's buyable, if it's auctionable, etc.
-[items.shop_settings]
+[shop_settings]
     auctionable = false # (bool) Whether the item can be put up for auction.
     buyable = true  # (bool) Whether the item can be bought from the shop.
     buy = 500  # (int): The price of the item when bought from the shop.
     sell = 200  # (int): The price of the item when sold to the shop.
 
 # (array) The recipes of the item.
-[[items.recipe]]
+[[recipe]]
     # None
 
 # The usage of an item.
-[items.usage]
+[usage]
 
     # (array) Represents thr crafting recipes involving the parent item.
-    [[items.usage.crafting]]
-        id = "GUITAR"  # (UPPER_SNAKE_CASE) The ID of an item craftable with the parent item. Must be unique for all items in the [[items.usage.crafting]] array.
+    [[usage.crafting]]
+        id = "GUITAR"  # (UPPER_SNAKE_CASE) The ID of an item craftable with the parent item. Must be unique for all items in the [[usage.crafting]] array.
         amount = 10  # (int) The amount of the parent item required to craft said item.
 
     # (array) Represents the brewing recipes involving the parent item.
-    [[items.usage.brewing]]
+    [[usage.brewing]]
         # None
 
     # (array) Represents the skills that the parent item is used for.
-    [[items.usage.skills]]
+    [[usage.skills]]
         # None

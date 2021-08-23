@@ -6,35 +6,35 @@ name = "Item name"  # (string) The name of the item.
 description = "This is the description of the item" # (string) The description of the item.
 
 # (array) Represents the skill requirements for a given item.
-[[items.skill_requirements]]
-    id = "SKILL_ID"  # (UPPER_SNAKE_CASE) The ID of the required skill. Must be unique for all skills in the [[items.skill_requirements]] array.
+[[skill_requirements]]
+    id = "SKILL_ID"  # (UPPER_SNAKE_CASE) The ID of the required skill. Must be unique for all skills in the [[skill_requirements]] array.
     level = 69  # (int) The level of the skill required.
 
 # Represents the shop settings. I.e. the price, if it's buyable, if it's auctionable, etc.
-[items.shop_settings]
+[shop_settings]
     auctionable = false # (bool) Whether the item can be put up for auction.
     buyable = true  # (bool) Whether the item can be bought from the shop.
     buy = 100  # (int): The price of the item when bought from the shop.
     sell = 20  # (int): The price of the item when sold to the shop.
 
 #  (array) The recipes of the item.
-[[items.recipe]]
-    id = "REQUIRED_ITEM_ID"  # (string UPPER_SNAKE_CASE) The ID of an item that is required to craft this item. Must be unique for all items in the [[items.recipe]] array.
+[[recipe]]
+    id = "REQUIRED_ITEM_ID"  # (string UPPER_SNAKE_CASE) The ID of an item that is required to craft this item. Must be unique for all items in the [[recipe]] array.
     amount = 10  # (int) The amount of the parent item required to craft said item.
 
 # The usage of an item.
-[items.usage]
+[usage]
 
     # (array) Represents thr crafting recipes involving the parent item.
-    [[items.usage.crafting]]
-        id = "CRAFTING_ITEM_ID"  # (UPPER_SNAKE_CASE) The ID of an item craftable with the parent item. Must be unique for all items in the [[items.usage.crafting]] array.
+    [[usage.crafting]]
+        id = "CRAFTING_ITEM_ID"  # (UPPER_SNAKE_CASE) The ID of an item craftable with the parent item. Must be unique for all items in the [[usage.crafting]] array.
         amount = 69  # (int) The amount of the parent item required to craft said item.
 
     # (array) Represents the brewing recipes involving the parent item.
-    [[items.usage.brewing]]
-        id = "POTION_OR_BEVERAGE_ID"  # (UPPER_SNAKE_CASE) The ID of a potion or beverage craftable with the parent item. Must be unique for all items in the [[items.usage.brewing]] array.
+    [[usage.brewing]]
+        id = "POTION_OR_BEVERAGE_ID"  # (UPPER_SNAKE_CASE) The ID of a potion or beverage craftable with the parent item. Must be unique for all items in the [[usage.brewing]] array.
         amount = 69  # (int) The amount of the parent item required to brew said potion or beverage.
 
     # (array) Represents the skills that the parent item is used for.
-    [[items.usage.skills]]
-        id = "SKILL_ID"  # (UPPER_SNAKE_CASE) The ID of the skill that the parent item is used for. Must be unique for all skills in the [[items.usage.skills]] array.
+    [[usage.skills]]
+        id = "SKILL_ID"  # (UPPER_SNAKE_CASE) The ID of the skill that the parent item is used for. Must be unique for all skills in the [[usage.skills]] array.
