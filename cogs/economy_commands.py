@@ -21,11 +21,11 @@ class EconomyCommands(vbu.Cog):
         # Let's clean up the items cache
         try:
             self.bot.items.clear()
-            self.bot.logger.info("   * Clearing items cache... success")
+            self.logger.info("   * Clearing items cache... success")
 
         # No cache to clean? then we don't need to do anything
         except AttributeError:
-            self.bot.logger.warn(
+            self.logger.warn(
                 "   * Clearing items cache... failed - No items cached")
 
         # Now let's load the items
@@ -45,26 +45,26 @@ class EconomyCommands(vbu.Cog):
             "auction": {i.id: i for i in items if i.shop_settings.auctionable},
             "all": {i.id: i for i in items},
         }
-        self.bot.logger.info("   * Caching items... success")
+        self.logger.info("   * Caching items... success")
 
         # No user cache? Let's create it
         if not hasattr(self.bot, "user_cache"):
             self.bot.user_cache = {}
-            self.bot.logger.info("   * Creating user cache... success")
+            self.logger.info("   * Creating user cache... success")
 
         # Now let's start the update db from user cache task
         self.update_db_from_user_cache.start()
-        self.bot.logger.info(
+        self.logger.info(
             "   * Starting update db from user cache task... success")
 
         # Now we clean up the begging cache
         try:
             self.bot.begging.clear()
-            self.bot.logger.info("   * Clearing begging cache... success")
+            self.logger.info("   * Clearing begging cache... success")
 
         # No cache to clean? then we don't need to do anything
         except AttributeError:
-            self.bot.logger.warn(
+            self.logger.warn(
                 "   * Clearing begging cache... failed - No begging information cached")
 
         # Load each location from ./config/locations
@@ -126,7 +126,7 @@ class EconomyCommands(vbu.Cog):
             }
 
             # we do a little logging. it's called: "We do a little logging"
-            self.bot.logger.info(
+            self.logger.info(
                 f"Creating user cache for {user_id}... success")
 
             # and return the user cache
@@ -138,7 +138,7 @@ class EconomyCommands(vbu.Cog):
         This task updates the database from the user cache every minute.
         """
 
-        self.bot.logger.info("Updating database from user cache...")
+        self.logger.info("Updating database from user cache...")
 
         # Establish a connection to the database
         async with vbu.DatabaseConnection() as db:
@@ -161,7 +161,7 @@ class EconomyCommands(vbu.Cog):
                     )
 
                     # Log our update
-                    self.bot.logger.info(
+                    self.logger.info(
                         f"Updating user cache for {user_id} - {skill.name!r}... success")
 
                 # Update the user's pp
@@ -172,7 +172,7 @@ class EconomyCommands(vbu.Cog):
                 )
 
                 # Log our update
-                self.bot.logger.info(
+                self.logger.info(
                     f"Updating user cache for {user_id}'s pp: {pp.name!r}... success")
 
     # Skills
