@@ -4,7 +4,7 @@ import typing
 import toml
 
 import voxelbotutils as vbu
-from discord.ext import tasks
+from discord.ext import commands, tasks
 
 
 from cogs import utils
@@ -14,7 +14,7 @@ class EconomyCommands(vbu.Cog):
 
     def __init__(self, bot: vbu.Bot):
         super().__init__(bot)
-
+        self.bot: vbu.Bot
         # Let's clean up the items cache
         try:
             self.bot.items.clear()
@@ -25,7 +25,6 @@ class EconomyCommands(vbu.Cog):
             self.logger.warn(
                 "\t* Clearing items cache... failed - No items cached")
 
-        # Now let's load the items
         # Load each location from ./config/locations
         directory = r"config\items"
         items = []
@@ -36,7 +35,6 @@ class EconomyCommands(vbu.Cog):
                         toml.load(os.path.join(directory, filename))
                     )
                 )
-
         self.bot.items = {
             "shop": {i.id: i for i in items if i.shop_settings.buyable},
             "auction": {i.id: i for i in items if i.shop_settings.auctionable},
@@ -69,19 +67,20 @@ class EconomyCommands(vbu.Cog):
             if filename.endswith('.toml'):
                 begging_locations.append(
                     utils.begging.BeggingLocation.from_dict(
+                        self.bot,
                         toml.load(os.path.join(directory, filename))
                     )
                 )
 
         # Put the locations into the bot's begging cache
         self.bot.begging = {
-            "locations": utils.begging.BeggingLocations(begging_locations),
+            "locations": begging_locations,
         }
 
     def cog_unload(self):
         self.update_db_from_user_cache.cancel()
 
-    async def get_user_cache(self, user_id: int, db: typing.Optional[vbu.DatabaseConnection]) -> typing.Dict[utils.Skill, utils.Pp]:
+    async def get_user_cache(self, user_id: int, db: typing.Optional[vbu.DatabaseConnection]) -> utils.CachedUser:
         """
         Returns user's cached information, if any. Otherwise returns data from the database.
 
@@ -114,13 +113,10 @@ class EconomyCommands(vbu.Cog):
                 user_pp = utils.Pp(user_id)
 
             # Now we add this to the user cache
-            self.bot.user_cache[user_id] = {
-                "skills": user_skills,
-                "pp": user_pp,
-            }
+            self.bot.user_cache[user_id] = utils.CachedUser(user_id, user_skills, user_pp)
 
             # we do a little logging. it's called: "We do a little logging"
-            self.logger.info(f"Creating user cache for {user_id}... success")
+            self.logger.info(f"\t* Creating user cache for {user_id}... success")
 
             # and return the user cache
             return self.bot.user_cache[user_id]
@@ -137,14 +133,11 @@ class EconomyCommands(vbu.Cog):
         async with vbu.DatabaseConnection() as db:
 
             # Iterate through all cached users
-            for user_id, values in self.bot.user_cache.items():
-
-                # Now we unpack the cached values
-                skills, pp = values.values()
+            for user_id, user_cache in self.bot.user_cache.items():
 
                 # Iterate through all of their skills
                 skill: utils.Skill
-                for skill in skills:
+                for skill in user_cache.skills:
 
                     # Update the user's skill
                     await db(
@@ -162,19 +155,29 @@ class EconomyCommands(vbu.Cog):
                     """INSERT INTO user_pp VALUES ($1, $2, $3, $4)
                     ON CONFLICT (user_id) DO UPDATE SET name = $2,
                     size = $3, multiplier = $4""",
-                    user_id, pp.name, pp.size, pp.multiplier,
+                    user_id, user_cache.pp.name, user_cache.pp.size, user_cache.pp.multiplier,
                 )
 
                 # Log our update
-                self.logger.info(f"Updating user cache for {user_id}'s pp: {pp.name!r}... success")
+                self.logger.info(f"Updating user cache for {user_id}'s pp: {user_cache!r}... success")
 
     @vbu.command(name='beg')
+    @vbu.bot_has_permissions(embed_links=True, read_messages=True, send_messages=True,use_external_emojis=True, )
+    @commands.has_permissions(read_messages=True, send_messages=True, use_slash_commands=True, )
     async def _beg_command(self, ctx: vbu.Context):
         """
-        Level up begging, earn items, and get a large pp in the process!
+        Beg for inches, earn items, and get a large pp in the process!
         """
 
-        await ctx.send(self.bot.begging["locations"])
+        async with vbu.DatabaseConnection() as db:
+
+            # Get the user's cache
+            cache = await self.get_user_cache(ctx.author.id, db)
+            begging = cache.get_skill("BEGGING")
+
+            await ctx.send(begging)
+            # Set up the begging locations with the user's current begging level
+            locations = utils.begging.BeggingLocations(begging.level, *self.bot.begging["locations"])
 
 
 def setup(bot: vbu.Bot):
