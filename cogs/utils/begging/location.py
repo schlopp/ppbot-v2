@@ -4,8 +4,10 @@ import textwrap
 from dataclasses import dataclass
 
 import voxelbotutils as vbu
+import discord
 
 from cogs.utils import LootableItem
+from cogs.utils.readable import int_formatting
 
 
 @dataclass
@@ -102,7 +104,7 @@ class BeggingLocation:
         id (`str` UPPER_SNAKE_CASE): (UPPER_SNAKE_CASE) The ID of the location.
         name (`str`): The name of the location. This will appeal as the label in a select menu.
         description (`str`): The description of the location. This will appear as the description in a select menu.
-        emoji (`str`): The emoji that will be used to represent the location. Can also be custom disco emoji, E.g. "<custom_emoji:123456789>"
+        emoji (`str` or `discord.Emoji`): The emoji that will be used to represent the location. Can also be a custom emoji.
         loot_table (`list` of :class:`LootTableItem`): The loot table for the location.
         quotes (:class:`Quotes`): The quotes for the location.
     """
@@ -111,13 +113,13 @@ class BeggingLocation:
     id: str
     name: str
     description: str
-    emoji: str
+    emoji: typing.Union[str, discord.Emoji]
     loot_table: typing.List[LootTableItem]
     quotes: Quotes
 
     def __init__(
         self, level: int, id: str, name: str, description: str,
-        emoji: str, loot_table: typing.List[LootTableItem], quotes: Quotes,
+        emoji: typing.Union[str, discord.Emoji], loot_table: typing.List[LootTableItem], quotes: Quotes,
     ):
         self.level = level
         self.id = id
@@ -128,11 +130,12 @@ class BeggingLocation:
         self.quotes = quotes
 
     @classmethod
-    def from_dict(cls, data: dict):
+    def from_dict(cls, bot: vbu.Bot, data: dict):
         """
         Loads an :class:`Item` from a dictionary. This can be used to load an item from `./config/items.toml`.
 
         Args:
+            bot (:class:`voxelbot.VoxelBot`): The bot used for loading emojis.
             data (`dict`): The dictionary to load the item from.
         """
 
@@ -141,7 +144,7 @@ class BeggingLocation:
             data["id"],
             data["name"],
             data["description"],
-            data["emoji"],
+            bot.get_emoji(data["emoji"]) if isinstance(data["emoji"], int) else data["emoji"],
             [
                 LootTableItem(**item) for item in data["loot_table"]
             ],
@@ -154,6 +157,39 @@ class BeggingLocation:
                     ),
                 ),
             ),
+        )
+
+    @property
+    def roman_numeral(self) -> str:
+        """
+        (`str`) The roman numeral representation of the level. E.g. "I" for level 1.
+        """
+
+        return int_formatting.int_to_roman(self.level)
+
+    @property
+    def label(self) -> str:
+        """
+        (`str`) The label of the location.
+        
+        E.g. "LEVEL IV: The park"
+        """
+
+        return f"LEVEL {self.roman_numeral}: {self.name}"
+
+    def to_select_option(self) -> vbu.SelectOption:
+        """
+        Converts the location to a select option for the location menu.
+
+        Returns:
+            (:class:`vbu.SelectOption`): The select option for the location.
+        """
+
+        return vbu.SelectOption(
+            label=self.label,
+            value=self.id,
+            description=self.description,
+            custom_emoji=self.emoji,
         )
 
     def get_random_loot(self, bot: vbu.Bot, max_items: typing.Optional[int] = None) -> typing.List[LootableItem]:
@@ -250,14 +286,17 @@ class BeggingLocations:
         locations (`dict`): A dictionary of locations.
     """
 
+    level: int
     locations: typing.List[BeggingLocation]
 
-    def __init__(self, *locations: BeggingLocation):
+    def __init__(self, level: int, *locations: BeggingLocation):
         """
         Args:
             *locations (:class:`BeggingLocation`): A list of the locations that this holder will hold.
         """
-        self.locations = list(locations)
+        self.level = level
+        self.locations = list(location for location in locations if location.level <= self.level)
+        self.locations.sort(key=lambda x: x.level, reverse=True)
 
     def add_location(self, location: BeggingLocation):
         """
@@ -266,8 +305,10 @@ class BeggingLocations:
         Args:
             location (:class:`BeggingLocation`): The location to add.
         """
-
-        self.locations.append(location)
+        
+        if not location.level > self.level:
+            self.locations.append(location)
+            self.locations.sort(key=lambda x: x.level, reverse=True)
         return self
 
     def remove_location(self, location: BeggingLocation):
@@ -278,5 +319,21 @@ class BeggingLocations:
             location (:class:`BeggingLocation`): The location to remove.
         """
 
-        self.locations.remove(location)
+        if not location.level > self.level:
+            self.locations.remove(location)
+            self.locations.sort(key=lambda x: x.level, reverse=True)
         return self
+
+    def to_select_menu(self) -> vbu.SelectMenu:
+        """
+        Converts the locations to a select menu for the location menu.
+
+        Returns:
+            (:class:`vbu.SelectMenu`): The select menu for the locations with the ID of BEGGING_LOCATIONS.
+        """
+
+        return vbu.SelectMenu(
+            custom_id="BEGGING_LOCATIONS",
+            options=[i.to_select_option() for i in self.locations],
+            placeholder="Pick a location to beg at.",
+        )
