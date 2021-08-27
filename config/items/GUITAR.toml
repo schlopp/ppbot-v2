@@ -19,7 +19,7 @@ description = "The amount of funk in this bad boy is rediculous. Play some sick 
 
 #  (array) The recipes of the item.
 [[recipe]]
-    id = "GUITAR"  # (string UPPER_SNAKE_CASE) The ID of an item that is required to craft this item. Must be unique for all items in the [[recipe]] array.
+    id = "ROTTEN_WOOD"  # (string UPPER_SNAKE_CASE) The ID of an item that is required to craft this item. Must be unique for all items in the [[recipe]] array.
     amount = 10  # (int) The amount of the parent item required to craft said item.
 
 # The usage of an item.
@@ -27,7 +27,8 @@ description = "The amount of funk in this bad boy is rediculous. Play some sick 
 
     # (array) Represents thr crafting recipes involving the parent item.
     [[usage.crafting]]
-        # None
+        id = "METAL_GUITAR"  # (UPPER_SNAKE_CASE) The ID of an item craftable with the parent item. Must be unique for all items in the [[usage.crafting]] array.
+        amount = 20  # (int) The amount of the parent item required to craft said item.
 
     # (array) Represents the brewing recipes involving the parent item.
     [[usage.brewing]]
@@ -35,4 +36,4 @@ description = "The amount of funk in this bad boy is rediculous. Play some sick 
 
     # (array) Represents the skills that the parent item is used for.
     [[usage.skills]]
-        # None
+        id = "BEGGING"  # (UPPER_SNAKE_CASE) The ID of the skill that the parent item is used for. Must be unique for all skills in the [[usage.skills]] array.

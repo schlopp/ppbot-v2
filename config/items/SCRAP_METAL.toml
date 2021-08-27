@@ -1,9 +1,9 @@
-id = "ROTTEN_WOOD"  # (UPPER_SNAKE_CASE) The ID of the item. Must be unique for all items in the [[items]] array.
-type = "CRAFTING_REAGENT"  # (UPPER_SNAKE_CASE) The type of the item.
+id = "SCRAP_METAL"  # (UPPER_SNAKE_CASE) The ID of the item. Must be unique for all items in the [[items]] array.
+type = "CRAFTING REAGENT"  # (UPPER_SNAKE_CASE) The type of the item.
 rarity = "COMMON" # (UPPER_SNAKE_CASE) The rarity of the item.
-emoji = 876433964749963274  # (int) The custom ID of the emoji associated with the item.
-name = "rotten wood"  # (string) The name of the item.
-description = "A chunk of wood that has been rotted from a tree, ised to craft a funky guitar." # (string) The description of the item.
+emoji = 880408346547585044  # (int) The custom ID of the emoji associated with the item.
+name = "scrap metal"  # (string) The name of the item.
+description = "Some old screws, bolts, and springs. There might even be a syringe in there, who knows" # (string) The description of the item.
 
 # (array) Represents the skill requirements for a given item.
 [[skill_requirements]]
@@ -16,7 +16,7 @@ description = "A chunk of wood that has been rotted from a tree, ised to craft a
     buy = 500  # (int): The price of the item when bought from the shop.
     sell = 200  # (int): The price of the item when sold to the shop.
 
-# (array) The recipes of the item.
+#  (array) The recipes of the item.
 [[recipe]]
     # None
 
@@ -25,8 +25,8 @@ description = "A chunk of wood that has been rotted from a tree, ised to craft a
 
     # (array) Represents thr crafting recipes involving the parent item.
     [[usage.crafting]]
-        id = "GUITAR"  # (UPPER_SNAKE_CASE) The ID of an item craftable with the parent item. Must be unique for all items in the [[usage.crafting]] array.
-        amount = 10  # (int) The amount of the parent item required to craft said item.
+        id = "METAL_INGOT"  # (UPPER_SNAKE_CASE) The ID of an item craftable with the parent item. Must be unique for all items in the [[usage.crafting]] array.
+        amount = 25  # (int) The amount of the parent item required to craft said item.
 
     # (array) Represents the brewing recipes involving the parent item.
     [[usage.brewing]]
