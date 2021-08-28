@@ -19,11 +19,7 @@ description = "This is the description of the item" # (string) The description o
 
 #  (array) The recipes of the item.
 [[recipe]]
-    id = "METAL_GUITAR"  # (string UPPER_SNAKE_CASE) The ID of an item that is required to craft this item. Must be unique for all items in the [[recipe]] array.
-    amount = 1  # (int) The amount of the parent item required to craft said item.
-
-[[recipe]]
-    id = "METH_POTION"  # (string UPPER_SNAKE_CASE) The ID of an item that is required to craft this item. Must be unique for all items in the [[recipe]] array.
+    id = "REQUIRED_ITEM_ID"  # (string UPPER_SNAKE_CASE) The ID of an item that is required to craft this item. Must be unique for all items in the [[recipe]] array.
     amount = 1  # (int) The amount of the parent item required to craft said item.
 
 # The usage of an item.
