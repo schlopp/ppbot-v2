@@ -1,4 +1,6 @@
+import asyncio
 import os
+import textwrap
 import typing
 
 import toml
@@ -143,12 +145,12 @@ class EconomyCommands(vbu.Cog):
                     await db(
                         """INSERT INTO user_skill VALUES ($1, $2, $3)
                         ON CONFLICT (user_id, name) DO UPDATE SET
-                        user_skill = user_skill.experience + $3""",
+                        experience = user_skill.experience + $3""",
                         user_id, skill.name, skill.experience,
                     )
 
                     # Log our update
-                    self.logger.info(f"Updating user cache for {user_id} - {skill.name!r}... success")
+                    self.logger.info(f"\t* Updating user cache for {user_id} - {skill.name!r}... success")
 
                 # Update the user's pp
                 await db(
@@ -172,12 +174,34 @@ class EconomyCommands(vbu.Cog):
         async with vbu.DatabaseConnection() as db:
 
             # Get the user's cache
-            cache = await self.get_user_cache(ctx.author.id, db)
+            cache: utils.CachedUser = await self.get_user_cache(ctx.author.id, db)
             begging = cache.get_skill("BEGGING")
 
-            await ctx.send(begging)
             # Set up the begging locations with the user's current begging level
             locations = utils.begging.BeggingLocations(begging.level, *self.bot.begging["locations"])
+
+            # Build the message
+            components = vbu.MessageComponents(vbu.ActionRow(locations.to_select_menu()))
+            content = textwrap.dedent(f"""
+                <:thonk:881578428506185779> **Where are you begging?**
+                Level up `BEGGING` unlock new locations!
+                **Current level:** {utils.readable.int_formatting.int_to_roman(begging.level, emoji_mode=True)}
+            """)
+
+            # Send the message
+            message: vbu.InteractionMessage = await ctx.send(content, components=components)
+
+            try:
+                # Wait for a response
+                payload: vbu.ComponentInteractionPayload = await self.bot.wait_for(
+                    'component_interaction',
+                    check=lambda p: p.message.id == message.id and p.user.id == ctx.author.id,
+                    timeout=60.0
+                )
+            except asyncio.TimeoutError:
+                components.disable_components()
+                content = content + "\n\\🟥 **You took too long to respond** 😔 `waited 60.0s`"
+                return await message.edit(content=content, components=components)
 
 
 def setup(bot: vbu.Bot):
