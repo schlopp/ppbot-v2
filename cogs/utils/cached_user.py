@@ -32,20 +32,21 @@ class CachedUser:
         self.skills = skills
         self.pp = pp
     
-    def get_skill(self, skill_id: str) -> Skill:
+    def get_skill(self, name: str) -> Skill:
         """
         Gets a skill
 
         Args:
-            skill_id (`str`):  The skill's id.
+            name (`str`):  The skill's name.
 
         Returns:
             `:class:Skill`:  The skill.
-            or `Skill`:  An empty skill with the skill_id.
+            or `Skill`:  An empty skill with `name` as the skill name.
         """
 
-        # return the skill if it exists
-        for skill in self.skills:
-            if skill.id == skill_id:
-                return skill
-        return Skill(self.user_id, name=skill_id)
+        skill = next((x for x in self.skills if x.name == name), None)
+        if skill is None:
+            skill = Skill(self.user_id, name=name)
+            self.skills.append(skill)
+            return skill
+        return skill
