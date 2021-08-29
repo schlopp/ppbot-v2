@@ -6,10 +6,58 @@ description = "Lmao homeless lookin ass 😆"  # (string) The description of the
 emoji = "<:PP_BEG:879382346812489809>"  # (string) The emoji that will be used to represent the location. Can also be custom disco emoji, E.g. "<custom_emoji:123456789>"
 
 [[loot_table]]
-    id = "EXAMPLE_LOOT_TABLE"  # (UPPER_SNAKE_CASE) The ID of an item in the loot table. Must be unique for all items in the [[locations.loot_table]] array.
+    id = "ROTTEN_WOOD"  # (UPPER_SNAKE_CASE) The ID of an item in the loot table. Must be unique for all items in the [[locations.loot_table]] array.
     drop_rate = 0.5  # (float) The drop rate of the item. This is the chance that the item will be dropped. This example shows a 50% chance of dropping the item.
-    min = 0  # (int) The minimum amount of the item that can be dropped.
+    min = 1  # (int) The minimum amount of the item that can be dropped.
     max = 5  # (int) The maximum number of this item that can be dropped from this location.
+
+[[loot_table]]
+    id = "GUITAR"  # (UPPER_SNAKE_CASE) The ID of an item in the loot table. Must be unique for all items in the [[locations.loot_table]] array.
+    drop_rate = 0.01  # (float) The drop rate of the item. This is the chance that the item will be dropped. This example shows a 50% chance of dropping the item.
+    min = 1  # (int) The minimum amount of the item that can be dropped.
+    max = 2  # (int) The maximum number of this item that can be dropped from this location.
+
+[[loot_table]]
+    id = "SCRAP_METAL"  # (UPPER_SNAKE_CASE) The ID of an item in the loot table. Must be unique for all items in the [[locations.loot_table]] array.
+    drop_rate = 0.5  # (float) The drop rate of the item. This is the chance that the item will be dropped. This example shows a 50% chance of dropping the item.
+    min = 1  # (int) The minimum amount of the item that can be dropped.
+    max = 5  # (int) The maximum number of this item that can be dropped from this location.
+
+[[loot_table]]
+    id = "METAL_INGOT"  # (UPPER_SNAKE_CASE) The ID of an item in the loot table. Must be unique for all items in the [[locations.loot_table]] array.
+    drop_rate = 0.05  # (float) The drop rate of the item. This is the chance that the item will be dropped. This example shows a 50% chance of dropping the item.
+    min = 1  # (int) The minimum amount of the item that can be dropped.
+    max = 3  # (int) The maximum number of this item that can be dropped from this location.
+
+[[loot_table]]
+    id = "METH_PIPE"  # (UPPER_SNAKE_CASE) The ID of an item in the loot table. Must be unique for all items in the [[locations.loot_table]] array.
+    drop_rate = 0.25  # (float) The drop rate of the item. This is the chance that the item will be dropped. This example shows a 50% chance of dropping the item.
+    min = 1  # (int) The minimum amount of the item that can be dropped.
+    max = 5  # (int) The maximum number of this item that can be dropped from this location.
+
+[[loot_table]]
+    id = "METH_POTION"  # (UPPER_SNAKE_CASE) The ID of an item in the loot table. Must be unique for all items in the [[locations.loot_table]] array.
+    drop_rate = 0.01  # (float) The drop rate of the item. This is the chance that the item will be dropped. This example shows a 50% chance of dropping the item.
+    min = 1  # (int) The minimum amount of the item that can be dropped.
+    max = 2  # (int) The maximum number of this item that can be dropped from this location.
+
+[[loot_table]]
+    id = "CHEETOS"  # (UPPER_SNAKE_CASE) The ID of an item in the loot table. Must be unique for all items in the [[locations.loot_table]] array.
+    drop_rate = 0.5  # (float) The drop rate of the item. This is the chance that the item will be dropped. This example shows a 50% chance of dropping the item.
+    min = 3  # (int) The minimum amount of the item that can be dropped.
+    max = 6  # (int) The maximum number of this item that can be dropped from this location.
+
+[[loot_table]]
+    id = "OLD_CLOTHES"  # (UPPER_SNAKE_CASE) The ID of an item in the loot table. Must be unique for all items in the [[locations.loot_table]] array.
+    drop_rate = 0.5  # (float) The drop rate of the item. This is the chance that the item will be dropped. This example shows a 50% chance of dropping the item.
+    min = 1  # (int) The minimum amount of the item that can be dropped.
+    max = 3  # (int) The maximum number of this item that can be dropped from this location.
+
+[[loot_table]]
+    id = "CASHMERE"  # (UPPER_SNAKE_CASE) The ID of an item in the loot table. Must be unique for all items in the [[locations.loot_table]] array.
+    drop_rate = 0.1  # (float) The drop rate of the item. This is the chance that the item will be dropped. This example shows a 50% chance of dropping the item.
+    min = 1  # (int) The minimum amount of the item that can be dropped.
+    max = 3  # (int) The maximum number of this item that can be dropped from this location.
 
 # The quotes for the location.
 [quotes]
