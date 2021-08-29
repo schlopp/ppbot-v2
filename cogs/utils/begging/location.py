@@ -189,7 +189,7 @@ class BeggingLocation:
             label=self.label,
             value=self.id,
             description=self.description,
-            custom_emoji=self.emoji,
+            emoji=self.emoji,
         )
 
     def get_random_loot(self, bot: vbu.Bot, max_items: typing.Optional[int] = None) -> typing.List[LootableItem]:
