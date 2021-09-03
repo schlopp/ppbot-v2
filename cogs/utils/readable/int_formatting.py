@@ -15,15 +15,53 @@ def int_to_roman(n: int, *, emoji_mode: typing.Optional[bool] = False) -> str:
     """
     if not isinstance(n, int):
         raise TypeError("can only")
-    
+
     if not n:
-        return '<:ROMAN_NOTHING:881601079618453505>' if emoji_mode else '0'
+        return "<:ROMAN_NOTHING:881601079618453505>" if emoji_mode else "0"
 
     if not emoji_mode:
-        M = ["", "M", "MM", "MMM", ]
-        C = ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM", ]
-        X = ["", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC", ]
-        I = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", ]
+        M = [
+            "",
+            "M",
+            "MM",
+            "MMM",
+        ]
+        C = [
+            "",
+            "C",
+            "CC",
+            "CCC",
+            "CD",
+            "D",
+            "DC",
+            "DCC",
+            "DCCC",
+            "CM",
+        ]
+        X = [
+            "",
+            "X",
+            "XX",
+            "XXX",
+            "XL",
+            "L",
+            "LX",
+            "LXX",
+            "LXXX",
+            "XC",
+        ]
+        I = [
+            "",
+            "I",
+            "II",
+            "III",
+            "IV",
+            "V",
+            "VI",
+            "VII",
+            "VIII",
+            "IX",
+        ]
 
     else:
         emojis = {
@@ -81,4 +119,6 @@ def int_to_roman(n: int, *, emoji_mode: typing.Optional[bool] = False) -> str:
     try:
         return M[n // 1000] + C[(n % 1000) // 100] + X[(n % 100) // 10] + I[n % 10]
     except IndexError:
-        raise ValueError(f"Expected \"int\" within the range of `0` to `3999`, got `{n}` instead.")
+        raise ValueError(
+            f'Expected "int" within the range of `0` to `3999`, got `{n}` instead.'
+        )

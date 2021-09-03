@@ -1,3 +1,8 @@
 from cogs.utils.begging.location import (
-    LootTableItem, FillInTheBlank, MiniGames, Quotes, BeggingLocation, BeggingLocations
+    LootTableItem,
+    FillInTheBlank,
+    MiniGames,
+    Quotes,
+    BeggingLocation,
+    BeggingLocations,
 )

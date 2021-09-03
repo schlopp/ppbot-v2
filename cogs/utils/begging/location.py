@@ -118,8 +118,14 @@ class BeggingLocation:
     quotes: Quotes
 
     def __init__(
-        self, level: int, id: str, name: str, description: str,
-        emoji: typing.Union[str, discord.Emoji], loot_table: typing.List[LootTableItem], quotes: Quotes,
+        self,
+        level: int,
+        id: str,
+        name: str,
+        description: str,
+        emoji: typing.Union[str, discord.Emoji],
+        loot_table: typing.List[LootTableItem],
+        quotes: Quotes,
     ):
         self.level = level
         self.id = id
@@ -144,10 +150,10 @@ class BeggingLocation:
             data["id"],
             data["name"],
             data["description"],
-            bot.get_emoji(data["emoji"]) if isinstance(data["emoji"], int) else data["emoji"],
-            [
-                LootTableItem(**item) for item in data["loot_table"]
-            ],
+            bot.get_emoji(data["emoji"])
+            if isinstance(data["emoji"], int)
+            else data["emoji"],
+            [LootTableItem(**item) for item in data["loot_table"]],
             Quotes(
                 data["quotes"]["success"],
                 data["quotes"]["fail"],
@@ -171,7 +177,7 @@ class BeggingLocation:
     def label(self) -> str:
         """
         (`str`) The label of the location.
-        
+
         E.g. "LEVEL IV: The park"
         """
 
@@ -192,7 +198,9 @@ class BeggingLocation:
             emoji=self.emoji,
         )
 
-    def get_random_loot(self, bot: vbu.Bot, max_items: typing.Optional[int] = None) -> typing.List[LootableItem]:
+    def get_random_loot(
+        self, bot: vbu.Bot, max_items: typing.Optional[int] = None
+    ) -> typing.List[LootableItem]:
         """
         Gets a random item from the loot table.
 
@@ -203,28 +211,28 @@ class BeggingLocation:
         Returns:
             typing.List[:class:`LootableItem`]: The random items.
         """
-        
+
         # The maximum number of items will be the length of the loot table, unless max_items is specified.
         if max_items is None:
             max_items = len(self.loot_table)
-        
+
         # Create a list of :class:`LootableItem`s, which we'll be returning later.
         loot: typing.List[LootableItem] = []
-        
+
         # Iterate over the loot table.
         for loot_table_item in self.loot_table:
-            
+
             # Stop ourselves from going over the maximum number of items.
             if len(loot) >= max_items:
                 break
-            
+
             # Make a random check to see if we should add the item to the list.
             if random.random() <= loot_table_item.drop_rate:
 
                 # Get the item from the cache.
                 try:
-                    item = bot.items['all'][loot_table_item.id]
-                
+                    item = bot.items["all"][loot_table_item.id]
+
                 # If the item isn't in the cache, we'll raise an exception.
                 except KeyError:
 
@@ -234,18 +242,24 @@ class BeggingLocation:
                     ]
 
                     # If the cache doesn't contain the 'all' key, something is wrong.
-                    if not bot.items.has_key('all'):
-                        possible_exception_causes.append("Items not proporly cached, missing 'all' key in `bot.items`.")
-                    
+                    if not bot.items.has_key("all"):
+                        possible_exception_causes.append(
+                            "Items not proporly cached, missing 'all' key in `bot.items`."
+                        )
+
                     # Else, the item probably doesn't exist.
                     else:
                         possible_exception_causes.append("{} doesn't exist.")
-                    
+
                     # Add the possible causes together, into a pretty string.
-                    possible_exception_causes = "\n".join([f"- {i}" for i in possible_exception_causes])
+                    possible_exception_causes = "\n".join(
+                        [f"- {i}" for i in possible_exception_causes]
+                    )
 
                     # Now we format it with the item ID.
-                    possible_exception_causes = possible_exception_causes.format(f'The item with the ID {loot_table_item.id}')
+                    possible_exception_causes = possible_exception_causes.format(
+                        f"The item with the ID {loot_table_item.id}"
+                    )
 
                     # Create a string containing the error message, which soon will be raised.
                     error_message = textwrap.dedent(
@@ -272,7 +286,7 @@ class BeggingLocation:
 
                 # Add the :class:`LootableItem` to the list.
                 loot.append(lootable_item)
-        
+
         # Return the list of random :class:`LootableItem`s.
         return loot
 
@@ -295,7 +309,9 @@ class BeggingLocations:
             *locations (:class:`BeggingLocation`): A list of the locations that this holder will hold.
         """
         self.level = level
-        self.locations = list(location for location in locations if location.level <= self.level)
+        self.locations = list(
+            location for location in locations if location.level <= self.level
+        )
         self.locations.sort(key=lambda x: x.level, reverse=True)
 
     def add_location(self, location: BeggingLocation):
@@ -305,7 +321,7 @@ class BeggingLocations:
         Args:
             location (:class:`BeggingLocation`): The location to add.
         """
-        
+
         if not location.level > self.level:
             self.locations.append(location)
             self.locations.sort(key=lambda x: x.level, reverse=True)

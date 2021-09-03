@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 from cogs.utils import Pp, Skill
 
+
 @dataclass
 class CachedUser:
     """
@@ -31,7 +32,7 @@ class CachedUser:
         self.user_id = user_id
         self.skills = skills
         self.pp = pp
-    
+
     def get_skill(self, name: str) -> Skill:
         """
         Gets a skill

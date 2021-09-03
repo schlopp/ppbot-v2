@@ -13,7 +13,6 @@ from cogs import utils
 
 
 class EconomyCommands(vbu.Cog):
-
     def __init__(self, bot: vbu.Bot):
         super().__init__(bot)
         self.bot: vbu.Bot
@@ -24,8 +23,7 @@ class EconomyCommands(vbu.Cog):
 
         # No cache to clean? then we don't need to do anything
         except AttributeError:
-            self.logger.warn(
-                "\t* Clearing items cache... failed - No items cached")
+            self.logger.warn("\t* Clearing items cache... failed - No items cached")
 
         # Load each location from ./config/locations
         directory = r"config\items"
@@ -33,9 +31,7 @@ class EconomyCommands(vbu.Cog):
         for filename in os.listdir(directory):
             if filename.endswith(".toml"):
                 items.append(
-                    utils.Item.from_dict(
-                        toml.load(os.path.join(directory, filename))
-                    )
+                    utils.Item.from_dict(toml.load(os.path.join(directory, filename)))
                 )
         self.bot.items = {
             "shop": {i.id: i for i in items if i.shop_settings.buyable},
@@ -60,17 +56,18 @@ class EconomyCommands(vbu.Cog):
 
         # No cache to clean? then we don't need to do anything
         except AttributeError:
-            self.logger.warn("\t* Clearing begging cache... failed - No begging information cached")
+            self.logger.warn(
+                "\t* Clearing begging cache... failed - No begging information cached"
+            )
 
         # Load each location from ./config/locations
         directory = r"config\begging\locations"
         begging_locations = []
         for filename in os.listdir(directory):
-            if filename.endswith('.toml'):
+            if filename.endswith(".toml"):
                 begging_locations.append(
                     utils.begging.BeggingLocation.from_dict(
-                        self.bot,
-                        toml.load(os.path.join(directory, filename))
+                        self.bot, toml.load(os.path.join(directory, filename))
                     )
                 )
 
@@ -82,7 +79,9 @@ class EconomyCommands(vbu.Cog):
     def cog_unload(self):
         self.update_db_from_user_cache.cancel()
 
-    async def get_user_cache(self, user_id: int, db: typing.Optional[vbu.DatabaseConnection]) -> utils.CachedUser:
+    async def get_user_cache(
+        self, user_id: int, db: typing.Optional[vbu.DatabaseConnection]
+    ) -> utils.CachedUser:
         """
         Returns user's cached information, if any. Otherwise returns data from the database.
 
@@ -102,7 +101,9 @@ class EconomyCommands(vbu.Cog):
         except KeyError:
 
             # Get the user's skills
-            user_skill_rows = await db("SELECT * FROM user_skill WHERE user_id = $1", user_id)
+            user_skill_rows = await db(
+                "SELECT * FROM user_skill WHERE user_id = $1", user_id
+            )
             user_skills = [utils.Skill(**i) for i in user_skill_rows]
 
             # Now let's get the user's pp
@@ -115,7 +116,9 @@ class EconomyCommands(vbu.Cog):
                 user_pp = utils.Pp(user_id)
 
             # Now we add this to the user cache
-            self.bot.user_cache[user_id] = utils.CachedUser(user_id, user_skills, user_pp)
+            self.bot.user_cache[user_id] = utils.CachedUser(
+                user_id, user_skills, user_pp
+            )
 
             # we do a little logging. it's called: "We do a little logging"
             self.logger.info(f"\t* Creating user cache for {user_id}... success")
@@ -146,26 +149,44 @@ class EconomyCommands(vbu.Cog):
                         """INSERT INTO user_skill VALUES ($1, $2, $3)
                         ON CONFLICT (user_id, name) DO UPDATE SET
                         experience = user_skill.experience + $3""",
-                        user_id, skill.name, skill.experience,
+                        user_id,
+                        skill.name,
+                        skill.experience,
                     )
 
                     # Log our update
-                    self.logger.info(f"\t* Updating user cache for {user_id} - {skill.name!r}... success")
+                    self.logger.info(
+                        f"\t* Updating user cache for {user_id} - {skill.name!r}... success"
+                    )
 
                 # Update the user's pp
                 await db(
                     """INSERT INTO user_pp VALUES ($1, $2, $3, $4)
                     ON CONFLICT (user_id) DO UPDATE SET name = $2,
                     size = $3, multiplier = $4""",
-                    user_id, user_cache.pp.name, user_cache.pp.size, user_cache.pp.multiplier,
+                    user_id,
+                    user_cache.pp.name,
+                    user_cache.pp.size,
+                    user_cache.pp.multiplier,
                 )
 
                 # Log our update
-                self.logger.info(f"Updating user cache for {user_id}'s pp: {user_cache!r}... success")
+                self.logger.info(
+                    f"Updating user cache for {user_id}'s pp: {user_cache!r}... success"
+                )
 
-    @vbu.command(name='beg')
-    @vbu.bot_has_permissions(embed_links=True, read_messages=True, send_messages=True,use_external_emojis=True, )
-    @commands.has_permissions(read_messages=True, send_messages=True, use_slash_commands=True, )
+    @vbu.command(name="beg")
+    @vbu.bot_has_permissions(
+        embed_links=True,
+        read_messages=True,
+        send_messages=True,
+        use_external_emojis=True,
+    )
+    @commands.has_permissions(
+        read_messages=True,
+        send_messages=True,
+        use_slash_commands=True,
+    )
     async def _beg_command(self, ctx: vbu.Context):
         """
         Beg for inches, earn items, and get a large pp in the process!
@@ -178,29 +199,40 @@ class EconomyCommands(vbu.Cog):
             begging = cache.get_skill("BEGGING")
 
             # Set up the begging locations with the user's current begging level
-            locations = utils.begging.BeggingLocations(begging.level, *self.bot.begging["locations"])
+            locations = utils.begging.BeggingLocations(
+                begging.level, *self.bot.begging["locations"]
+            )
 
             # Build the message
-            components = vbu.MessageComponents(vbu.ActionRow(locations.to_select_menu()))
-            content = textwrap.dedent(f"""
+            components = vbu.MessageComponents(
+                vbu.ActionRow(locations.to_select_menu())
+            )
+            content = textwrap.dedent(
+                f"""
                 <:thonk:881578428506185779> **Where are you begging?**
                 Level up `BEGGING` unlock new locations!
-                **Current level:** {utils.readable.int_formatting.int_to_roman(begging.level, emoji_mode=True)}
-            """)
+                **Current level:** {utils.readable.int_formatting.int_to_roman(begging.level)}
+            """
+            )
 
             # Send the message
-            message: vbu.InteractionMessage = await ctx.send(content, components=components)
+            message: vbu.InteractionMessage = await ctx.send(
+                content, components=components
+            )
 
             try:
                 # Wait for a response
                 payload: vbu.ComponentInteractionPayload = await self.bot.wait_for(
-                    'component_interaction',
-                    check=lambda p: p.message.id == message.id and p.user.id == ctx.author.id,
-                    timeout=60.0
+                    "component_interaction",
+                    check=lambda p: p.message.id == message.id
+                    and p.user.id == ctx.author.id,
+                    timeout=60.0,
                 )
             except asyncio.TimeoutError:
                 components.disable_components()
-                content = content + "\n\\🟥 **You took too long to respond** 😔 `waited 60.0s`"
+                content = (
+                    content + "\n\\🟥 **You took too long to respond** 😔 `waited 60.0s`"
+                )
                 return await message.edit(content=content, components=components)
 
 

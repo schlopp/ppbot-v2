@@ -15,11 +15,12 @@ class SkillRequirements:
     id: str
     level: int
 
+
 @dataclass
 class ShopSettings:
     """
     Represents a shop settings. I.e. the price, if it's buyable, if it's auctionable, etc.
-    
+
     Attributes:
         buyable (`bool`): Whether the item can be bought from the shop.
         buy (`int`): The price of the item when bought from the shop.
@@ -46,6 +47,7 @@ class Recipe:
     id: str
     amount: int
 
+
 @dataclass
 class CraftingUsage:
     """
@@ -58,6 +60,7 @@ class CraftingUsage:
 
     id: str
     amount: int
+
 
 @dataclass
 class BrewingUsage:
@@ -72,6 +75,7 @@ class BrewingUsage:
     id: str
     amount: int
 
+
 @dataclass
 class SkillUsage:
     """
@@ -82,6 +86,7 @@ class SkillUsage:
     """
 
     id: str
+
 
 @dataclass
 class Usage:
@@ -108,10 +113,11 @@ class Usage:
         """
 
         return cls(
-            [CraftingUsage(**c) for c in data['crafting'] if c],
-            [BrewingUsage(**b) for b in data['brewing'] if b],
-            [SkillUsage(**s) for s in data['skills'] if s],
+            [CraftingUsage(**c) for c in data["crafting"] if c],
+            [BrewingUsage(**b) for b in data["brewing"] if b],
+            [SkillUsage(**s) for s in data["skills"] if s],
         )
+
 
 @dataclass
 class Item:
@@ -143,9 +149,17 @@ class Item:
     usage: Usage
 
     def __init__(
-        self, id: str, type: str, rarity: str, emoji: int,
-        name: str, description: str, skill_requirements: typing.List[SkillRequirements],
-        shop_settings: ShopSettings, recipe: typing.List[Recipe],usage: Usage,
+        self,
+        id: str,
+        type: str,
+        rarity: str,
+        emoji: int,
+        name: str,
+        description: str,
+        skill_requirements: typing.List[SkillRequirements],
+        shop_settings: ShopSettings,
+        recipe: typing.List[Recipe],
+        usage: Usage,
     ):
         """
         Args:
@@ -182,16 +196,16 @@ class Item:
         """
 
         return cls(
-            data['id'],
-            data['type'],
-            data['rarity'],
-            data['emoji'],
-            data['name'],
-            data['description'],
-            [SkillRequirements(**req) for req in data['skill_requirements'] if req],
-            ShopSettings(**data['shop_settings']),
-            [Recipe(**r) for r in data['recipe'] if r],
-            Usage.from_dict(data['usage']),
+            data["id"],
+            data["type"],
+            data["rarity"],
+            data["emoji"],
+            data["name"],
+            data["description"],
+            [SkillRequirements(**req) for req in data["skill_requirements"] if req],
+            ShopSettings(**data["shop_settings"]),
+            [Recipe(**r) for r in data["recipe"] if r],
+            Usage.from_dict(data["usage"]),
         )
 
 
@@ -217,9 +231,17 @@ class LootableItem(Item):
     amount: int = 1
 
     def __init__(
-        self, id: str, type: str, rarity: str, emoji: int,
-        name: str, description: str, skill_requirements: typing.List[SkillRequirements],
-        shop_settings: ShopSettings, recipe: typing.List[Recipe],usage: Usage,
+        self,
+        id: str,
+        type: str,
+        rarity: str,
+        emoji: int,
+        name: str,
+        description: str,
+        skill_requirements: typing.List[SkillRequirements],
+        shop_settings: ShopSettings,
+        recipe: typing.List[Recipe],
+        usage: Usage,
         amount: int = 1,
     ):
         """
@@ -248,7 +270,7 @@ class LootableItem(Item):
         self.recipe = recipe
         self.usage = usage
         self.amount = amount
-    
+
     @classmethod
     def from_item(cls, item: Item, amount: int):
         """

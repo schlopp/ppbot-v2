@@ -2,7 +2,6 @@ import voxelbotutils as vbu
 
 
 class PingCommand(vbu.Cog):
-
     @vbu.command()
     async def ping(self, ctx: vbu.Context):
         """

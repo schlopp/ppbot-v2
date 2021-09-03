@@ -10,8 +10,10 @@ import discord
 
 ZERO_WIDTH_SPACE = "\u200B"
 
+
 def codeblock(
-    content: str, *,
+    content: str,
+    *,
     max_chars: typing.Optional[int] = 2000,
     filename_extension: typing.Optional[str],
 ) -> typing.Union[str, discord.File]:
@@ -32,5 +34,7 @@ def codeblock(
         f.write(content)
         f.seek(0)
         return discord.File(f, "output.{}".format(filename_extension))
-    
-    return "```{}\n{}```".format(filename_extension, content.replace('`', ZERO_WIDTH_SPACE+'​`'))
+
+    return "```{}\n{}```".format(
+        filename_extension, content.replace("`", ZERO_WIDTH_SPACE + "​`")
+    )
