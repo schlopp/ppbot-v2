@@ -2,7 +2,7 @@ id = "GUITAR"  # (UPPER_SNAKE_CASE) The ID of the item. Must be unique for all i
 type = "TOOL"  # (UPPER_SNAKE_CASE) The type of the item.
 rarity = "UNCOMMON" # (UPPER_SNAKE_CASE) The rarity of the item.
 emoji = 876864767728431124  # (int) The custom ID of the emoji associated with the item.
-name = "Extremely funky guitar"  # (string) The name of the item.
+name = "extremely funky guitar"  # (string) The name of the item.
 description = "The amount of funk in this bad boy is rediculous. Play some sick tunes with this and people will surely give you money" # (string) The description of the item.
 
 # (array) Represents the skill requirements for a given item.

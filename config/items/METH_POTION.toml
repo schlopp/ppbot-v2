@@ -1,8 +1,8 @@
 id = "METH_POTION"  # (UPPER_SNAKE_CASE) The ID of the item. Must be unique for all items in the [[items]] array.
 type = "POTION"  # (UPPER_SNAKE_CASE) The type of the item.
 rarity = "RARE" # (UPPER_SNAKE_CASE) The rarity of the item.
-emoji = 880052372234203207  # (int) The custom ID of the emoji associated with the item.
-name = "Crystal potion"  # (string) The name of the item.
+emoji = 880208473135144991  # (int) The custom ID of the emoji associated with the item.
+name = "crystal potion"  # (string) The name of the item.
 description = "Crystal meth, but in a bottle. Ride the ice pony without smoking! Rated 9.4/10 by many homeless people. “Mama loves her sweet shabu shabu, and this hot crystaline is the top of the white crystal crunch mountain. We call it getting gakked up on woop chicken.” — Proud customer." # (string) The description of the item.
 
 # (array) Represents the skill requirements for a given item.

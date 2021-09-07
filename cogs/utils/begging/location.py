@@ -46,6 +46,99 @@ class LootTable:
         """
         self.items = list(items)
 
+    def get_random_loot(
+        self, bot: vbu.Bot, max_items: typing.Optional[int] = None
+    ) -> typing.List[LootableItem]:
+        """
+        Gets a random item from the loot table.
+
+        Args:
+            bot (:class:`vbu.Bot`): The bot which has the items cached.
+            max_items (`int`): The maximum number of items to return. If None, all items will be returned.
+
+        Returns:
+            typing.List[:class:`LootableItem`]: The random items with random amounts.
+        """
+
+        # The maximum number of items will be the length of the loot table, unless max_items is specified.
+        if max_items is None:
+            max_items = len(self.items)
+
+        # Create a list of :class:`LootableItem`s, which we'll be returning later.
+        loot: typing.List[LootableItem] = []
+
+        # Iterate over the loot table.
+        for loot_table_item in self.items:
+
+            # Stop ourselves from going over the maximum number of items.
+            if len(loot) >= max_items:
+                break
+
+            # Make a random check to see if we should add the item to the list.
+            if random.random() <= loot_table_item.drop_rate:
+
+                # Get the item from the cache.
+                try:
+                    item = bot.items["all"][loot_table_item.id]
+
+                # If the item isn't in the cache, we'll raise an exception.
+                except KeyError:
+
+                    # Make a list of all possible causes for the exception.
+                    possible_exception_causes = [
+                        "{} isn't in the cache.",
+                    ]
+
+                    # If the cache doesn't contain the 'all' key, something is wrong.
+                    if not bot.items.has_key("all"):
+                        possible_exception_causes.append(
+                            "Items not proporly cached, missing 'all' key in `bot.items`."
+                        )
+
+                    # Else, the item probably doesn't exist.
+                    else:
+                        possible_exception_causes.append("{} doesn't exist.")
+
+                    # Add the possible causes together, into a pretty string.
+                    possible_exception_causes = "\n".join(
+                        [f"- {i}" for i in possible_exception_causes]
+                    )
+
+                    # Now we format it with the item ID.
+                    possible_exception_causes = possible_exception_causes.format(
+                        f"The item with the ID {loot_table_item.id}"
+                    )
+
+                    # Create a string containing the error message, which soon will be raised.
+                    error_message = textwrap.dedent(
+                        f"""Item '{loot_table_item.id}' not found in `bot.items` cache.
+                        Possible causes:
+                        {possible_exception_causes}"""
+                    )
+
+                    # Raise the exception with the `error_message`.
+                    raise KeyError(error_message)
+
+                # Generate a random number between the item's min and max.
+                amount = random.randint(loot_table_item.min, loot_table_item.max)
+
+                # Don't add the item if the amount is 0.
+                if not amount:
+                    continue
+
+                # Create a new :class:`LootableItem` with the item and a random amount.
+                lootable_item = LootableItem.from_item(
+                    bot,
+                    item,
+                    amount,
+                )
+
+                # Add the :class:`LootableItem` to the list.
+                loot.append(lootable_item)
+
+        # Return the list of random :class:`LootableItem`s.
+        return loot
+
 
 @dataclass
 class FillInTheBlank:
@@ -105,7 +198,7 @@ class BeggingLocation:
         name (`str`): The name of the location. This will appeal as the label in a select menu.
         description (`str`): The description of the location. This will appear as the description in a select menu.
         emoji (`str` or `discord.Emoji`): The emoji that will be used to represent the location. Can also be a custom emoji.
-        loot_table (`list` of :class:`LootTableItem`): The loot table for the location.
+        loot_table (:class:`LootTable`): The loot table for the location.
         quotes (:class:`Quotes`): The quotes for the location.
     """
 
@@ -114,24 +207,25 @@ class BeggingLocation:
     name: str
     description: str
     emoji: typing.Union[str, discord.Emoji]
-    loot_table: typing.List[LootTableItem]
+    loot_table: LootTable
     quotes: Quotes
 
     def __init__(
         self,
+        bot: vbu.Bot,
         level: int,
         id: str,
         name: str,
         description: str,
-        emoji: typing.Union[str, discord.Emoji],
-        loot_table: typing.List[LootTableItem],
+        emoji: typing.Union[str, int, discord.Emoji],
+        loot_table: LootTable,
         quotes: Quotes,
     ):
         self.level = level
         self.id = id
         self.name = name
         self.description = description
-        self.emoji = emoji
+        self.emoji = bot.get_emoji(emoji) if isinstance(emoji, int) else emoji
         self.loot_table = loot_table
         self.quotes = quotes
 
@@ -146,6 +240,7 @@ class BeggingLocation:
         """
 
         return cls(
+            bot,
             data["level"],
             data["id"],
             data["name"],
@@ -153,7 +248,7 @@ class BeggingLocation:
             bot.get_emoji(data["emoji"])
             if isinstance(data["emoji"], int)
             else data["emoji"],
-            [LootTableItem(**item) for item in data["loot_table"]],
+            LootTable(*(LootTableItem(**item) for item in data["loot_table"])),
             Quotes(
                 data["quotes"]["success"],
                 data["quotes"]["fail"],
@@ -197,98 +292,6 @@ class BeggingLocation:
             description=self.description,
             emoji=self.emoji,
         )
-
-    def get_random_loot(
-        self, bot: vbu.Bot, max_items: typing.Optional[int] = None
-    ) -> typing.List[LootableItem]:
-        """
-        Gets a random item from the loot table.
-
-        Args:
-            bot (:class:`vbu.Bot`): The bot which has the items cached.
-            max_items (`int`): The maximum number of items to return. If None, all items will be returned.
-
-        Returns:
-            typing.List[:class:`LootableItem`]: The random items.
-        """
-
-        # The maximum number of items will be the length of the loot table, unless max_items is specified.
-        if max_items is None:
-            max_items = len(self.loot_table)
-
-        # Create a list of :class:`LootableItem`s, which we'll be returning later.
-        loot: typing.List[LootableItem] = []
-
-        # Iterate over the loot table.
-        for loot_table_item in self.loot_table:
-
-            # Stop ourselves from going over the maximum number of items.
-            if len(loot) >= max_items:
-                break
-
-            # Make a random check to see if we should add the item to the list.
-            if random.random() <= loot_table_item.drop_rate:
-
-                # Get the item from the cache.
-                try:
-                    item = bot.items["all"][loot_table_item.id]
-
-                # If the item isn't in the cache, we'll raise an exception.
-                except KeyError:
-
-                    # Make a list of all possible causes for the exception.
-                    possible_exception_causes = [
-                        "{} isn't in the cache.",
-                    ]
-
-                    # If the cache doesn't contain the 'all' key, something is wrong.
-                    if not bot.items.has_key("all"):
-                        possible_exception_causes.append(
-                            "Items not proporly cached, missing 'all' key in `bot.items`."
-                        )
-
-                    # Else, the item probably doesn't exist.
-                    else:
-                        possible_exception_causes.append("{} doesn't exist.")
-
-                    # Add the possible causes together, into a pretty string.
-                    possible_exception_causes = "\n".join(
-                        [f"- {i}" for i in possible_exception_causes]
-                    )
-
-                    # Now we format it with the item ID.
-                    possible_exception_causes = possible_exception_causes.format(
-                        f"The item with the ID {loot_table_item.id}"
-                    )
-
-                    # Create a string containing the error message, which soon will be raised.
-                    error_message = textwrap.dedent(
-                        f"""Item '{loot_table_item.id}' not found in `bot.items` cache.
-                        Possible causes:
-                        {possible_exception_causes}"""
-                    )
-
-                    # Raise the exception with the `error_message`.
-                    raise KeyError(error_message)
-
-                # Generate a random number between the item's min and max.
-                amount = random.randint(item.min, item.max)
-
-                # Don't add the item if the amount is 0.
-                if not amount:
-                    continue
-
-                # Create a new :class:`LootableItem` with the item and a random amount.
-                lootable_item = LootableItem.from_item(
-                    item,
-                    amount,
-                )
-
-                # Add the :class:`LootableItem` to the list.
-                loot.append(lootable_item)
-
-        # Return the list of random :class:`LootableItem`s.
-        return loot
 
 
 @dataclass
@@ -353,3 +356,16 @@ class BeggingLocations:
             options=[i.to_select_option() for i in self.locations],
             placeholder="Pick a location to beg at.",
         )
+
+    def get_location_from_interaction(
+        self, payload: vbu.ComponentInteractionPayload
+    ) -> typing.Union[BeggingLocation, None]:
+        """
+        Get a location from a :class:`vbu.ComponentInteractionPayload`.
+
+        Returns:
+            (:class:`BeggingLocation`): The location received found.
+            or (`None`): Only if no location is found.
+        """
+
+        return next((x for x in self.locations if x.id == payload.values[0]))

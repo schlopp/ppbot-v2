@@ -2,7 +2,7 @@ id = "CASHMERE"  # (UPPER_SNAKE_CASE) The ID of the item. Must be unique for all
 type = "CRAFTING_REAGENT"  # (UPPER_SNAKE_CASE) The type of the item.
 rarity = "UNCOMMON" # (UPPER_SNAKE_CASE) The rarity of the item.
 emoji = 880802689825513492  # (int) The custom ID of the emoji associated with the item.
-name = "Cashmere"  # (string) The name of the item.
+name = "cashmere"  # (string) The name of the item.
 description = "I feel rich just touching this." # (string) The description of the item.
 
 # (array) Represents the skill requirements for a given item.

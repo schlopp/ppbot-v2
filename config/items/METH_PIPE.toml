@@ -1,8 +1,8 @@
 id = "METH_PIPE"  # (UPPER_SNAKE_CASE) The ID of the item. Must be unique for all items in the [[items]] array.
 type = "CRAFTING_REAGENT"  # (UPPER_SNAKE_CASE) The type of the item.
 rarity = "UNCOMMON" # (UPPER_SNAKE_CASE) The rarity of the item.
-emoji = 123456789  # (int) The custom ID of the emoji associated with the item.
-name = "Item name"  # (string) The name of the item.
+emoji = 879481112680882237  # (int) The custom ID of the emoji associated with the item.
+name = "broken meth pipe"  # (string) The name of the item.
 description = "Some crackhead left this behind." # (string) The description of the item.
 
 # (array) Represents the skill requirements for a given item.

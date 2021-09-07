@@ -1,3 +1,4 @@
+import random
 import asyncio
 import os
 import textwrap
@@ -16,6 +17,14 @@ class EconomyCommands(vbu.Cog):
     def __init__(self, bot: vbu.Bot):
         super().__init__(bot)
         self.bot: vbu.Bot
+        if self.bot.is_ready():
+            self._load_cache()
+
+    def _load_cache(self):
+        """
+        Cache some stuff. Only use when bot is loaded.
+        """
+
         # Let's clean up the items cache
         try:
             self.bot.items.clear()
@@ -31,7 +40,9 @@ class EconomyCommands(vbu.Cog):
         for filename in os.listdir(directory):
             if filename.endswith(".toml"):
                 items.append(
-                    utils.Item.from_dict(toml.load(os.path.join(directory, filename)))
+                    utils.Item.from_dict(
+                        self.bot, toml.load(os.path.join(directory, filename))
+                    )
                 )
         self.bot.items = {
             "shop": {i.id: i for i in items if i.shop_settings.buyable},
@@ -75,6 +86,14 @@ class EconomyCommands(vbu.Cog):
         self.bot.begging = {
             "locations": begging_locations,
         }
+
+    @vbu.Cog.listener(name="on_ready")
+    async def _load_cache_on_ready(self):
+        """
+        Cache some stuff when the bot is loaded.
+        """
+
+        self._load_cache()
 
     def cog_unload(self):
         self.update_db_from_user_cache.cancel()
@@ -148,7 +167,7 @@ class EconomyCommands(vbu.Cog):
                     await db(
                         """INSERT INTO user_skill VALUES ($1, $2, $3)
                         ON CONFLICT (user_id, name) DO UPDATE SET
-                        experience = user_skill.experience + $3""",
+                        experience = user_skill.experience""",
                         user_id,
                         skill.name,
                         skill.experience,
@@ -234,6 +253,29 @@ class EconomyCommands(vbu.Cog):
                     content + "\n\\🟥 **You took too long to respond** 😔 `waited 60.0s`"
                 )
                 return await message.edit(content=content, components=components)
+
+            location = locations.get_location_from_interaction(payload)
+
+            random_percentage = random.random()
+
+            # 5% chance of fill in the blank minigame
+            if random_percentage < 0.05:
+                raise NotImplementedError(
+                    "The 'fill in the blank' minigame has not been added yet."
+                )
+
+            with vbu.Embed(use_random_colour=True) as embed:
+                embed.set_author(
+                    name=f"gay bowser \N{bullet} {location.name}",
+                    icon_url="https://styles.redditmedia.com/t5_t93jy/styles/communityIcon_s2fo5jltaf871.png?width=256&s=459139a25d313a0e248748c64d5c616948a5a040",
+                )
+                quote = random.choice(location.quotes.success).format(
+                    utils.readable.rewards.format_rewards(
+                        items=location.loot_table.get_random_loot(self.bot)
+                    )
+                )
+                embed.description = f"“{quote}”"
+            await payload.update_message(embed=embed, components=None, content=None)
 
 
 def setup(bot: vbu.Bot):

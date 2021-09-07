@@ -2,7 +2,7 @@ id = "METAL_INGOT"  # (UPPER_SNAKE_CASE) The ID of the item. Must be unique for 
 type = "CRAFTING_REAGENT"  # (UPPER_SNAKE_CASE) The type of the item.
 rarity = "UNCOMMON" # (UPPER_SNAKE_CASE) The rarity of the item.
 emoji = 880410826777968650  # (int) The custom ID of the emoji associated with the item.
-name = "Metal bar"  # (string) The name of the item.
+name = "metal bar"  # (string) The name of the item.
 description = "Very heavy, good for throwing at MEE6 users" # (string) The description of the item.
 
 # (array) Represents the skill requirements for a given item.

@@ -2,7 +2,7 @@ id = "FEDORA"  # (UPPER_SNAKE_CASE) The ID of the item. Must be unique for all i
 type = "CRAFTING_REAGENT"  # (UPPER_SNAKE_CASE) The type of the item.
 rarity = "RARE" # (UPPER_SNAKE_CASE) The rarity of the item.
 emoji = 880806749614014494  # (int) The custom ID of the emoji associated with the item.
-name = "Fedora"  # (string) The name of the item.
+name = "fedora"  # (string) The name of the item.
 description = "_Tip's fedora_ M'lady😩" # (string) The description of the item.
 
 # (array) Represents the skill requirements for a given item.

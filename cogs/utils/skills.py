@@ -12,29 +12,30 @@ def get_level_by_exp(exp) -> int:
     exp_per_level = [
         0,
         50,
-        175,  # 0  1  2
+        175,
         375,
         675,
-        1_175,  # 3  4  5
+        1_175,
         1_925,
         2_925,
-        4_425,  # 6  7  8
+        4_425,
         6_425,
         9_925,
-        14_925,  # 9  10 11
+        14_925,
         22_425,
         32_425,
-        47_425,  # 12 13 14
+        47_425,
         67_425,
         97_425,
-        147_425,  # 15 16 17
+        147_425,
         222_425,
         322_425,
-        472425,  # 18 19 20
+        472_425,
     ]
     for n, i in enumerate(exp_per_level):
         if exp <= i:
             return n
+    return len(exp_per_level) - 1
 
 
 async def update_skill(
@@ -43,7 +44,7 @@ async def update_skill(
     await db(
         """
         INSERT INTO user_skill VALUES ($1, $2, $3)
-        ON CONFLICT (user_id, name) DO UPDATE SET experience = user_skill.experience + $3
+        ON CONFLICT (user_id, name) DO UPDATE SET experience = user_skill.experience
         """,
         user_id,
         skill_name,

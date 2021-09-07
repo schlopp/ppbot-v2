@@ -1,6 +1,9 @@
 import typing
 from dataclasses import dataclass
 
+import voxelbotutils as vbu
+import discord
+
 
 @dataclass
 class SkillRequirements:
@@ -150,6 +153,7 @@ class Item:
 
     def __init__(
         self,
+        bot: vbu.Bot,
         id: str,
         type: str,
         rarity: str,
@@ -178,7 +182,7 @@ class Item:
         self.id = id
         self.type = type
         self.rarity = rarity
-        self.emoji = emoji
+        self.emoji = bot.get_emoji(emoji) if isinstance(emoji, int) else emoji
         self.name = name
         self.description = description
         self.skill_requirements = skill_requirements
@@ -187,7 +191,7 @@ class Item:
         self.usage = usage
 
     @classmethod
-    def from_dict(cls, data):
+    def from_dict(cls, bot: vbu.Bot, data: dict):
         """
         Loads an :class:`Item` from a dictionary. This can be used to load an item from `./config/items.toml`.
 
@@ -196,10 +200,13 @@ class Item:
         """
 
         return cls(
+            bot,
             data["id"],
             data["type"],
             data["rarity"],
-            data["emoji"],
+            bot.get_emoji(data["emoji"])
+            if isinstance(data["emoji"], int)
+            else data["emoji"],
             data["name"],
             data["description"],
             [SkillRequirements(**req) for req in data["skill_requirements"] if req],
@@ -232,10 +239,11 @@ class LootableItem(Item):
 
     def __init__(
         self,
+        bot: vbu.Bot,
         id: str,
         type: str,
         rarity: str,
-        emoji: int,
+        emoji: typing.Union[int, discord.Emoji],
         name: str,
         description: str,
         skill_requirements: typing.List[SkillRequirements],
@@ -246,6 +254,7 @@ class LootableItem(Item):
     ):
         """
         Args:
+            bot (:class:`vbu.Bot`): The bot.
             id (`str` UPPER_SNAKE_CASE): The ID of the item.
             type (`str` UPPER_SNAKE_CASE): The type of the item..
             rarity (`str` UPPER_SNAKE_CASE): The rarity of the item.
@@ -262,7 +271,7 @@ class LootableItem(Item):
         self.id = id
         self.type = type
         self.rarity = rarity
-        self.emoji = emoji
+        self.emoji = bot.get_emoji(emoji) if isinstance(emoji, int) else emoji
         self.name = name
         self.description = description
         self.skill_requirements = skill_requirements
@@ -272,7 +281,7 @@ class LootableItem(Item):
         self.amount = amount
 
     @classmethod
-    def from_item(cls, item: Item, amount: int):
+    def from_item(cls, bot: vbu.Bot, item: Item, amount: int):
         """
         Loads a :class:`LootableItem` from an :class:`Item`.
 
@@ -282,6 +291,7 @@ class LootableItem(Item):
         """
 
         return cls(
+            bot,
             item.id,
             item.type,
             item.rarity,
