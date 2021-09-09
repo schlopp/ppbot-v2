@@ -4,7 +4,7 @@
     icon_url = "https://example.com/image.png?size=256"  # (string) The URL of the donator's icon. Square size recommended.
 
     # Represents custom quotes for the donator.
-    [custom_quotes]
+    [donators.quotes]
         success = [  # (array) The success quotes for the donator.
             "Blah blah blah you gain {} blah blah",  # (string) The quote. Will be formatted with the reward.
             "AAAAAAAAA {} blah blah",  # (string) The quote. Will be formatted with the reward.
