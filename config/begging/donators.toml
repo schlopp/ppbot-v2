@@ -1,15 +1,18 @@
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
-    name = "person/character"  # (string) The name of the donator
-    icon_url = "https://example.com/image.png?size=256"  # (string) The URL of the donator's icon. Square size recommended.
+    name = "obama"  # (string) The name of the donator
+    icon_url = "https://cdn.discordapp.com/attachments/861715293615947868/885264878238052372/llnb9gjtche41.png"  # (string) The URL of the donator's icon. Square size recommended.
 
     # Represents custom quotes for the donator.
-    [custom_quotes]
+    [donators.quotes]
         success = [  # (array) The success quotes for the donator.
-            "Blah blah blah you gain {} blah blah",  # (string) The quote. Will be formatted with the reward.
-            "AAAAAAAAA {} blah blah",  # (string) The quote. Will be formatted with the reward.
+            "uhhhh my fellow americans i have {} for you",  # (string) The quote. Will be formatted with the reward.
+            "my fellow americans here is uhhhhhh your reward its uhhh {} your mother lets it behind when we had uhhh sexual relationships",  # (string) The quote. Will be formatted with the reward.
         ]
         fail = [  # (array) The fail quotes for the donator.
-            "Fuck off I don't care",  # (string) The quote.
-            "No, I'm not giving you anything",  # (string) The quote.
+            "uhhh my fellow americans uhhhhhhh your mom is gay",  # (string) The quote.
+            "uhh my fellow americans i have uhhh sexual relationships with your mother",  # (string) The quote.
+            "uhhh my fellow americans uhhhhh let me be clear uhh i had sexual relationships with uhhh your mother",  # (string) The quote.
+            "uhhhh your mom is uhhh gay",  # (string) The quote.
+            "my fellow americans uhhhhhh shut the fuck up"  # (string) The quote.
         ]
