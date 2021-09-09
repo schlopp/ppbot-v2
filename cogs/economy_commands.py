@@ -71,21 +71,26 @@ class EconomyCommands(vbu.Cog):
                 "\t* Clearing begging cache... failed - No begging information cached"
             )
 
-        # Load each location from ./config/locations
+        # Create a dictionary for the begging cache
+        self.bot.begging = {
+            "locations": [],
+        }
+
+        # Load each location from ./config/begging/locations
         directory = r"config\begging\locations"
-        begging_locations = []
         for filename in os.listdir(directory):
             if filename.endswith(".toml"):
-                begging_locations.append(
+                self.bot.begging["locations"].append(
                     utils.begging.BeggingLocation.from_dict(
                         self.bot, toml.load(os.path.join(directory, filename))
                     )
                 )
 
-        # Put the locations into the bot's begging cache
-        self.bot.begging = {
-            "locations": begging_locations,
-        }
+        # Load all donators from ./config/begging/donators.toml
+        directory = r"config\begging\donators.toml"
+        self.bot.begging["donators"] = utils.begging.Donators.from_dict(
+            toml.load(directory)
+        )
 
     @vbu.Cog.listener(name="on_ready")
     async def _load_cache_on_ready(self):
@@ -195,6 +200,7 @@ class EconomyCommands(vbu.Cog):
                 )
 
     @vbu.command(name="beg")
+    @vbu.checks.bot_is_ready()
     @vbu.bot_has_permissions(
         embed_links=True,
         read_messages=True,
@@ -265,14 +271,21 @@ class EconomyCommands(vbu.Cog):
                 )
 
             with vbu.Embed(use_random_colour=True) as embed:
-                embed.set_author(
-                    name=f"gay bowser \N{bullet} {location.name}",
-                    icon_url="https://styles.redditmedia.com/t5_t93jy/styles/communityIcon_s2fo5jltaf871.png?width=256&s=459139a25d313a0e248748c64d5c616948a5a040",
+                donators: utils.begging.Donators = self.bot.begging["donators"]
+                donator = donators.get_random_donator()
+                loot = location.loot_table.get_random_loot(self.bot)
+                quotes = random.choices(
+                    (donator.quotes.success, location.quotes.success),
+                    (0.8, 0.2),
+                )[0]
+                quote = random.choice(quotes).format(
+                    utils.readable.rewards.format_rewards(items=loot)
                 )
-                quote = random.choice(location.quotes.success).format(
-                    utils.readable.rewards.format_rewards(
-                        items=location.loot_table.get_random_loot(self.bot)
-                    )
+
+                # Generate the embed's content
+                embed.set_author(
+                    name=f"{donator.name} \N{bullet} {location.name}",
+                    icon_url=donator.icon_url,
                 )
                 embed.description = f"“{quote}”"
             await payload.update_message(embed=embed, components=None, content=None)
