@@ -28,11 +28,11 @@ class EconomyCommands(vbu.Cog):
         # Let's clean up the items cache
         try:
             self.bot.items.clear()
-            self.logger.info("\t* Clearing items cache... success")
+            self.logger.info("Clearing items cache... success")
 
         # No cache to clean? then we don't need to do anything
         except AttributeError:
-            self.logger.warn("\t* Clearing items cache... failed - No items cached")
+            self.logger.warn("Clearing items cache... failed - No items cached")
 
         # Load each location from ./config/locations
         directory = r"config\items"
@@ -49,26 +49,26 @@ class EconomyCommands(vbu.Cog):
             "auction": {i.id: i for i in items if i.shop_settings.auctionable},
             "all": {i.id: i for i in items},
         }
-        self.logger.info("\t* Caching items... success")
+        self.logger.info("Caching items... success")
 
         # No user cache? Let's create it
         if not hasattr(self.bot, "user_cache"):
             self.bot.user_cache = {}
-            self.logger.info("\t* Creating user cache... success")
+            self.logger.info("Creating user cache... success")
 
         # Now let's start the update db from user cache task
         self.update_db_from_user_cache.start()
-        self.logger.info("\t* Starting update db from user cache task... success")
+        self.logger.info("Starting update db from user cache task... success")
 
         # Now we clean up the begging cache
         try:
             self.bot.begging.clear()
-            self.logger.info("\t* Clearing begging cache... success")
+            self.logger.info("Clearing begging cache... success")
 
         # No cache to clean? then we don't need to do anything
         except AttributeError:
             self.logger.warn(
-                "\t* Clearing begging cache... failed - No begging information cached"
+                "Clearing begging cache... failed - No begging information cached"
             )
 
         # Create a dictionary for the begging cache
@@ -145,7 +145,7 @@ class EconomyCommands(vbu.Cog):
             )
 
             # we do a little logging. it's called: "We do a little logging"
-            self.logger.info(f"\t* Creating user cache for {user_id}... success")
+            self.logger.info(f"Creating user cache for {user_id}... success")
 
             # and return the user cache
             return self.bot.user_cache[user_id]
@@ -180,7 +180,7 @@ class EconomyCommands(vbu.Cog):
 
                     # Log our update
                     self.logger.info(
-                        f"\t* Updating user cache for {user_id} - {skill.name!r}... success"
+                        f"Updating user cache for {user_id} - {skill.name!r}... success"
                     )
 
                 # Update the user's pp
@@ -269,7 +269,7 @@ class EconomyCommands(vbu.Cog):
                     "The 'fill in the blank' minigame has not been added yet."
                 )
 
-            # Build the embed
+            # Update database and build the embed for receiving a generic donation.
             with vbu.Embed(use_random_colour=True) as embed:
                 donators: utils.begging.Donators = self.bot.begging["donators"]
                 donator = donators.get_random_donator()
