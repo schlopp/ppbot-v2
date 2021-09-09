@@ -232,7 +232,7 @@ class BeggingLocation:
     @classmethod
     def from_dict(cls, bot: vbu.Bot, data: dict):
         """
-        Loads an :class:`Item` from a dictionary. This can be used to load an item from `./config/items.toml`.
+        Loads an :class:`Item` from a dictionary.
 
         Args:
             bot (:class:`voxelbot.VoxelBot`): The bot used for loading emojis.
