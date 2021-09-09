@@ -6,3 +6,8 @@ from cogs.utils.begging.location import (
     BeggingLocation,
     BeggingLocations,
 )
+from .donator import (
+    DonatorQuotes,
+    Donator,
+    Donators,
+)
