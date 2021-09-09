@@ -260,34 +260,44 @@ class EconomyCommands(vbu.Cog):
                 )
                 return await message.edit(content=content, components=components)
 
+            # Get the selected location
             location = locations.get_location_from_interaction(payload)
 
-            random_percentage = random.random()
-
             # 5% chance of fill in the blank minigame
-            if random_percentage < 0.05:
+            if (random_percentage := random.random()) < 0.05:
                 raise NotImplementedError(
                     "The 'fill in the blank' minigame has not been added yet."
                 )
 
+            # Build the embed
             with vbu.Embed(use_random_colour=True) as embed:
                 donators: utils.begging.Donators = self.bot.begging["donators"]
                 donator = donators.get_random_donator()
                 loot = location.loot_table.get_random_loot(self.bot)
-                quotes = random.choices(
-                    (donator.quotes.success, location.quotes.success),
-                    (0.8, 0.2),
-                )[0]
+
+                # If there are any donator success quotes, use them
+                if donator.quotes.success:
+                    quotes = donator.quotes.success
+
+                # Otherwise, use the default quotes
+                else:
+                    quotes = location.quotes.success
+
+                # Get a random quote and format it with the reward
                 quote = random.choice(quotes).format(
                     utils.readable.rewards.format_rewards(items=loot)
                 )
 
-                # Generate the embed's content
+                # Set the embed's author
                 embed.set_author(
                     name=f"{donator.name} \N{bullet} {location.name}",
                     icon_url=donator.icon_url,
                 )
+
+                # Set the embed's description to the quote
                 embed.description = f"“{quote}”"
+
+            # Update the message
             await payload.update_message(embed=embed, components=None, content=None)
 
 
