@@ -41,3 +41,10 @@ CREATE TABLE IF NOT EXISTS user_skill(
     experience BIGINT DEFAULT 0 NOT NULL,
     PRIMARY KEY (user_id, name)
 );
+
+
+CREATE TABLE IF NOT EXISTS user_inv(
+    user_id BIGINT NOT NULL,
+    item_id TEXT NOT NULL,
+    amount INT NOT NULL,
+)
