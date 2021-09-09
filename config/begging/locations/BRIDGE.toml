@@ -62,20 +62,19 @@ emoji = "<:PP_BEG:879382346812489809>"  # (string) The emoji that will be used t
 # The quotes for the location.
 [quotes]
 
-    # (array) The default success quotes for the location. {0} is a placeholder for whatever reward the user receives.
+    # (array) The default success quotes for the location. {} is a placeholder for whatever reward the user receives.
     success = [
-        "Sure, here's {0}. Have a good day!",  # how a user might see this: "Sure, here's 4 **Rotten Wood**s. Have a good day!"
-        "oh, good timing! I have {0} for you",
-        "Here you go, {0}",
-        "Eh, you can have {0}, I don't need that stuff anyways",
+        "aight KUH here's {} now go skeddadle before i beat ur ass",  # how a user might see this: "Sure, here's 4 **Rotten Wood**s. Have a good day!"
+        "take {}, and eat it, you little dumpster boy",
+        "aight buster buddy bitchboy here's {}",
+        "eh, you can have {}, I don't need that stuff anyways",
     ]
 
     # (array) The default failure quotes for the location.
     fail = [
-        "I'm sorry, I can't do that",
-        "I don't have any inches to give you",
-        "I'm broke, sorry",
-        "I'm not sure I can do that",
+        "nah 🅱️",
+        "gtfo beggar",
+        "nah im broke",
     ]
 
     # The mini-games for the user to complete.
