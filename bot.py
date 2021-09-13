@@ -6,7 +6,8 @@ import toml
 
 
 class AutoShardedClient(discord.AutoShardedClient):
-    status = discord.Status.idle
+    def __init__(self) -> None:
+        super().__init__(status=discord.Status.idle)
 
     async def on_message(self, message):
         if re.match(r"^(pp\s)", message.content, re.IGNORECASE):
