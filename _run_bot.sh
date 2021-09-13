@@ -1,1 +1,0 @@
-vbu run-bot .

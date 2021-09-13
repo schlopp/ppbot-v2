@@ -1,4 +1,1 @@
-__pycache__/
-config/config.toml
-config/website.toml
-cogs/testing.py
+config.toml
