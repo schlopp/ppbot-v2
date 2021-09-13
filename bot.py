@@ -14,4 +14,5 @@ class Client(discord.Client):
             await message.reply(f"Sorry, but pp bot is currently offline (The dev's PC died and is being fixed {laughing})")
 
 client = Client()
-client.run(toml.load(r"config.toml"))
+token = toml.load(r"config.toml")["token"]
+client.run(token)
