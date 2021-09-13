@@ -5,7 +5,7 @@ import discord
 import toml
 
 
-class Client(discord.Client):
+class AutoShardedClient(discord.AutoShardedClient):
     status = discord.Status.idle
 
     async def on_message(self, message):
@@ -13,6 +13,6 @@ class Client(discord.Client):
             laughing = random.choice(['kek', 'keke', 'kekw', 'lmao', 'lmfao', 'lol'])
             await message.reply(f"Sorry, but pp bot is currently offline (The dev's PC died and is being fixed {laughing})")
 
-client = Client()
+client = AutoShardedClient()
 token = toml.load(r"config.toml")["token"]
 client.run(token)
