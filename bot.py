@@ -12,7 +12,7 @@ class AutoShardedClient(discord.AutoShardedClient):
         )
 
     async def on_message(self, message):
-        if re.match(r"^(pp\s)", message.content, re.IGNORECASE):
+        if re.match(r"^(pp\s)(?!bo)", message.content, re.IGNORECASE):
             embed = discord.Embed()
             embed.title = random.choice(
                 (
