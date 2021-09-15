@@ -24,6 +24,10 @@ class AutoShardedClient(discord.AutoShardedClient):
                 )
             )
             embed.description = "pp bot is currently __offline__, and will be online again in a few days.\n[FAQ](https://github.com/schlopp/ppbot/blob/offline/FAQ.md)"
+            embed.add_field(
+                name="In the meanwhile..",
+                value="Looking for a bot to use while pp bot is off? Try [Gooser](https://discord.com/oauth2/authorize?client_id=800317467422621726&permissions=2147798080&scope=bot), a beautiful bastard goose bot"
+            )
             await message.reply(embed=embed)
 
 
