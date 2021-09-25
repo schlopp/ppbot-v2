@@ -19,7 +19,7 @@ class InventoryWrapper:
         self.user_id = user_id
         self.update_values = update_values
 
-    async def __aenter__(self) -> Inventory:
+    async def __aenter__(self):
         v = await self.db("SELECT * FROM user_inv WHERE user_id=$1", self.user_id)
         items = []
         for i in v:

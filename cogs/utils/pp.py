@@ -15,7 +15,7 @@ class PpWrapper:  # Haha, condom
         self.user_id = user_id
         self.update_values = update_values
 
-    async def __aenter__(self) -> Pp:
+    async def __aenter__(self):
         v = await self.db("""SELECT * FROM user_pp WHERE user_id = $1""", self.user_id)
 
         # If the user doesn't have a pp, create one
