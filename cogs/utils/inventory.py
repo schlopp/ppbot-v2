@@ -27,7 +27,12 @@ class InventoryWrapper:
                 items.append(LootableItem.from_item(self.bot, self.bot.items["all"][i["item_id"]]))
             except KeyError:
                 pass
-        return Inventory(self.user_id, *items)
+        self.inventory = Inventory(self.user_id, *items)
+        return self.inventory
+    
+    async def __aexit__(self, *args):
+        if self.update_values:
+            await self.inventory.update_values()
 
 
 @dataclass
