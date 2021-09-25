@@ -60,6 +60,16 @@ class Inventory:
         self.user_id = user_id
         self.items = list(items)
 
+    @classmethod
+    def fetch(
+        cls,
+        bot: vbu.Bot,
+        db: vbu.DatabaseConnection,
+        user_id: int,
+        update_values: typing.Optional[bool] = True,
+    ):
+        return InventoryWrapper(bot, db, user_id, update_values)
+
     async def update_values(self, db: vbu.DatabaseConnection):
         """
         Update the database with the inventory's values
