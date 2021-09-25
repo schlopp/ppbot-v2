@@ -26,3 +26,8 @@ from cogs.utils import (
     begging,
     readable,
 )
+
+from cogs.utils.inventory import (
+    Inventory,
+    InventoryWrapper,
+)
