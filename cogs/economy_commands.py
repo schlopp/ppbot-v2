@@ -199,6 +199,8 @@ class EconomyCommands(vbu.Cog):
                     f"Updating user cache for {user_id}'s pp: {user_cache!r}... success"
                 )
 
+        self.bot.user_cache.clear()
+
     @vbu.command(name="beg")
     @vbu.checks.bot_is_ready()
     @vbu.bot_has_permissions(
