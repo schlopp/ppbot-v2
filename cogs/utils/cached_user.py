@@ -45,7 +45,10 @@ class CachedUser:
             or `Skill`:  An empty skill with `name` as the skill name.
         """
 
-        skill = next((x for x in self.skills if x.name == name))
+        try:
+            skill = next(x for x in self.skills if x.name == name)
+        except StopIteration:
+            skill = None
         if skill is None:
             skill = Skill(self.user_id, name=name)
             self.skills.append(skill)
