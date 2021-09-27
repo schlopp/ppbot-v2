@@ -26,7 +26,7 @@ class InventoryWrapper:
             try:
                 items.append(
                     LootableItem.from_item(
-                        self.bot, self.bot.items["all"][i["item_id"]]
+                        self.bot, self.bot.items["all"][i["item_id"]], i["amount"]
                     )
                 )
             except KeyError:
