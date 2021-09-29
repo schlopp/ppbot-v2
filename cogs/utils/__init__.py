@@ -31,3 +31,7 @@ from cogs.utils.inventory import (
     Inventory,
     InventoryWrapper,
 )
+
+from cogs.utils.paginator import (
+    Paginator,
+)
