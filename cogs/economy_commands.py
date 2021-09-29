@@ -227,13 +227,10 @@ class EconomyCommands(vbu.Cog):
                     output = []
                     for item in items:
                         output.append(
-                            textwrap.dedent(
-                                f"""
-                                {item.amount}x {item.name} ─ **{item.rarity}**
-                                `{item.id}` {item.description}
-                                """
-                            )
+                            f"{item.amount}x {item.name} ─ **{item.rarity}**"
+                            + f"`{item.id}` {item.description}"
                         )
+
                     with vbu.Embed() as embed:
                         embed.set_author(
                             name=f"{ctx.author.display_name}'s inventory",
