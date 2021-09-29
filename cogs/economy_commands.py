@@ -228,7 +228,7 @@ class EconomyCommands(vbu.Cog):
                     for item in items:
                         output.append(
                             f"{item.amount}x {item.name} ─ **{item.rarity}**"
-                            + f"`{item.id}` {item.description}"
+                            + f"\n`{item.id}` {item.description}"
                         )
 
                     with vbu.Embed() as embed:
