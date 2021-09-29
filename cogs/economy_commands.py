@@ -228,9 +228,10 @@ class EconomyCommands(vbu.Cog):
                     for item in items:
                         output.append(
                             textwrap.dedent(
-                                f"""{item.amount}x {item.name} ─ **{item.rarity}**
+                                f"""
+                                {item.amount}x {item.name} ─ **{item.rarity}**
                                 `{item.id}` {item.description}
-                                use [/item-info {item.id}]({self.hyperlink}) for more information."""
+                                """
                             )
                         )
                     with vbu.Embed() as embed:
@@ -238,7 +239,10 @@ class EconomyCommands(vbu.Cog):
                             name=f"{ctx.author.display_name}'s inventory",
                             icon_url=ctx.author.avatar_url,
                         )
-                        embed.description = "\n\n".join(output)
+                        embed.description = (
+                            f"use [/item-info [ITEM_ID]]({self.hyperlink}) for more information.\n\n"
+                            + "\n\n".join(output)
+                        )
                     return embed
 
                 paginator = utils.Paginator(
