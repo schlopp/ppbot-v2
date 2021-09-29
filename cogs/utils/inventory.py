@@ -36,7 +36,7 @@ class InventoryWrapper:
 
     async def __aexit__(self, *args):
         if self.update_values:
-            await self.inventory.update_values()
+            await self.inventory.update_values(self.db)
 
 
 @dataclass
@@ -74,6 +74,16 @@ class Inventory:
     ):
         return InventoryWrapper(bot, db, user_id, update_values)
 
+    def add_items(self, *items: LootableItem):
+        """
+        Add items to the inventory.
+
+        Args:
+            items (`iterable` of `LootableItem`): The items to add.
+        """
+
+        self.items.extend(items)
+
     async def update_values(self, db: vbu.DatabaseConnection):
         """
         Update the database with the inventory's values
@@ -81,8 +91,8 @@ class Inventory:
 
         await db.conn.executemany(
             """
-            INSERT into user_inv VALUES ($1, $2, $3) ON CONFLICT DO UPDATE
-            SET amount = $3
+            INSERT into user_inv VALUES ($1, $2, $3) ON CONFLICT (user_id, item_id) DO UPDATE
+            SET amount = $3;
             """,
-            *((self.user_id, x.id, x.amount) for x in self.items)
+            tuple((self.user_id, x.id, x.amount) for x in self.items),
         )
