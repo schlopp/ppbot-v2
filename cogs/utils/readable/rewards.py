@@ -83,19 +83,18 @@ def format_rewards(
             plural = "" if re.match(r".*s$", item.name, re.IGNORECASE) else "s"
             items_as_text.append(f"{item.amount}x **{item.emoji} {item.name}**{plural}")
 
-    if len(items_as_text) == 1:
-        return "{} and {}".format(
-            ", ".join(items_as_text),
-            "**+{} {}**".format(
-                inches,
-                random.choice(
-                    [
-                        "cock size",
-                        "pp size",
-                        "peepee size",
-                        "dick size",
-                        "inches",
-                    ]
-                ),
+    return "{} and {}".format(
+        ", ".join(items_as_text),
+        "**+{} {}**".format(
+            inches,
+            random.choice(
+                [
+                    "cock size",
+                    "pp size",
+                    "peepee size",
+                    "dick size",
+                    "inches",
+                ]
             ),
-        )
+        ),
+    )
