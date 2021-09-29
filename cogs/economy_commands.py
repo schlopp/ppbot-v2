@@ -17,6 +17,7 @@ class EconomyCommands(vbu.Cog):
     def __init__(self, bot: vbu.Bot):
         super().__init__(bot)
         self.bot: vbu.Bot
+        self.hyperlink = "https://www.youtube.com/watch?v=FP23VU01fz8"
         if self.bot.is_ready():
             self._load_cache()
 
@@ -201,6 +202,50 @@ class EconomyCommands(vbu.Cog):
 
         self.bot.user_cache.clear()
 
+    @vbu.command(name="inventory", aliases=["inv"])
+    @vbu.checks.bot_is_ready()
+    @vbu.bot_has_permissions(
+        embed_links=True,
+        read_messages=True,
+        send_messages=True,
+        use_external_emojis=True,
+    )
+    @commands.has_permissions(
+        read_messages=True,
+        send_messages=True,
+        use_slash_commands=True,
+    )
+    async def _inventory_command(self, ctx: vbu.Context) -> None:
+        """
+        View the items in your inventory!
+        """
+
+        async with vbu.DatabaseConnection() as db:
+            async with utils.Inventory.fetch(self.bot, db, ctx.author.id) as inventory:
+
+                def formatter(menu, items: typing.List[utils.LootableItem]) -> str:
+                    output = []
+                    for item in items:
+                        output.append(
+                            textwrap.dedent(
+                                f"""{item.amount}x {item.name} ─ **{item.rarity}**
+                                `{item.id}` {item.description}
+                                use [/item-info {item.id}]({self.hyperlink}) for more information."""
+                            )
+                        )
+                    with vbu.Embed() as embed:
+                        embed.set_author(
+                            name=f"{ctx.author.display_name}'s inventory",
+                            icon_url=ctx.author.avatar_url,
+                        )
+                        embed.description = "\n\n".join(output)
+                    return embed
+
+                paginator = utils.Paginator(
+                    inventory.items, per_page=5, formatter=formatter
+                )
+                await paginator.start(ctx)
+
     @vbu.command(name="beg")
     @vbu.checks.bot_is_ready()
     @vbu.bot_has_permissions(
@@ -214,7 +259,7 @@ class EconomyCommands(vbu.Cog):
         send_messages=True,
         use_slash_commands=True,
     )
-    async def _beg_command(self, ctx: vbu.Context):
+    async def _beg_command(self, ctx: vbu.Context) -> None:
         """
         Beg for inches, earn items, and get a large pp in the process!
         """
@@ -275,7 +320,16 @@ class EconomyCommands(vbu.Cog):
             with vbu.Embed(use_random_colour=True) as embed:
                 donators: utils.begging.Donators = self.bot.begging["donators"]
                 donator = donators.get_random_donator()
+
+                # Generate rewards and give them to the user
                 loot = location.loot_table.get_random_loot(self.bot)
+                async with utils.Inventory.fetch(
+                    self.bot, db, ctx.author.id, update_values=True
+                ) as inv:
+                    inv.add_items(*loot)
+
+                growth = int(random.randint(1, 50) * cache.pp.multiplier)
+                cache.pp.size += growth
 
                 # If there are any donator success quotes, use them
                 if donator.quotes.success:
@@ -287,7 +341,7 @@ class EconomyCommands(vbu.Cog):
 
                 # Get a random quote and format it with the reward
                 quote = random.choice(quotes).format(
-                    utils.readable.rewards.format_rewards(items=loot)
+                    utils.readable.rewards.format_rewards(inches=growth, items=loot)
                 )
 
                 # Set the embed's author
