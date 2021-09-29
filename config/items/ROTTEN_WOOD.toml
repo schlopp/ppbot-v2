@@ -3,7 +3,7 @@ type = "CRAFTING_REAGENT"  # (UPPER_SNAKE_CASE) The type of the item.
 rarity = "COMMON" # (UPPER_SNAKE_CASE) The rarity of the item.
 emoji = 876433964749963274  # (int) The custom ID of the emoji associated with the item.
 name = "rotten wood"  # (string) The name of the item.
-description = "A chunk of wood that has been rotted from a tree, ised to craft a funky guitar." # (string) The description of the item.
+description = "A chunk of wood that has been rotted from a tree, ised to craft a funky guitar" # (string) The description of the item.
 
 # (array) Represents the skill requirements for a given item.
 [[skill_requirements]]

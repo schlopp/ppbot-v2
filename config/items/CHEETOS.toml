@@ -3,7 +3,7 @@ type = "CRAFTING_REAGENT"  # (UPPER_SNAKE_CASE) The type of the item.
 rarity = "COMMON" # (UPPER_SNAKE_CASE) The rarity of the item.
 emoji = 880813894094974996  # (int) The custom ID of the emoji associated with the item.
 name = "bag of Flamin' Hot Cheetos"  # (string) The name of the item.
-description = "Hot as fuck, makes you constipated." # (string) The description of the item.
+description = "Hot as fuck, makes you constipated" # (string) The description of the item.
 
 # (array) Represents the skill requirements for a given item.
 [[skill_requirements]]

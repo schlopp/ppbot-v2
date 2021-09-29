@@ -1,7 +1,7 @@
 id = "OLD_CLOTHES"  # (UPPER_SNAKE_CASE) The ID of the item. Must be unique for all items in the [[items]] array.
 type = "CRAFTING_REAGENT"  # (UPPER_SNAKE_CASE) The type of the item.
 rarity = "COMMON" # (UPPER_SNAKE_CASE) The rarity of the item.
-emoji = 880799165188296714  # (int) The custom ID of the emoji associated with the item.
+emoji = 892545108493357076  # (int) The custom ID of the emoji associated with the item.
 name = "old clothes"  # (string) The name of the item.
 description = "Probably already worn by 20 people. They smell like shit, literally" # (string) The description of the item.
 
