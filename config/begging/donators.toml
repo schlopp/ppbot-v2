@@ -62,15 +62,15 @@
     [donators.quotes]
         success = [  # (array) The success quotes for the donator.
             "you're on the right side of the wall, have some {}",  # (string) The quote. Will be formatted with the reward.
-            "have {} and don't forget to vote for me"  # (string) The quote. Will be formatted with the reward.
-            "as a reward for completing the capitol quest, enjoy {}"
-            "i let one of my hitmen kill joe biden and he dropped {}. i don't need it so you can have it"
+            "have {} and don't forget to vote for me",  # (string) The quote. Will be formatted with the reward.
+            "as a reward for completing the capitol quest, enjoy {}",
+            "i let one of my hitmen kill joe biden and he dropped {}. i don't need it so you can have it",
         ]
         fail = [  # (array) The fail quotes for the donator.
             "america is too great for you!",  # (string) The quote.
             "america first, something else second, you aren't even on the list",  # (string) The quote.
             "you're on the wrong side of the wall, so you'll get nada",  # (string) The quote.
             "my sexy daughter told me not to give you money",  # (string) The quote.
-            "my iq is too high for that"  # (string) The quote.
-            "your face isn't orange enough for that"
+            "my iq is too high for that",  # (string) The quote.
+            "your face isn't orange enough for that",
         ]
