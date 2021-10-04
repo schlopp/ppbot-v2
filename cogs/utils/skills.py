@@ -1,10 +1,16 @@
 import typing
 from dataclasses import dataclass
 
-import voxelbotutils as vbu
+from discord.ext import vbu
 
 
-def get_level_by_exp(exp) -> int:
+__all__ = (
+    "get_level_by_exp",
+    "Skill",
+)
+
+
+def get_level_by_exp(exp: int) -> int:
     """
     Returns the level of the player based on the amount of exp.
     """

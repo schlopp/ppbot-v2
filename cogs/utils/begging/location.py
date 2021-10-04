@@ -3,11 +3,22 @@ import typing
 import textwrap
 from dataclasses import dataclass
 
-import voxelbotutils as vbu
 import discord
+from discord.ext import vbu
 
-from cogs.utils import LootableItem
-from cogs.utils.readable import int_formatting
+from .. import LootableItem
+from ..readable import int_formatting
+
+
+__all__ = (
+    "LootTableItem",
+    "LootTable",
+    "FillInTheBlank",
+    "MiniGames",
+    "Quotes",
+    "BeggingLocation",
+    "BeggingLocations",
+)
 
 
 @dataclass
@@ -278,15 +289,15 @@ class BeggingLocation:
 
         return f"LEVEL {self.roman_numeral}: {self.name}"
 
-    def to_select_option(self) -> vbu.SelectOption:
+    def to_select_option(self) -> discord.ui.SelectOption:
         """
         Converts the location to a select option for the location menu.
 
         Returns:
-            (:class:`vbu.SelectOption`): The select option for the location.
+            (:class:`discord.ui.SelectOption`): The select option for the location.
         """
 
-        return vbu.SelectOption(
+        return discord.ui.SelectOption(
             label=self.label,
             value=self.id,
             description=self.description,
@@ -343,25 +354,25 @@ class BeggingLocations:
             self.locations.sort(key=lambda x: x.level, reverse=True)
         return self
 
-    def to_select_menu(self) -> vbu.SelectMenu:
+    def to_select_menu(self) -> discord.ui.SelectMenu:
         """
         Converts the locations to a select menu for the location menu.
 
         Returns:
-            (:class:`vbu.SelectMenu`): The select menu for the locations with the ID of BEGGING_LOCATIONS.
+            (:class:`discord.ui.SelectMenu`): The select menu for the locations with the ID of BEGGING_LOCATIONS.
         """
 
-        return vbu.SelectMenu(
+        return discord.ui.SelectMenu(
             custom_id="BEGGING_LOCATIONS",
             options=[i.to_select_option() for i in self.locations],
             placeholder="Pick a location to beg at.",
         )
 
     def get_location_from_interaction(
-        self, payload: vbu.ComponentInteractionPayload
+        self, payload: discord.Interaction
     ) -> typing.Union[BeggingLocation, None]:
         """
-        Get a location from a :class:`vbu.ComponentInteractionPayload`.
+        Get a location from a :class:`discord.Interaction`.
 
         Returns:
             (:class:`BeggingLocation`): The location received found.

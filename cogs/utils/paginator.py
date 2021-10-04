@@ -2,13 +2,14 @@ import typing
 import asyncio
 import inspect
 
-import voxelbotutils as vbu
-
 import discord
-from discord.ext import commands
+from discord.ext import commands, vbu
 
 
-class Paginator(object):
+__all__ = ("Paginator",)
+
+
+class Paginator:
     """
     An automatic paginator util that takes a list and listens for reactions on a message
     to change the content.
@@ -162,8 +163,10 @@ class Paginator(object):
                     lambda p: p.user.id == ctx.author.id
                     and p.message.id == self._message.id
                 )
-                interaction: vbu.ComponentInteractionPayload = await ctx.bot.wait_for(
-                    "component_interaction", check=check, timeout=timeout
+                interaction: discord.Interaction = (
+                    await ctx.bot.wait_for(
+                        "component_interaction", check=check, timeout=timeout
+                    )
                 )
                 await interaction.defer_update()
             except asyncio.TimeoutError:
@@ -189,31 +192,31 @@ class Paginator(object):
         )
 
     def get_pagination_components(self):
-        components = vbu.MessageComponents(
-            vbu.ActionRow(
-                vbu.Button(
+        components = discord.ui.MessageComponents(
+            discord.ui.ActionRow(
+                discord.ui.Button(
                     emoji="<:START:892833211120496721>",
                     custom_id="START",
-                    style=vbu.ButtonStyle.SECONDARY,
+                    style=discord.ui.ButtonStyle.SECONDARY,
                     disabled=self.current_page == 0,
                 ),
-                vbu.Button(
+                discord.ui.Button(
                     emoji="<:PREVIOUS:892833166950273075>",
                     custom_id="PREVIOUS",
-                    style=vbu.ButtonStyle.SECONDARY,
+                    style=discord.ui.ButtonStyle.SECONDARY,
                     disabled=self.current_page == 0,
                 ),
-                vbu.Button(
+                discord.ui.Button(
                     emoji="<:NEXT:892832013491503124>",
                     custom_id="NEXT",
-                    style=vbu.ButtonStyle.SECONDARY,
+                    style=discord.ui.ButtonStyle.SECONDARY,
                     disabled=self.max_pages != "?"
                     and self.current_page >= self.max_pages - 1,
                 ),
-                vbu.Button(
+                discord.ui.Button(
                     emoji="<:END:892833141205647430>",
                     custom_id="END",
-                    style=vbu.ButtonStyle.SECONDARY,
+                    style=discord.ui.ButtonStyle.SECONDARY,
                     disabled=self.max_pages == "?"
                     or self.current_page >= self.max_pages - 1,
                 ),

@@ -1,12 +1,10 @@
-"""
-Functions involving code blocks.
-"""
-
 import typing
 from io import StringIO
 
 import discord
 
+
+__all__ = ("codeblock",)
 
 ZERO_WIDTH_SPACE = "\u200B"
 
@@ -29,7 +27,7 @@ def codeblock(
         or `discord.File`: The code block as a file. (only if content exceeds max_chars)
     """
 
-    if max_chars is not None and len(content) > max_chars:
+    if max_chars is not None and len(content) + 20 > max_chars:
         f = StringIO()
         f.write(content)
         f.seek(0)

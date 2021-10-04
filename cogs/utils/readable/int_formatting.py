@@ -1,8 +1,6 @@
-"""
-Functions that take an int as input and return a string.
-"""
-
 import typing
+
+__all__ = ("int_to_roman",)
 
 
 def int_to_roman(n: int, *, emoji_mode: typing.Optional[bool] = False) -> str:

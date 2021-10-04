@@ -6,7 +6,10 @@ import random
 import re
 import typing
 
-from cogs.utils import LootableItem
+from .. import LootableItem
+
+
+__all__ = ("format_rewards",)
 
 
 def format_rewards(

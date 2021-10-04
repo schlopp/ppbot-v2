@@ -1,8 +1,21 @@
 import typing
 from dataclasses import dataclass
 
-import voxelbotutils as vbu
 import discord
+from discord.ext import vbu
+
+
+__all__ = (
+    "SkillRequirements",
+    "ShopSettings",
+    "Recipe",
+    "CraftingUsage",
+    "BrewingUsage",
+    "SkillUsage",
+    "Usage",
+    "Item",
+    "LootableItem",
+)
 
 
 @dataclass

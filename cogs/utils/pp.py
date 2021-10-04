@@ -1,7 +1,10 @@
 import typing
 from dataclasses import dataclass
 
-import voxelbotutils as vbu
+from discord.ext import vbu
+
+
+__all__ = ("Pp",)
 
 
 class PpWrapper:  # Haha, condom

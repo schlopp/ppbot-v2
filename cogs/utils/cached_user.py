@@ -1,7 +1,10 @@
 import typing
 from dataclasses import dataclass
 
-from cogs.utils import Pp, Skill
+from . import Pp, Skill
+
+
+__all__ = ("CachedUser",)
 
 
 @dataclass

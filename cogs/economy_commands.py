@@ -6,17 +6,17 @@ import typing
 
 import toml
 
-import voxelbotutils as vbu
-from discord.ext import commands, tasks
+import discord
+from discord.ext import commands, tasks, vbu
 
-
-from cogs import utils
+from . import utils
 
 
 class EconomyCommands(vbu.Cog):
     def __init__(self, bot: vbu.Bot):
         super().__init__(bot)
         self.bot: vbu.Bot
+
         self.hyperlink = "https://www.youtube.com/watch?v=FP23VU01fz8"
         if self.bot.is_ready():
             self._load_cache()
@@ -82,7 +82,7 @@ class EconomyCommands(vbu.Cog):
         for filename in os.listdir(directory):
             if filename.endswith(".toml"):
                 self.bot.begging["locations"].append(
-                    utils.begging.BeggingLocation.from_dict(
+                    utils.BeggingLocation.from_dict(
                         self.bot, toml.load(os.path.join(directory, filename))
                     )
                 )
@@ -202,9 +202,9 @@ class EconomyCommands(vbu.Cog):
 
         self.bot.user_cache.clear()
 
-    @vbu.command(name="inventory", aliases=["inv"])
+    @commands.command(name="inventory", aliases=["inv"])
     @vbu.checks.bot_is_ready()
-    @vbu.bot_has_permissions(
+    @commands.bot_has_permissions(
         embed_links=True,
         read_messages=True,
         send_messages=True,
@@ -215,7 +215,7 @@ class EconomyCommands(vbu.Cog):
         send_messages=True,
         use_slash_commands=True,
     )
-    async def _inventory_command(self, ctx: vbu.Context) -> None:
+    async def _inventory_command(self, ctx: commands.SlashContext) -> None:
         """
         View the items in your inventory!
         """
@@ -247,9 +247,9 @@ class EconomyCommands(vbu.Cog):
                 )
                 await paginator.start(ctx)
 
-    @vbu.command(name="beg")
+    @commands.command(name="beg")
     @vbu.checks.bot_is_ready()
-    @vbu.bot_has_permissions(
+    @commands.bot_has_permissions(
         embed_links=True,
         read_messages=True,
         send_messages=True,
@@ -260,7 +260,7 @@ class EconomyCommands(vbu.Cog):
         send_messages=True,
         use_slash_commands=True,
     )
-    async def _beg_command(self, ctx: vbu.Context) -> None:
+    async def _beg_command(self, ctx: commands.SlashContext) -> None:
         """
         Beg for inches, earn items, and get a large pp in the process!
         """
@@ -277,8 +277,8 @@ class EconomyCommands(vbu.Cog):
             )
 
             # Build the message
-            components = vbu.MessageComponents(
-                vbu.ActionRow(locations.to_select_menu())
+            components = discord.ui.MessageComponents(
+                discord.ui.ActionRow(locations.to_select_menu())
             )
             content = textwrap.dedent(
                 f"""
@@ -289,13 +289,13 @@ class EconomyCommands(vbu.Cog):
             )
 
             # Send the message
-            message: vbu.InteractionMessage = await ctx.send(
+            message: discord.InteractionMessage = await ctx.interaction.original_message.send_message(
                 content, components=components
             )
 
             try:
                 # Wait for a response
-                payload: vbu.ComponentInteractionPayload = await self.bot.wait_for(
+                payload: discord.Interaction = await self.bot.wait_for(
                     "component_interaction",
                     check=lambda p: p.message.id == message.id
                     and p.user.id == ctx.author.id,
