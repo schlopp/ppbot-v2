@@ -234,7 +234,7 @@ class EconomyCommands(vbu.Cog):
                     with vbu.Embed() as embed:
                         embed.set_author(
                             name=f"{ctx.author.display_name}'s inventory",
-                            icon_url=ctx.author.avatar_url,
+                            icon_url=ctx.author.avatar.url,
                         )
                         embed.description = (
                             f"use [/item-info [ITEM_ID]]({self.hyperlink}) for more information.\n\n"
@@ -272,7 +272,7 @@ class EconomyCommands(vbu.Cog):
             begging = cache.get_skill("BEGGING")
 
             # Set up the begging locations with the user's current begging level
-            locations = utils.begging.BeggingLocations(
+            locations = utils.BeggingLocations(
                 begging.level, *self.bot.begging["locations"]
             )
 
@@ -284,13 +284,15 @@ class EconomyCommands(vbu.Cog):
                 f"""
                 <:thonk:881578428506185779> **Where are you begging?**
                 Level up `BEGGING` unlock new locations!
-                **Current level:** {utils.readable.int_formatting.int_to_roman(begging.level)}
+                **Current level:** {utils.int_to_roman(begging.level)}
             """
             )
 
             # Send the message
-            message: discord.InteractionMessage = await ctx.interaction.original_message.send_message(
-                content, components=components
+            message: discord.InteractionMessage = (
+                await ctx.interaction.original_message.send_message(
+                    content, components=components
+                )
             )
 
             try:
@@ -319,7 +321,7 @@ class EconomyCommands(vbu.Cog):
 
             # Update database and build the embed for receiving a generic donation.
             with vbu.Embed(use_random_colour=True) as embed:
-                donators: utils.begging.Donators = self.bot.begging["donators"]
+                donators: utils.Donators = self.bot.begging["donators"]
                 donator = donators.get_random_donator()
 
                 # Generate rewards and give them to the user
@@ -342,7 +344,7 @@ class EconomyCommands(vbu.Cog):
 
                 # Get a random quote and format it with the reward
                 quote = random.choice(quotes).format(
-                    utils.readable.rewards.format_rewards(inches=growth, items=loot)
+                    utils.format_rewards(inches=growth, items=loot)
                 )
 
                 # Set the embed's author
