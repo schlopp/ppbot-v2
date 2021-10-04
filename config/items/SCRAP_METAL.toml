@@ -1,5 +1,5 @@
 id = "SCRAP_METAL"  # (UPPER_SNAKE_CASE) The ID of the item. Must be unique for all items in the [[items]] array.
-type = "CRAFTING REAGENT"  # (UPPER_SNAKE_CASE) The type of the item.
+type = "CRAFTING_REAGENT"  # (UPPER_SNAKE_CASE) The type of the item.
 rarity = "COMMON" # (UPPER_SNAKE_CASE) The rarity of the item.
 emoji = 880408346547585044  # (int) The custom ID of the emoji associated with the item.
 name = "scrap metal"  # (string) The name of the item.
