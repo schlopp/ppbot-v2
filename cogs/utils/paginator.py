@@ -163,12 +163,10 @@ class Paginator:
                     lambda p: p.user.id == ctx.author.id
                     and p.message.id == self._message.id
                 )
-                interaction: discord.Interaction = (
-                    await ctx.bot.wait_for(
-                        "component_interaction", check=check, timeout=timeout
-                    )
+                interaction: discord.Interaction = await ctx.bot.wait_for(
+                    "component_interaction", check=check, timeout=timeout
                 )
-                await interaction.defer_update()
+                await interaction.response.defer_update()
             except asyncio.TimeoutError:
                 break
 
@@ -197,26 +195,22 @@ class Paginator:
                 discord.ui.Button(
                     emoji="<:START:892833211120496721>",
                     custom_id="START",
-                    style=discord.ui.ButtonStyle.SECONDARY,
                     disabled=self.current_page == 0,
                 ),
                 discord.ui.Button(
                     emoji="<:PREVIOUS:892833166950273075>",
                     custom_id="PREVIOUS",
-                    style=discord.ui.ButtonStyle.SECONDARY,
                     disabled=self.current_page == 0,
                 ),
                 discord.ui.Button(
                     emoji="<:NEXT:892832013491503124>",
                     custom_id="NEXT",
-                    style=discord.ui.ButtonStyle.SECONDARY,
                     disabled=self.max_pages != "?"
                     and self.current_page >= self.max_pages - 1,
                 ),
                 discord.ui.Button(
                     emoji="<:END:892833141205647430>",
                     custom_id="END",
-                    style=discord.ui.ButtonStyle.SECONDARY,
                     disabled=self.max_pages == "?"
                     or self.current_page >= self.max_pages - 1,
                 ),
