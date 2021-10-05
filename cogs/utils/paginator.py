@@ -6,7 +6,95 @@ import discord
 from discord.ext import commands, vbu
 
 
-__all__ = ("Paginator",)
+__all__ = (
+    "Sorter",
+    "Sorters",
+    "Paginator",
+)
+
+
+class Sorter:
+    """
+    A sorting method to use within the class `Paginator`.
+    """
+
+    def __init__(
+        self,
+        label: str,
+        description: str,
+        id: str,
+        sorter: typing.Callable[[list], list],
+    ):
+        self.label = f"Sort by {label}"
+        self.description = description
+        self.id = id
+        self.sorter = sorter
+
+
+class Sorters:
+    """
+    A container of sorting methods to use with in the :class:`Paginator`
+
+    Args:
+        default (`str`): The default `Sorter`.
+        options (:class: `dict`): A dictionary of `Sorter`s to use.
+        current_sorter (:class:`Sorter`): The current `Sorter` in usage.
+    """
+
+    def __init__(
+        self,
+        default: typing.Optional[typing.Union[Sorter, str]] = None,
+        *options: typing.Iterable[Sorter],
+    ):
+        """
+        Args:
+            default (optional :class:`Union` of :class:`Sorter` and `str`): The default `Sorter`.
+                If no other method is specified by the user, this method will be used.
+                If this is of type `str`, it must be the ID of a `Sorter` in `options`.
+                Will default to the first `Sorter` in `options`.
+            options (:class:`Iterable` of :class:`Sorter`): A list of `Sorter`s to use.
+                Must atleast contain atleast one `Sorter` if `default` is not specified to a :class:`Sorter`.
+        """
+
+        options = list(options)
+        if not isinstance(default, (Sorter, str, None)):
+            raise TypeError("`default` must be of type `Sorter`, `str` or `None`")
+        elif default is None:
+            try:
+                self.default = options[0]
+            except IndexError:
+                raise ValueError("No default sorter specified and no sorters available")
+        elif isinstance(default, str):
+            try:
+                self.default = next(s for s in options if s.id == default)
+            except StopIteration:
+                self.default = None
+            if self.default is None:
+                raise ValueError(f"No default sorter with ID `{self.default}` found")
+            options.pop(options.index(self.default))
+        else:
+            self.default = default
+        self.default: Sorter
+        self.options = {self.default.id: self.default, **{s.id: s for s in options}}
+        self.current_sorter = self.default
+
+    def to_selectmenu(self):
+        """
+        Get a :class:`discord.ui.SelectMenu` based on the sorters.
+        """
+
+        return discord.ui.SelectMenu(
+            custom_id="SORTER",
+            options=[
+                discord.ui.SelectOption(
+                    label=s.label,
+                    value=s.id,
+                    description=s.description,
+                    default=s == self.current_sorter,
+                )
+                for s in self.options.values()
+            ],
+        )
 
 
 class Paginator:
@@ -16,7 +104,7 @@ class Paginator:
     ::
         # Items will automatically be cast to strings and joined
         my_list = list(range(30))
-        p = voxelbotutils.Paginator(my_list, per_page=5)
+        p = utils.Paginator(my_list, per_page=5)
         await p.start(ctx, timeout=15)
         # Alternatively you can give a function, which can return a string, an embed, or a dict
         # that gets unpacked directly into the message's edit method
@@ -25,9 +113,9 @@ class Paginator:
             for i in items:
                 output.append(f"The {i}th item")
             output_string = "\\n".join(output)
-            embed = voxelbotutils.Embed(description=output_string)
+            embed = discord.Embed(description=output_string)
             embed.set_footer(f"Page {menu.current_page + 1}/{menu.max_pages}")
-        p = voxelbotutils.Paginator(my_list, formatter=my_formatter)
+        p = utils.Paginator(my_list, formatter=my_formatter)
         await p.start(ctx)
     """
 
@@ -37,11 +125,14 @@ class Paginator:
             typing.Sequence, typing.Generator, typing.Callable[[int], typing.Any]
         ],
         *,
-        per_page: int = 10,
-        formatter: typing.Callable[
-            ["Paginator", typing.Sequence[typing.Any]],
-            typing.Union[str, discord.Embed, dict],
+        per_page: typing.Optional[int] = 10,
+        formatter: typing.Optional[
+            typing.Callable[
+                ["Paginator", typing.Sequence[typing.Any]],
+                typing.Union[str, discord.Embed, dict],
+            ]
         ] = None,
+        sorters: typing.Optional[Sorters] = None,
     ):
         """
         Args:
@@ -57,7 +148,11 @@ class Paginator:
                 function taking the paginator instance and a list of things to display, returning a dictionary of kwargs that get passed
                 directly into a :func:`discord.Message.edit`.
         """
-        self.data = data
+        self.sorters: Sorters = sorters
+        if isinstance(data, typing.Iterable) and self.sorters is not None:
+            self.data = self.sorters.default.sorter(list(data))
+        else:
+            self.data = data
         self.per_page: int = per_page
         self.formatter: typing.Callable[
             ["Paginator", typing.Sequence[typing.Any]],
@@ -170,19 +265,31 @@ class Paginator:
             except asyncio.TimeoutError:
                 break
 
-            # Change the page number based on the reaction
-            self.current_page = {
-                "START": lambda i: 0,
-                "PREVIOUS": lambda i: i - 1,
-                "NEXT": lambda i: i + 1,
-                "END": lambda i: self.max_pages,
-            }[str(interaction.component.custom_id)](self.current_page)
-
-            # Make sure the page number is still valid
-            if self.max_pages != "?" and self.current_page >= self.max_pages:
-                self.current_page = self.max_pages - 1
-            elif self.current_page < 0:
+            # Change the item order based on the component interaction
+            if interaction.component.custom_id == "SORTER":
                 self.current_page = 0
+                if isinstance(self.data, typing.Iterable) and self.sorters is not None:
+                    self.sorters.current_sorter = self.sorters.options[
+                        interaction.data["values"][0]
+                    ]
+
+                    # Clear the cache
+                    self._page_cache = {}
+
+            else:
+                # Change the page number based on the component interaction
+                self.current_page = {
+                    "START": lambda i: 0,
+                    "PREVIOUS": lambda i: i - 1,
+                    "NEXT": lambda i: i + 1,
+                    "END": lambda i: self.max_pages,
+                }[str(interaction.component.custom_id)](self.current_page)
+
+                # Make sure the page number is still valid
+                if self.max_pages != "?" and self.current_page >= self.max_pages:
+                    self.current_page = self.max_pages - 1
+                elif self.current_page < 0:
+                    self.current_page = 0
 
         # Let us break from the loop
         ctx.bot.loop.create_task(
@@ -214,8 +321,12 @@ class Paginator:
                     disabled=self.max_pages == "?"
                     or self.current_page >= self.max_pages - 1,
                 ),
-            )
+            ),
         )
+        if self.sorters is not None:
+            components.add_component(
+                discord.ui.ActionRow(self.sorters.to_selectmenu()),
+            )
         return components
 
     async def get_page(self, page_number: int) -> typing.List[typing.Any]:
@@ -232,21 +343,30 @@ class Paginator:
         except KeyError:
             pass
         try:
-            if inspect.isasyncgenfunction(self.data) or inspect.isasyncgen(self.data):
-                v = await self.data.__anext__()
-            elif inspect.isgeneratorfunction(self.data) or inspect.isgenerator(
-                self.data
-            ):
-                v = next(self.data)
-            elif inspect.iscoroutinefunction(self.data):
-                v = await self.data(page_number)
-            elif inspect.isfunction(self.data):
-                v = self.data(page_number)
+            if self.sorters is None:
+                if inspect.isasyncgenfunction(self.data) or inspect.isasyncgen(
+                    self.data
+                ):
+                    v = await self.data.__anext__()
+                elif inspect.isgeneratorfunction(self.data) or inspect.isgenerator(
+                    self.data
+                ):
+                    v = next(self.data)
+                elif inspect.iscoroutinefunction(self.data):
+                    v = await self.data(page_number)
+                elif inspect.isfunction(self.data):
+                    v = self.data(page_number)
+                else:
+                    v = self.data[
+                        page_number * self.per_page : (page_number + 1) * self.per_page
+                    ]
+                self._page_cache[page_number] = v
             else:
+                self.data = self.sorters.current_sorter.sorter(self.data)
                 v = self.data[
                     page_number * self.per_page : (page_number + 1) * self.per_page
                 ]
-            self._page_cache[page_number] = v
+                self._page_cache[page_number] = v
         except (StopIteration, StopAsyncIteration):
             self.max_pages = page_number
             page_number -= 1
