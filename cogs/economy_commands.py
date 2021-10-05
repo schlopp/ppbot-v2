@@ -224,26 +224,61 @@ class EconomyCommands(vbu.Cog):
             async with utils.Inventory.fetch(self.bot, db, ctx.author.id) as inventory:
 
                 def formatter(menu, items: typing.List[utils.LootableItem]) -> str:
-                    output = []
-                    for item in items:
-                        output.append(
-                            f"{item.amount}x {item.name} ─ **{item.rarity}**"
-                            + f"\n`{item.id}` {item.description}"
-                        )
-
                     with vbu.Embed() as embed:
+                        output = []
+                        for item in items:
+                            output.append(
+                                f"2x {item.emoji} **{item.name}** ─ {item.type.replace('_', ' ').title()}"
+                                + f"\n **{item.rarity.replace('_', ' ').title()}**"
+                                + f"  ─ `{item.id}` {item.description}"
+                            )
                         embed.set_author(
                             name=f"{ctx.author.display_name}'s inventory",
                             icon_url=ctx.author.avatar.url,
                         )
                         embed.description = (
-                            f"use [/item-info [ITEM_ID]]({self.hyperlink}) for more information.\n\n"
+                            f"use [/item-info [item]]({self.hyperlink}) for more information.\n\n"
                             + "\n\n".join(output)
+                        )
+                        embed.set_footer(
+                            f"Page {menu.current_page + 1}/{menu.max_pages}"
                         )
                     return embed
 
+                sorters = utils.Sorters(
+                    "ALPHABETICAL",
+                    utils.Sorter(
+                        "name (A ➞ Z)",
+                        "Sort items alphabetically",
+                        "ALPHABETICAL",
+                        lambda i: sorted(i, key=lambda x: x.name),
+                    ),
+                    utils.Sorter(
+                        "name (Z ➞ A)",
+                        "Sort items reverse-alphabetically",
+                        "REVERSE_ALPHABETICAL",
+                        lambda i: sorted(i, key=lambda x: x.name, reverse=True),
+                    ),
+                    utils.Sorter(
+                        "rarity (GODLIKE ➞ COMMON)",
+                        "Sort items based on their rarity",
+                        "RARITY",
+                        lambda i: sorted(
+                            i,
+                            key=lambda x: {
+                                "ADMIN-ABUSE": 0,
+                                "GODLIKE": 1,
+                                "LEGENDARY": 2,
+                                "RARE": 3,
+                                "UNCOMMON": 4,
+                                "COMMON": 5,
+                            }[x.rarity],
+                        ),
+                    ),
+                )
+
                 paginator = utils.Paginator(
-                    inventory.items, per_page=5, formatter=formatter
+                    inventory.items, per_page=5, formatter=formatter, sorters=sorters
                 )
                 await paginator.start(ctx)
 
