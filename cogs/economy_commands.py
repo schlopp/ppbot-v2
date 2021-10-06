@@ -1,6 +1,7 @@
-import random
 import asyncio
+import copy
 import os
+import random
 import textwrap
 import typing
 
@@ -261,7 +262,7 @@ class EconomyCommands(vbu.Cog):
                     ),
                     utils.Sorter(
                         "rarity (GODLIKE ➞ COMMON)",
-                        "Sort items based on their rarity",
+                        "Sort items based on their rarity from highest to lowest",
                         "RARITY",
                         lambda i: sorted(
                             i,
@@ -275,12 +276,54 @@ class EconomyCommands(vbu.Cog):
                             }[x.rarity],
                         ),
                     ),
+                    utils.Sorter(
+                        "rarity (COMMON ➞ GODLIKE)",
+                        "Sort items based on their rarity from lowest to highest",
+                        "REVERSE_RARITY",
+                        lambda i: sorted(
+                            i,
+                            key=lambda x: {
+                                "COMMON": 0,
+                                "UNCOMMON": 1,
+                                "RARE": 2,
+                                "LEGENDARY": 3,
+                                "GODLIKE": 4,
+                                "ADMIN-ABUSE": 5,
+                            }[x.rarity],
+                        ),
+                    ),
+                )
+
+                filters = utils.Filters(
+                    utils.Filter(
+                        "Crafting reagents",
+                        "CREATING_REAGENT",
+                        filterer=lambda i: list(
+                            filter(lambda x: x.type == "CRAFTING_REAGENT", i)
+                        ),
+                    ),
+                    utils.Filter(
+                        "Tools",
+                        "TOOL",
+                        filterer=lambda i: list(filter(lambda x: x.type == "TOOL", i)),
+                    ),
+                    utils.Filter(
+                        "Potions",
+                        "POTION",
+                        filterer=lambda i: list(
+                            filter(lambda x: x.type == "POTION", i)
+                        ),
+                    ),
                 )
 
                 paginator = utils.Paginator(
-                    inventory.items, per_page=5, formatter=formatter, sorters=sorters
+                    inventory.items,
+                    per_page=5,
+                    formatter=formatter,
+                    sorters=sorters,
+                    filters=filters,
                 )
-                await paginator.start(ctx)
+                await paginator.start(ctx, timeout=10)
 
     @commands.command(name="beg")
     @vbu.checks.bot_is_ready()
@@ -317,33 +360,27 @@ class EconomyCommands(vbu.Cog):
             )
             content = textwrap.dedent(
                 f"""
-                <:thonk:881578428506185779> **Where are you begging?**
+                **Where are you begging?**
                 Level up `BEGGING` unlock new locations!
                 **Current level:** {utils.int_to_roman(begging.level)}
             """
             )
 
             # Send the message
-            message: discord.InteractionMessage = (
-                await ctx.interaction.original_message.send_message(
+            message: discord.InteractionMessage = await ctx.interaction.response.send_message(
                     content, components=components
                 )
-            )
 
             try:
                 # Wait for a response
                 payload: discord.Interaction = await self.bot.wait_for(
                     "component_interaction",
-                    check=lambda p: p.message.id == message.id
-                    and p.user.id == ctx.author.id,
-                    timeout=60.0,
+                    # check=lambda p: p.message == message and p.user == ctx.author,
+                    timeout=3.0,
                 )
+                await ctx.send(payload)
             except asyncio.TimeoutError:
-                components.disable_components()
-                content = (
-                    content + "\n\\🟥 **You took too long to respond** 😔 `waited 60.0s`"
-                )
-                return await message.edit(content=content, components=components)
+                return await message.edit(content=content + "\n\\🟥 **You took too long to respond** 😔\n`waited 60.0s`", components=components.disable_components())
 
             # Get the selected location
             location = locations.get_location_from_interaction(payload)
