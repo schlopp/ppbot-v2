@@ -1,21 +1,101 @@
 import typing
 import asyncio
 import inspect
+import itertools
 
 import discord
 from discord.ext import commands, vbu
 
 
 __all__ = (
+    "Filter",
+    "Filters",
     "Sorter",
     "Sorters",
     "Paginator",
 )
 
 
+class Filter:
+    """
+    A filter method to use within the class :class:`Sorters`.
+    """
+
+    def __init__(
+        self,
+        label: str,
+        id: str,
+        *,
+        description: typing.Optional[str] = None,
+        filterer: typing.Callable[[list], list],
+    ):
+        self.label = label
+        self.id = id
+        self.description = description
+        self.filterer = filterer
+
+
+class Filters:
+    """
+    A container of filter methods to use within the :class:`Paginator`
+
+    Args:
+        options (`dict`) A dictionary of :class:`Filter`s to use.
+        current_filter  (:class:`Filter`): The current :class:`Filter` in usage.
+    """
+
+    def __init__(self, *options: typing.Iterable[Filter]):
+        self.current_filters: typing.List[Filter] = []
+        options = list(options)
+        self.options = {f.id: f for f in options}
+
+    def to_selectmenu(self):
+        """
+        Get a :class:`discord.ui.SelectMenu` based on the sorters.
+        """
+
+        return discord.ui.SelectMenu(
+            custom_id="FILTER",
+            placeholder="Filter...",
+            min_values=0,
+            max_values=len(self.options) - 1 if len(self.options) > 1 else 1,
+            options=[
+                discord.ui.SelectOption(
+                    label=s.label,
+                    value=s.id,
+                    description=s.description,
+                    default=s in self.current_filters,
+                )
+                for s in self.options.values()
+            ],
+        )
+
+    def filter(self, data: typing.Sequence):
+        """
+        Filter the data based on the current filters.
+        """
+
+        if not self.current_filters:
+            return data
+        filtered = []
+        for i in self.current_filters:
+            filtered.append(i.filterer(data))
+        x = list(
+            filtered
+            for filtered, _ in itertools.groupby(
+                sorted([j for i in filtered for j in i], key=lambda x: x.id)
+            )
+        )
+        return x
+
+
 class Sorter:
     """
-    A sorting method to use within the class `Paginator`.
+    A container of sorting methods to use with in the :class:`Paginator`
+
+    Args:
+        options (`dict`): A dictionary of `Sorter`s to use.
+        current_sorter (:class:`Sorter`): The current :class:`Sorter` in usage.
     """
 
     def __init__(
@@ -25,7 +105,7 @@ class Sorter:
         id: str,
         sorter: typing.Callable[[list], list],
     ):
-        self.label = f"Sort by {label}"
+        self.label = label
         self.description = description
         self.id = id
         self.sorter = sorter
@@ -33,7 +113,7 @@ class Sorter:
 
 class Sorters:
     """
-    A container of sorting methods to use with in the :class:`Paginator`
+    A container of sorting methods to use within the :class:`Paginator`
 
     Args:
         default (`str`): The default `Sorter`.
@@ -133,6 +213,7 @@ class Paginator:
             ]
         ] = None,
         sorters: typing.Optional[Sorters] = None,
+        filters: typing.Optional[Filters] = None,
     ):
         """
         Args:
@@ -148,11 +229,21 @@ class Paginator:
                 function taking the paginator instance and a list of things to display, returning a dictionary of kwargs that get passed
                 directly into a :func:`discord.Message.edit`.
         """
-        self.sorters: Sorters = sorters
-        if isinstance(data, typing.Iterable) and self.sorters is not None:
-            self.data = self.sorters.default.sorter(list(data))
-        else:
+        if not isinstance(data, typing.Sequence):
+            self.sorters = None
+            self.filters = None
             self.data = data
+            self.filtered_data = self.data
+        else:
+            data = list(data)
+            self.sorters: Sorters = sorters
+            if self.sorters.current_sorter is not None:
+                self.data = data
+                self.filtered_data = self.sorters.current_sorter.sorter(data)
+            else:
+                self.data = data
+                self.filtered_data = self.data
+            self.filters: Filters = filters
         self.per_page: int = per_page
         self.formatter: typing.Callable[
             ["Paginator", typing.Sequence[typing.Any]],
@@ -193,7 +284,10 @@ class Paginator:
         if self._message is None:
             self._message = await ctx.send(*args, **kwargs)
         else:
-            await self._message.edit(*args, **kwargs)
+            try:
+                await self._message.edit(*args, **kwargs)
+            except discord.errors.NotFound:
+                pass
 
     async def start(self, ctx: commands.Context, *, timeout: float = 120):
         """
@@ -248,8 +342,8 @@ class Paginator:
 
             # See if we want to bother paginating
             last_payload = payload
-            if self.max_pages == 1:
-                return
+            if self.max_pages == 1 and not self.filters.current_filters:
+                break
 
             # Wait for reactions to be added by the user
             interaction = None
@@ -268,13 +362,23 @@ class Paginator:
             # Change the item order based on the component interaction
             if interaction.component.custom_id == "SORTER":
                 self.current_page = 0
-                if isinstance(self.data, typing.Iterable) and self.sorters is not None:
+                if self.sorters is not None:
                     self.sorters.current_sorter = self.sorters.options[
                         interaction.data["values"][0]
                     ]
 
                     # Clear the cache
-                    self._page_cache = {}
+                    self._page_cache.clear()
+
+            elif interaction.component.custom_id == "FILTER":
+                self.current_page = 0
+                if self.filters is not None:
+                    self.filters.current_filters = [
+                        self.filters.options[v] for v in interaction.data["values"]
+                    ]
+
+                    # Clear the cache
+                    self._page_cache.clear()
 
             else:
                 # Change the page number based on the component interaction
@@ -327,6 +431,10 @@ class Paginator:
             components.add_component(
                 discord.ui.ActionRow(self.sorters.to_selectmenu()),
             )
+        if self.filters is not None:
+            components.add_component(
+                discord.ui.ActionRow(self.filters.to_selectmenu()),
+            )
         return components
 
     async def get_page(self, page_number: int) -> typing.List[typing.Any]:
@@ -362,8 +470,15 @@ class Paginator:
                     ]
                 self._page_cache[page_number] = v
             else:
-                self.data = self.sorters.current_sorter.sorter(self.data)
-                v = self.data[
+                if (
+                    self.filters is not None
+                    and self.filters.current_filters is not None
+                ):
+                    self.filtered_data = self.filters.filter(self.data)
+                self.filtered_data = self.sorters.current_sorter.sorter(
+                    self.filtered_data
+                )
+                v = self.filtered_data[
                     page_number * self.per_page : (page_number + 1) * self.per_page
                 ]
                 self._page_cache[page_number] = v
@@ -371,6 +486,11 @@ class Paginator:
             self.max_pages = page_number
             page_number -= 1
             self.current_page -= 1
+        if self._data_is_iterable:
+            pages, left_over = divmod(len(self.filtered_data), self.per_page)
+            if left_over:
+                pages += 1
+            self.max_pages = pages
         return self._page_cache[page_number]
 
     @staticmethod
