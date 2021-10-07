@@ -48,7 +48,9 @@ class Donator:
         quotes (`DonatorQuotes`): The quotes that can be said by the donator.
     """
 
-    def __init__(self, name: str, icon_url: str, quotes: DonatorQuotes):
+    def __init__(
+        self, name: str, *, icon_url: typing.Optional[str] = None, quotes: DonatorQuotes
+    ):
         """
         Represents a "donator". This is a person/character with it's own name, icon_url, and quotes.
 
@@ -76,8 +78,8 @@ class Donator:
 
         return cls(
             data["name"],
-            data["icon_url"],
-            DonatorQuotes(**data["quotes"]),
+            icon_url=data.get("icon_url", None),
+            quotes=DonatorQuotes(**data["quotes"]),
         )
 
 
