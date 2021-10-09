@@ -1,3 +1,4 @@
+from .colours import *
 from .paginator import *
 from .item import *
 from .pp import *
@@ -13,3 +14,4 @@ from .cached_user import *
 
 from .begging import *
 from .readable import *
+from .gambling import *
