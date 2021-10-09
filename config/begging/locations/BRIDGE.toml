@@ -7,7 +7,7 @@ emoji = "<:PP_BEG:879382346812489809>"  # (string) The emoji that will be used t
 
 [[loot_table]]
     id = "ROTTEN_WOOD"  # (UPPER_SNAKE_CASE) The ID of an item in the loot table. Must be unique for all items in the [[locations.loot_table]] array.
-    drop_rate = 0.2  # (float) The drop rate of the item. This is the chance that the item will be dropped. This example shows a 50% chance of dropping the item.
+    drop_rate = 0.05  # (float) The drop rate of the item. This is the chance that the item will be dropped. This example shows a 50% chance of dropping the item.
     min = 1  # (int) The minimum amount of the item that can be dropped.
     max = 5  # (int) The maximum number of this item that can be dropped from this location.
 
@@ -19,7 +19,7 @@ emoji = "<:PP_BEG:879382346812489809>"  # (string) The emoji that will be used t
 
 [[loot_table]]
     id = "SCRAP_METAL"  # (UPPER_SNAKE_CASE) The ID of an item in the loot table. Must be unique for all items in the [[locations.loot_table]] array.
-    drop_rate = 0.2  # (float) The drop rate of the item. This is the chance that the item will be dropped. This example shows a 50% chance of dropping the item.
+    drop_rate = 0.05  # (float) The drop rate of the item. This is the chance that the item will be dropped. This example shows a 50% chance of dropping the item.
     min = 1  # (int) The minimum amount of the item that can be dropped.
     max = 5  # (int) The maximum number of this item that can be dropped from this location.
 
@@ -31,7 +31,7 @@ emoji = "<:PP_BEG:879382346812489809>"  # (string) The emoji that will be used t
 
 [[loot_table]]
     id = "METH_PIPE"  # (UPPER_SNAKE_CASE) The ID of an item in the loot table. Must be unique for all items in the [[locations.loot_table]] array.
-    drop_rate = 0.1  # (float) The drop rate of the item. This is the chance that the item will be dropped. This example shows a 50% chance of dropping the item.
+    drop_rate = 0.05  # (float) The drop rate of the item. This is the chance that the item will be dropped. This example shows a 50% chance of dropping the item.
     min = 1  # (int) The minimum amount of the item that can be dropped.
     max = 5  # (int) The maximum number of this item that can be dropped from this location.
 
@@ -43,13 +43,13 @@ emoji = "<:PP_BEG:879382346812489809>"  # (string) The emoji that will be used t
 
 [[loot_table]]
     id = "CHEETOS"  # (UPPER_SNAKE_CASE) The ID of an item in the loot table. Must be unique for all items in the [[locations.loot_table]] array.
-    drop_rate = 0.2  # (float) The drop rate of the item. This is the chance that the item will be dropped. This example shows a 50% chance of dropping the item.
+    drop_rate = 0.05  # (float) The drop rate of the item. This is the chance that the item will be dropped. This example shows a 50% chance of dropping the item.
     min = 3  # (int) The minimum amount of the item that can be dropped.
     max = 6  # (int) The maximum number of this item that can be dropped from this location.
 
 [[loot_table]]
     id = "OLD_CLOTHES"  # (UPPER_SNAKE_CASE) The ID of an item in the loot table. Must be unique for all items in the [[locations.loot_table]] array.
-    drop_rate = 0.2  # (float) The drop rate of the item. This is the chance that the item will be dropped. This example shows a 50% chance of dropping the item.
+    drop_rate = 0.05  # (float) The drop rate of the item. This is the chance that the item will be dropped. This example shows a 50% chance of dropping the item.
     min = 1  # (int) The minimum amount of the item that can be dropped.
     max = 3  # (int) The maximum number of this item that can be dropped from this location.
 
@@ -64,7 +64,7 @@ emoji = "<:PP_BEG:879382346812489809>"  # (string) The emoji that will be used t
 
     # (array) The default success quotes for the location. {} is a placeholder for whatever reward the user receives.
     success = [
-        "aight KUH here's {}, now go skeddadle",  # how a user might see this: "Sure, here's 4 **Rotten Wood**s. Have a good day!"
+        "aight kuh here's {}",  # how a user might see this: "Sure, here's 4 **Rotten Wood**s. Have a good day!"
         "take {}, and eat it, you little dumpster boy",
         "aight buddy here's {}",
         "ugh beggars are so annoying. here's {}, now stop wasting my time",
@@ -79,6 +79,26 @@ emoji = "<:PP_BEG:879382346812489809>"  # (string) The emoji that will be used t
         "ew dont talk to me",
         "I'm not giving you anything, you look weird",
         "lmao poor",
+        "eeeewwww don't touch me I'm too good for you",
+        "ew poor",
+        "don't touch my pp",
+        "my wife has a bigger pp than you",
+        "broke ass bitch",
+        "cringe poor",
+        "beg harder",
+        "poor people make me scared",
+        "dont touch me poor person",
+        "get a job",
+        "im offended",
+        "no u",
+        "i dont speak poor",
+        "you should take a shower",
+        "i love my wife... i love my wife... i love my wife..",
+        "drink some water",
+        "begone beggar",
+        "No.",
+        "no wtf?",
+        "try being a little 'cooler' next time",
     ]
 
     # The mini-games for the user to complete.
