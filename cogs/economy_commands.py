@@ -1,8 +1,6 @@
 import asyncio
-import copy
 import os
 import random
-import textwrap
 import typing
 
 import toml
@@ -343,6 +341,7 @@ class EconomyCommands(vbu.Cog):
         Beg for inches, earn items, and get a large pp in the process!
         """
 
+        ctx.interaction.response: discord.InteractionResponse
         async with vbu.DatabaseConnection() as db:
 
             # Get the user's cache
@@ -358,29 +357,45 @@ class EconomyCommands(vbu.Cog):
             components = discord.ui.MessageComponents(
                 discord.ui.ActionRow(locations.to_select_menu())
             )
-            content = textwrap.dedent(
-                f"""
-                **Where are you begging?**
-                Level up `BEGGING` unlock new locations!
-                **Current level:** {utils.int_to_roman(begging.level)}
-            """
+            content = "\n".join(
+                (
+                    f"**Where are you begging?**",
+                    f"Level up `BEGGING` unlock new locations!",
+                    f"**Current level:** {utils.int_to_roman(begging.level)}",
+                )
             )
 
             # Send the message
-            message: discord.InteractionMessage = await ctx.interaction.response.send_message(
-                    content, components=components
-                )
+            await ctx.interaction.response.send_message(content, components=components)
 
             try:
+                original_message = await ctx.interaction.original_message()
+
+                def check(interaction: discord.Interaction) -> typing.Union[bool, None]:
+                    # Check if the interaction is used the original context interaction message.
+                    if interaction.message.id != original_message.id:
+                        return
+                    if interaction.user != ctx.author:
+                        self.bot.loop.create_task(
+                            interaction.response.send_message(
+                                "Bro this is not meant for you LMAO"
+                            )
+                        )
+                        return
+                    return True
+
                 # Wait for a response
                 payload: discord.Interaction = await self.bot.wait_for(
                     "component_interaction",
-                    # check=lambda p: p.message == message and p.user == ctx.author,
-                    timeout=3.0,
+                    check=check,
+                    timeout=15.0,
                 )
-                await ctx.send(payload)
             except asyncio.TimeoutError:
-                return await message.edit(content=content + "\n\\🟥 **You took too long to respond** 😔\n`waited 60.0s`", components=components.disable_components())
+                return await ctx.interaction.edit_original_message(
+                    content=content
+                    + "\n\n\\🟥 You took too long to respond `waited 15.0s`",
+                    components=components.disable_components(),
+                )
 
             # Get the selected location
             location = locations.get_location_from_interaction(payload)
@@ -429,7 +444,9 @@ class EconomyCommands(vbu.Cog):
                 embed.description = f"“{quote}”"
 
             # Update the message
-            await payload.update_message(embed=embed, components=None, content=None)
+            await ctx.interaction.edit_original_message(
+                embed=embed, components=None, content=None
+            )
 
 
 def setup(bot: vbu.Bot):
