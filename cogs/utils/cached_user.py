@@ -65,7 +65,7 @@ async def get_user_cache(
     cog: vbu.Cog, user_id: int, db: typing.Optional[vbu.DatabaseConnection]
 ) -> CachedUser:
     """
-    Returns user's cached information, if any. Otherwise returns data from the database.
+    :coro: Returns user's cached information, if any. Otherwise returns data from the database.
 
     Args:
         cog (`:class:vbu.Cog`):  The cog.
