@@ -106,53 +106,6 @@ class EconomyCommands(vbu.Cog):
     def cog_unload(self):
         self.update_db_from_user_cache.cancel()
 
-    async def get_user_cache(
-        self, user_id: int, db: typing.Optional[vbu.DatabaseConnection]
-    ) -> utils.CachedUser:
-        """
-        Returns user's cached information, if any. Otherwise returns data from the database.
-
-        Args:
-            user_id (`int`): The user's ID.
-            db (:class:`voxelbotutils.DatabaseConnection`): The database connection.
-
-        Returns:
-            `dict`: The user's cache.
-        """
-
-        # If the user is already cached, return it
-        try:
-            return self.bot.user_cache[user_id]
-
-        # Otherwise, let's create it
-        except KeyError:
-
-            # Get the user's skills
-            user_skill_rows = await db(
-                "SELECT * FROM user_skill WHERE user_id = $1", user_id
-            )
-            user_skills = [utils.Skill(**i) for i in user_skill_rows]
-
-            # Now let's get the user's pp
-            try:
-                pp_rows = await db("SELECT * FROM user_pp WHERE user_id = $1", user_id)
-                user_pp = utils.Pp(**pp_rows[0])
-
-            # apparently the user doesn't have pp? Let's create one
-            except IndexError:
-                user_pp = utils.Pp(user_id)
-
-            # Now we add this to the user cache
-            self.bot.user_cache[user_id] = utils.CachedUser(
-                user_id, user_skills, user_pp
-            )
-
-            # we do a little logging. it's called: "We do a little logging"
-            self.logger.info(f"Creating user cache for {user_id}... success")
-
-            # and return the user cache
-            return self.bot.user_cache[user_id]
-
     @tasks.loop(seconds=30.0)
     async def update_db_from_user_cache(self) -> None:
         """
@@ -352,7 +305,9 @@ class EconomyCommands(vbu.Cog):
         async with vbu.DatabaseConnection() as db:
 
             # Get the user's cache
-            cache: utils.CachedUser = await self.get_user_cache(ctx.author.id, db)
+            cache: utils.CachedUser = await utils.get_user_cache(
+                self, ctx.author.id, db
+            )
             begging = cache.get_skill("BEGGING")
 
             # Set up the begging locations with the user's current begging level
