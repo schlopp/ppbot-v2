@@ -308,6 +308,7 @@ class GamblingCommands(vbu.Cog):
                     else:
                         actions.append(f"+ {ctx.author.name} and pp bot push.")
                         with embed:
+                            cache.pp.size += amount
                             embed.colour = utils.YELLOW
                             embed.description = f"**PUSH!**\n{ctx.author.name} and pp bot ended up in a tie. You win {utils.format_rewards(inches=0)}"
                             embed.edit_field_by_index(
