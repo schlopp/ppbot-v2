@@ -15,3 +15,5 @@ from .cached_user import *
 from .begging import *
 from .readable import *
 from .gambling import *
+from .checks import *
+from .using_command import *
