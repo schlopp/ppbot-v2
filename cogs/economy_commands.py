@@ -34,6 +34,9 @@ class EconomyCommands(vbu.Cog):
         except AttributeError:
             self.logger.warn("Clearing items cache... failed - No items cached")
 
+        if not hasattr(self.bot, "commands_in_use"):
+            self.bot.commands_in_use = {}
+
         # Load each location from ./config/locations
         directory = r"config\items"
         items = []
@@ -202,7 +205,6 @@ class EconomyCommands(vbu.Cog):
         self.bot.user_cache.clear()
 
     @commands.command(name="inventory", aliases=["inv"])
-    @vbu.checks.bot_is_ready()
     @commands.bot_has_permissions(
         embed_links=True,
         read_messages=True,
@@ -214,6 +216,9 @@ class EconomyCommands(vbu.Cog):
         send_messages=True,
         use_slash_commands=True,
     )
+    @utils.is_slash_command()
+    @utils.is_not_busy()
+    @vbu.checks.bot_is_ready()
     async def _inventory_command(self, ctx: commands.SlashContext) -> None:
         """
         View the items in your inventory!
@@ -324,7 +329,6 @@ class EconomyCommands(vbu.Cog):
                 await paginator.start(ctx, timeout=10)
 
     @commands.command(name="beg")
-    @vbu.checks.bot_is_ready()
     @commands.bot_has_permissions(
         embed_links=True,
         read_messages=True,
@@ -336,6 +340,9 @@ class EconomyCommands(vbu.Cog):
         send_messages=True,
         use_slash_commands=True,
     )
+    @utils.is_slash_command()
+    @utils.is_not_busy()
+    @vbu.checks.bot_is_ready()
     async def _beg_command(self, ctx: commands.SlashContext) -> None:
         """
         Beg for inches, earn items, and get a large pp in the process!
