@@ -57,9 +57,6 @@ class GamblingCommands(vbu.Cog):
                     custom_id="STAND",
                     style=discord.ui.ButtonStyle.primary,
                 ),
-                discord.ui.Button(
-                    label="TEST", custom_id="TEST", style=discord.ui.ButtonStyle.danger
-                ),
             )
         )
 
@@ -105,7 +102,9 @@ class GamblingCommands(vbu.Cog):
             reversed_actions = list(reversed(actions))
             if len(actions) > 2:
                 return "```diff\n{}\n{} previous {}...```".format(
-                    "\n".join(reversed_actions[:2]), len(reversed_actions) - 2, "actions" if len(reversed_actions) - 3 else "action"
+                    "\n".join(reversed_actions[:2]),
+                    len(reversed_actions) - 2,
+                    "actions" if len(reversed_actions) - 3 else "action",
                 )
             return "```diff\n{}```".format("\n".join(reversed_actions))
 
