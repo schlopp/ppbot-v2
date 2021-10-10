@@ -298,7 +298,9 @@ class EconomyCommands(vbu.Cog):
     @vbu.checks.bot_is_ready()
     async def _show_pp(self, ctx: commands.SlashContext) -> None:
         async with vbu.DatabaseConnection() as db:
-            cache: utils.CachedUser = await utils.get_user_cache(self, ctx.author.id, db)
+            cache: utils.CachedUser = await utils.get_user_cache(
+                self, ctx.author.id, db
+            )
             with vbu.Embed() as embed:
                 embed.colour = utils.BLUE
                 embed.set_author(
@@ -306,7 +308,10 @@ class EconomyCommands(vbu.Cog):
                     icon_url=ctx.author.avatar.url,
                 )
                 embed.description = f"8{('='*(cache.pp.size // 50))[:1000]}D"
-                embed.add_field("Stats", f"Size - {cache.pp.size}\nMultiplier - {cache.pp.multiplier}")
+                embed.add_field(
+                    "Stats",
+                    f"Size - {cache.pp.size}\nMultiplier - {cache.pp.multiplier}",
+                )
             await ctx.interaction.response.send_message(embed=embed)
 
     @commands.command(name="beg")
