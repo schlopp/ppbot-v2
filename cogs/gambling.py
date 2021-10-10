@@ -94,9 +94,7 @@ class GamblingCommands(vbu.Cog):
                 elif game.state == utils.BlackjackState.DEALER_BLACKJACK:
                     with embed:
                         embed.colour = utils.RED
-                        embed.description = (
-                            f"**DEALER BLACKJACK!**\n{ctx.author.name} loses {utils.format_rewards(inches=amount)}"
-                        )
+                        embed.description = f"**DEALER BLACKJACK!**\n{ctx.author.name} loses {utils.format_rewards(inches=amount)}"
                     return await ctx.interaction.response.send_message(
                         embed=embed, components=components.disable_components()
                     )
