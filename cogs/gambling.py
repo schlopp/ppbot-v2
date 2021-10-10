@@ -97,6 +97,7 @@ class GamblingCommands(vbu.Cog):
         actions: typing.List[str] = []
 
         def formatted_actions() -> str:
+            print(actions)
             if not actions:
                 return ""
             reversed_actions = list(reversed(actions))
@@ -141,6 +142,9 @@ class GamblingCommands(vbu.Cog):
             action = getattr(
                 utils.BlackjackAction, action_interaction.data["custom_id"]
             )
+
+            game.player_action(action)
+
             if action == utils.BlackjackAction.HIT:
                 actions.append(
                     f"+ {ctx.author.name} hits and received a {game.player.cards[-1]}."
@@ -149,8 +153,6 @@ class GamblingCommands(vbu.Cog):
                 actions.append(f"! {ctx.author.name} stands.")
             else:
                 actions.append(f"? {ctx.author.name} {action.name.lower()}s.")
-
-            game.player_action(action)
 
             with embed:
                 embed.edit_field_by_index(
