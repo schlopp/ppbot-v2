@@ -87,6 +87,11 @@ class GamblingCommands(vbu.Cog):
                     with embed:
                         embed.colour = utils.GREEN
                         embed.description = f"**BLACKJACK!**\n{ctx.author.name} walks away with {utils.format_rewards(inches=reward)} (50% bonus)"
+                        embed.edit_field_by_index(
+                            1,
+                            name="Pp bot <:ppevil:871396299830861884>",
+                            value=f"Hand - {game.dealer}\nTotal - `{game.dealer.total_value()}`",
+                        )
                     return await ctx.interaction.response.send_message(
                         embed=embed, components=components.disable_components()
                     )
@@ -95,6 +100,11 @@ class GamblingCommands(vbu.Cog):
                     with embed:
                         embed.colour = utils.RED
                         embed.description = f"**DEALER BLACKJACK!**\n{ctx.author.name} loses {utils.format_rewards(inches=-amount)}"
+                        embed.edit_field_by_index(
+                            1,
+                            name="Pp bot <:ppevil:871396299830861884>",
+                            value=f"Hand - {game.dealer}\nTotal - `{game.dealer.total_value()}`",
+                        )
                     return await ctx.interaction.response.send_message(
                         embed=embed, components=components.disable_components()
                     )
