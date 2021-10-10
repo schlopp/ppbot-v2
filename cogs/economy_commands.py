@@ -155,7 +155,6 @@ class EconomyCommands(vbu.Cog):
                     f"Updating user cache for {user_id}'s pp: {user_cache!r}... success"
                 )
 
-        self.bot.user_cache.clear()
 
     @commands.command(name="inventory", aliases=["inv"])
     @commands.bot_has_permissions(
@@ -334,115 +333,189 @@ class EconomyCommands(vbu.Cog):
         Beg for inches, earn items, and get a large pp in the process!
         """
 
-        ctx.interaction.response: discord.InteractionResponse
-        async with vbu.DatabaseConnection() as db:
+        with utils.UsingCommand(ctx):
+            async with vbu.DatabaseConnection() as db:
 
-            # Get the user's cache
-            cache: utils.CachedUser = await utils.get_user_cache(
-                self, ctx.author.id, db
-            )
-            begging = cache.get_skill("BEGGING")
-
-            # Set up the begging locations with the user's current begging level
-            locations = utils.BeggingLocations(
-                begging.level, *self.bot.begging["locations"]
-            )
-
-            # Build the message
-            components = discord.ui.MessageComponents(
-                discord.ui.ActionRow(locations.to_select_menu())
-            )
-            content = "\n".join(
-                (
-                    f"**Where are you begging?**",
-                    f"Level up `BEGGING` unlock new locations!",
-                    f"**Current level:** {utils.int_to_roman(begging.level)}",
+                cache: utils.CachedUser = await utils.get_user_cache(
+                    self, ctx.author.id, db
                 )
-            )
+                begging = cache.get_skill("BEGGING")
 
-            # Send the message
-            await ctx.interaction.response.send_message(content, components=components)
+                locations = utils.BeggingLocations(
+                    begging.level, *self.bot.begging["locations"]
+                )
 
-            try:
-                original_message = await ctx.interaction.original_message()
+                components = discord.ui.MessageComponents(
+                    discord.ui.ActionRow(locations.to_select_menu())
+                )
+                content = "\n".join(
+                    (
+                        f"**Where are you begging?**",
+                        f"Level up `BEGGING` unlock new locations!",
+                        f"**Current level:** {utils.int_to_roman(begging.level)}",
+                    )
+                )
 
-                def check(interaction: discord.Interaction) -> typing.Union[bool, None]:
-                    # Check if the interaction is used the original context interaction message.
-                    if interaction.message.id != original_message.id:
-                        return
-                    if interaction.user != ctx.author:
-                        self.bot.loop.create_task(
-                            interaction.response.send_message(
-                                content="Bro this is not meant for you LMAO",
-                                ephemeral=True,
+                await ctx.interaction.response.send_message(
+                    content, components=components
+                )
+
+                try:
+                    original_message = await ctx.interaction.original_message()
+
+                    def check(
+                        interaction: discord.Interaction,
+                    ) -> typing.Union[bool, None]:
+                        # Check if the interaction is used the original context interaction message.
+                        if interaction.message.id != original_message.id:
+                            return
+                        if interaction.user != ctx.author:
+                            self.bot.loop.create_task(
+                                interaction.response.send_message(
+                                    content="Bro this is not meant for you LMAO",
+                                    ephemeral=True,
+                                )
                             )
+                            return
+                        return True
+
+                    # Wait for a response
+                    payload: discord.Interaction = await self.bot.wait_for(
+                        "component_interaction",
+                        check=check,
+                        timeout=15.0,
+                    )
+                except asyncio.TimeoutError:
+                    return await ctx.interaction.edit_original_message(
+                        content=content
+                        + "\n\n\\🟥 You took WAY too long to respond `waited 15.0s`",
+                        components=components.disable_components(),
+                    )
+
+                # Get the selected location
+                location: utils.BeggingLocation = (
+                    locations.get_location_from_interaction(payload)
+                )
+                if locations is None:
+                    raise Exception("Invalid location")
+
+                # 10% chance of fill in the blank minigame
+                if (random_percentage := random.random()) < 0.1:
+                    with vbu.Embed() as embed:
+                        embed.colour = utils.BLUE
+                        embed.set_author(
+                            name=f"{ctx.author.display_name}'s minigame",
+                            icon_url=ctx.author.avatar.url,
                         )
-                        return
-                    return True
+                        embed.title = "Fill in the blank!"
+                        fill_in_the_blank = location.quotes.minigames.fill_in_the_blank
 
-                # Wait for a response
-                payload: discord.Interaction = await self.bot.wait_for(
-                    "component_interaction",
-                    check=check,
-                    timeout=15.0,
+                        prompt, answer = random.choice(
+                            [
+                                (
+                                    "Whoever threw that paper, your mom's a `[ _ _ _ ]`!",
+                                    "HOE",
+                                ),
+                                (
+                                    "I have the power of `[ _ _ _   _ _ _   _ _ _ _ _ ]` on my side!",
+                                    "GOD AND ANIME",
+                                ),
+                                (
+                                    "*dodges bullets like in The `[ _ _ _ _ _ _ ]`*",
+                                    "MATRIX",
+                                ),
+                                ("You'll never `[ _ _ _ _ ]` me alive! *doot*", "TAKE"),
+                            ]
+                        )
+
+                        embed.description = f"{fill_in_the_blank.context}\n\n**{fill_in_the_blank.approacher}:** {prompt}"
+                        embed.set_author(name="Respond to this message with the answer")
+                    await ctx.interaction.edit_original_message(
+                        embed=embed, components=None, content=None
+                    )
+
+                    try:
+                        answer_message = await self.bot.wait_for(
+                            "message",
+                            check=lambda m: m.author == ctx.author
+                            and m.content.upper() == answer,
+                            timeout=15.0,
+                        )
+                    except asyncio.TimeoutError:
+                        with embed:
+                            embed.description = f"bruh, you took WAY too long to respond. You get {utils.format_rewards()}.\n\n**{fill_in_the_blank.approacher}:** {fill_in_the_blank.fail}"
+                        return await ctx.interaction.edit_original_message(embed=embed)
+
+                    with vbu.Embed() as embed:
+                        embed.colour = utils.PINK
+
+                        # Generate rewards and give them to the user
+                        loot = location.loot_table.get_random_loot(self.bot)
+                        async with utils.Inventory.fetch(
+                            self.bot, db, ctx.author.id, update_values=True
+                        ) as inv:
+                            inv.add_items(*loot)
+
+                        growth = int(random.randint(1000, 2000) * cache.pp.multiplier)
+                        cache.pp.size += growth
+
+                        # Get a random quote and format it with the reward
+                        quote = fill_in_the_blank.success.format(
+                            utils.format_rewards(inches=growth, items=loot)
+                        )
+
+                        # Set the embed's description to the quote
+                        embed.description = (
+                            f"**{fill_in_the_blank.approacher}:** “{quote}”"
+                        )
+
+                    # Update the message
+                    return await ctx.interaction.edit_original_message(
+                        embed=embed, components=None, content=None
+                    )
+
+                # Update database and build the embed for receiving a generic donation.
+                with vbu.Embed() as embed:
+                    embed.colour = utils.BLUE
+                    donators: utils.Donators = self.bot.begging["donators"]
+                    donator = donators.get_random_donator()
+
+                    # Generate rewards and give them to the user
+                    loot = location.loot_table.get_random_loot(self.bot)
+                    async with utils.Inventory.fetch(
+                        self.bot, db, ctx.author.id, update_values=True
+                    ) as inv:
+                        inv.add_items(*loot)
+
+                    growth = int(random.randint(1, 50) * cache.pp.multiplier)
+                    cache.pp.size += growth
+
+                    # If there are any donator success quotes, use them
+                    if donator.quotes.success:
+                        quotes = donator.quotes.success
+
+                    # Otherwise, use the default quotes
+                    else:
+                        quotes = location.quotes.success
+
+                    # Get a random quote and format it with the reward
+                    quote = random.choice(quotes).format(
+                        utils.format_rewards(inches=growth, items=loot)
+                    )
+
+                    # Set the embed's author
+                    embed.set_author(
+                        name=f"{donator.name} \N{bullet} {location.name}",
+                        icon_url=donator.icon_url,
+                    )
+
+                    # Set the embed's description to the quote
+                    embed.description = f"“{quote}”"
+
+                # Update the message
+                await ctx.interaction.edit_original_message(
+                    embed=embed, components=None, content=None
                 )
-            except asyncio.TimeoutError:
-                return await ctx.interaction.edit_original_message(
-                    content=content
-                    + "\n\n\\🟥 You took too long to respond `waited 15.0s`",
-                    components=components.disable_components(),
-                )
-
-            # Get the selected location
-            location = locations.get_location_from_interaction(payload)
-
-            # 5% chance of fill in the blank minigame
-            if (random_percentage := random.random()) < 0.05:
-                raise NotImplementedError(
-                    "The 'fill in the blank' minigame has not been added yet."
-                )
-
-            # Update database and build the embed for receiving a generic donation.
-            with vbu.Embed(use_random_colour=True) as embed:
-                donators: utils.Donators = self.bot.begging["donators"]
-                donator = donators.get_random_donator()
-
-                # Generate rewards and give them to the user
-                loot = location.loot_table.get_random_loot(self.bot)
-                async with utils.Inventory.fetch(
-                    self.bot, db, ctx.author.id, update_values=True
-                ) as inv:
-                    inv.add_items(*loot)
-
-                growth = int(random.randint(1, 50) * cache.pp.multiplier)
-                cache.pp.size += growth
-
-                # If there are any donator success quotes, use them
-                if donator.quotes.success:
-                    quotes = donator.quotes.success
-
-                # Otherwise, use the default quotes
-                else:
-                    quotes = location.quotes.success
-
-                # Get a random quote and format it with the reward
-                quote = random.choice(quotes).format(
-                    utils.format_rewards(inches=growth, items=loot)
-                )
-
-                # Set the embed's author
-                embed.set_author(
-                    name=f"{donator.name} \N{bullet} {location.name}",
-                    icon_url=donator.icon_url,
-                )
-
-                # Set the embed's description to the quote
-                embed.description = f"“{quote}”"
-
-            # Update the message
-            await ctx.interaction.edit_original_message(
-                embed=embed, components=None, content=None
-            )
 
 
 def setup(bot: vbu.Bot):
