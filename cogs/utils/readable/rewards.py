@@ -64,7 +64,7 @@ def format_rewards(
 
         if not items:
             return "**{}{} {}**".format(
-                "+" if inches > 0 else "-",
+                "+" if inches > 0 else "",
                 inches,
                 random.choice(
                     [
@@ -90,7 +90,7 @@ def format_rewards(
     return "{} and {}".format(
         ", ".join(items_as_text),
         "**{}{} {}**".format(
-            "+" if inches > 0 else "-",
+            "+" if inches > 0 else "",
             inches,
             random.choice(
                 [
