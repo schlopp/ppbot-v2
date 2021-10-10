@@ -94,7 +94,7 @@ class GamblingCommands(vbu.Cog):
                 elif game.state == utils.BlackjackState.DEALER_BLACKJACK:
                     with embed:
                         embed.colour = utils.RED
-                        embed.description = f"**DEALER BLACKJACK!**\n{ctx.author.name} loses {utils.format_rewards(inches=amount)}"
+                        embed.description = f"**DEALER BLACKJACK!**\n{ctx.author.name} loses {utils.format_rewards(inches=-amount)}"
                     return await ctx.interaction.response.send_message(
                         embed=embed, components=components.disable_components()
                     )
@@ -197,7 +197,7 @@ class GamblingCommands(vbu.Cog):
                     actions.append(f"- {ctx.author.name} doesn't respond.")
                     with embed:
                         embed.colour = utils.YELLOW
-                        embed.description = f"**TIMED OUT!**\nWhile {ctx.author.name} was AFK, the dealer ran away with his {utils.format_rewards(inches=amount)}"
+                        embed.description = f"**TIMED OUT!**\nWhile {ctx.author.name} was AFK, the dealer ran away with his {utils.format_rewards(inches=-amount)}"
                         embed.edit_field_by_index(
                             1,
                             name="Pp bot <:ppevil:871396299830861884>",
@@ -210,7 +210,7 @@ class GamblingCommands(vbu.Cog):
                     actions.append(f"- {ctx.author.name} busts.")
                     with embed:
                         embed.colour = utils.RED
-                        embed.description = f"**BUST!**\n{ctx.author.name} got a bit to greedy, and busted. You lose {utils.format_rewards(inches=amount)}"
+                        embed.description = f"**BUST!**\n{ctx.author.name} got a bit to greedy, and busted. You lose {utils.format_rewards(inches=-amount)}"
                         embed.edit_field_by_index(
                             1,
                             name="Pp bot <:ppevil:871396299830861884>",
@@ -262,7 +262,7 @@ class GamblingCommands(vbu.Cog):
                         actions.append(f"+ pp bot wins.")
                         with embed:
                             embed.colour = utils.RED
-                            embed.description = f"**DEALER WIN!**\n{ctx.author.name} got dunked on by pp bot. You lose {utils.format_rewards(inches=amount)}"
+                            embed.description = f"**DEALER WIN!**\n{ctx.author.name} got dunked on by pp bot. You lose {utils.format_rewards(inches=-amount)}"
                             embed.edit_field_by_index(
                                 1,
                                 name="Pp bot <:ppevil:871396299830861884>",
