@@ -373,7 +373,7 @@ class EconomyCommands(vbu.Cog):
                     if interaction.user != ctx.author:
                         self.bot.loop.create_task(
                             interaction.response.send_message(
-                                "Bro this is not meant for you LMAO"
+                                content="Bro this is not meant for you LMAO", ephemeral=True,
                             )
                         )
                         return
