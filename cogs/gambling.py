@@ -137,6 +137,14 @@ class GamblingCommands(vbu.Cog):
                     ):
                         return
 
+                    if action_interaction.user != ctx.author:
+                        self.bot.loop.create_task(
+                            action_interaction.response.send_message(
+                                content="Bro this is not meant for you LMAO", ephemeral=True,
+                            )
+                        )
+                        return
+
                     if not hasattr(
                         utils.BlackjackAction,
                         action_interaction.data.get("custom_id", ""),
