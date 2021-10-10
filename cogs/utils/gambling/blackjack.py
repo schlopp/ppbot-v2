@@ -13,11 +13,13 @@ class BlackjackState(Enum):
     DEALER_TURN: int = 1
     DEALER_BUST: int = 2
     DEALER_BLACKJACK: int = 3
-    PUSH: int = 4
-    PLAYER_TURN: int = 5
-    PLAYER_BUST: int = 6
-    PLAYER_BLACKJACK: int = 7
-    TIMEOUT: int = 8
+    DEALER_WIN: int = 4
+    PUSH: int = 5
+    PLAYER_TURN: int = 6
+    PLAYER_BUST: int = 7
+    PLAYER_BLACKJACK: int = 8
+    PLAYER_WIN: int = 9
+    TIMEOUT: int = 10
 
 
 class BlackjackAction(Enum):
@@ -60,6 +62,9 @@ class BlackjackHand:
     def __str__(self):
         cards = [str(i) for i in self.cards]
         return f"`{'` `'.join(cards)}`"
+
+    def hidden(self):
+        return f"`{self.cards[0]}` `?`"
 
     def hit(self) -> Card:
         """
@@ -139,3 +144,27 @@ class BlackjackGame:
                 self.state = BlackjackState.PLAYER_BUST
         elif action == BlackjackAction.STAND:
             self.state = BlackjackState.DEALER_TURN
+
+    def dealer_action(self) -> None:
+        """
+        Performs an action on the dealer.
+        """
+
+        if self.state != BlackjackState.DEALER_TURN:
+            raise Exception("Dealer can only take actions in the DEALER_TURN state.")
+
+        total_value: BlackjackCardTotal = self._dealer.total_value()
+        player_total_value: BlackjackCardTotal = self._player.total_value()
+        if total_value.value > 21:
+            self.state = BlackjackState.DEALER_BUST
+        elif total_value.value >= 17:
+            if total_value.value > player_total_value.value:
+                self.state = BlackjackState.DEALER_WIN
+            elif total_value.value == player_total_value.value:
+                self.state = BlackjackState.PUSH
+            else:
+                self.state = BlackjackState.PLAYER_WIN
+        else:
+            self._dealer.hit()
+            self.state = BlackjackState.DEALER_TURN
+        print(total_value)
