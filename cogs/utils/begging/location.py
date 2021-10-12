@@ -91,9 +91,9 @@ class LootTable:
 
             # Make a random check to see if we should add the item to the list.
             if (
-                random.random() <= loot_table_item.drop_rate * 5
+                random.random() <= (loot_table_item.drop_rate * 5
                 if boosted
-                else loot_table_item.drop_rate
+                else loot_table_item.drop_rate)
             ):
 
                 # Get the item from the cache.
