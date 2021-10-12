@@ -155,7 +155,6 @@ class EconomyCommands(vbu.Cog):
                     f"Updating user cache for {user_id}'s pp: {user_cache!r}... success"
                 )
 
-
     @commands.command(name="inventory", aliases=["inv"])
     @commands.bot_has_permissions(
         embed_links=True,
@@ -450,7 +449,9 @@ class EconomyCommands(vbu.Cog):
                         embed.colour = utils.PINK
 
                         # Generate rewards and give them to the user
-                        loot = location.loot_table.get_random_loot(self.bot)
+                        loot = location.loot_table.get_random_loot(
+                            self.bot, boosted=True
+                        )
                         async with utils.Inventory.fetch(
                             self.bot, db, ctx.author.id, update_values=True
                         ) as inv:

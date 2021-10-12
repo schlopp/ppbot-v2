@@ -58,7 +58,11 @@ class LootTable:
         self.items = list(items)
 
     def get_random_loot(
-        self, bot: vbu.Bot, max_items: typing.Optional[int] = None
+        self,
+        bot: vbu.Bot,
+        max_items: typing.Optional[int] = None,
+        *,
+        boosted: typing.Optional[bool] = False,
     ) -> typing.List[LootableItem]:
         """
         Gets a random item from the loot table.
@@ -86,7 +90,11 @@ class LootTable:
                 break
 
             # Make a random check to see if we should add the item to the list.
-            if random.random() <= loot_table_item.drop_rate:
+            if (
+                random.random() <= loot_table_item.drop_rate * 5
+                if boosted
+                else loot_table_item.drop_rate
+            ):
 
                 # Get the item from the cache.
                 try:
@@ -131,7 +139,10 @@ class LootTable:
                     raise KeyError(error_message)
 
                 # Generate a random number between the item's min and max.
-                amount = random.randint(loot_table_item.min, loot_table_item.max)
+                amount = random.randint(
+                    loot_table_item.min,
+                    loot_table_item.max * 5 if boosted else loot_table_item.max,
+                )
 
                 # Don't add the item if the amount is 0.
                 if not amount:
