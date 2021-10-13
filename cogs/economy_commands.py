@@ -424,6 +424,11 @@ class EconomyCommands(vbu.Cog):
                                     "MATRIX",
                                 ),
                                 ("You'll never `[ _ _ _ _ ]` me alive! *doot*", "TAKE"),
+                                ("Doin' your [ _ _ _ ]", "MOM"),
+                                (
+                                    "Shut yo skin tone [ _ _ _ _ _ _ _ ] bone google chrome no home flip phone disowned ice cream cone garden gnome extra chromosome metronome dimmadome head ass tf up",
+                                    "CHICKEN",
+                                ),
                             ]
                         )
 
