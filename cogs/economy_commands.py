@@ -425,11 +425,16 @@ class EconomyCommands(vbu.Cog):
                                     "MATRIX",
                                 ),
                                 ("You'll never `[ _ _ _ _ ]` me alive! *doot*", "TAKE"),
+                                ("Doin' your [ _ _ _ ]", "MOM"),
+                                (
+                                    "Shut yo skin tone [ _ _ _ _ _ _ _ ] bone google chrome no home flip phone disowned ice cream cone garden gnome extra chromosome metronome dimmadome head ass tf up",
+                                    "CHICKEN",
+                                ),
                             ]
                         )
 
-                        embed.description = f"{fill_in_the_blank.context}\n\n**{fill_in_the_blank.approacher}:** {prompt}"
-                        embed.set_author(name="Respond to this message with the answer")
+                        embed.description = f"{fill_in_the_blank.context}\n\n**{fill_in_the_blank.approacher}:** “{prompt}”"
+                        embed.set_footer("Respond to this message with the answer")
                     await ctx.interaction.edit_original_message(
                         embed=embed, components=None, content=None
                     )
@@ -443,7 +448,7 @@ class EconomyCommands(vbu.Cog):
                         )
                     except asyncio.TimeoutError:
                         with embed:
-                            embed.description = f"bruh, you took WAY too long to respond. You get {utils.format_rewards()}.\n\n**{fill_in_the_blank.approacher}:** {fill_in_the_blank.fail}"
+                            embed.description = f"bruh, the answer was {answer}, but you took WAY too long to respond. You get {utils.format_rewards()}.\n\n**{fill_in_the_blank.approacher}:** {fill_in_the_blank.fail}"
                         return await ctx.interaction.edit_original_message(embed=embed)
 
                     with vbu.Embed() as embed:
