@@ -93,7 +93,9 @@ class EconomyCommands(vbu.Cog):
                 )
 
         # Load all donators
-        self.bot.begging["donators"] = utils.Donators.from_dict(toml.load(os.path.join(directory, "donators.toml")))
+        self.bot.begging["donators"] = utils.Donators.from_dict(
+            toml.load(os.path.join(directory, "donators.toml"))
+        )
 
     @vbu.Cog.listener(name="on_ready")
     async def _load_cache_on_ready(self):
