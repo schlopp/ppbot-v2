@@ -250,7 +250,7 @@ class BeggingLocation:
         self.quotes = quotes
 
     @classmethod
-    def from_dict(cls, bot: vbu.Bot, data: dict):
+    def from_dict(cls, bot: vbu.Bot, location_data: dict, quotes_data: dict):
         """
         Loads an :class:`Item` from a dictionary.
 
@@ -261,20 +261,20 @@ class BeggingLocation:
 
         return cls(
             bot,
-            data["level"],
-            data["id"],
-            data["name"],
-            data["description"],
-            bot.get_emoji(data["emoji"])
-            if isinstance(data["emoji"], int)
-            else data["emoji"],
-            LootTable(*(LootTableItem(**item) for item in data["loot_table"])),
+            location_data["level"],
+            location_data["id"],
+            location_data["name"],
+            location_data["description"],
+            bot.get_emoji(location_data["emoji"])
+            if isinstance(location_data["emoji"], int)
+            else location_data["emoji"],
+            LootTable(*(LootTableItem(**item) for item in location_data["loot_table"])),
             Quotes(
-                data["quotes"]["success"],
-                data["quotes"]["fail"],
+                (location_data["quotes"]["success"] or []) + quotes_data["success"],
+                (location_data["quotes"]["fail"] or []) + quotes_data["fail"],
                 MiniGames(
                     FillInTheBlank(
-                        **data["quotes"]["minigames"]["fill_in_the_blank"],
+                        **location_data["quotes"]["minigames"]["fill_in_the_blank"],
                     ),
                 ),
             ),

@@ -80,20 +80,21 @@ class EconomyCommands(vbu.Cog):
         }
 
         # Load each location from ./config/begging/locations
-        directory = r"config\begging\locations"
+        directory = r"config\begging"
+        quotes_data = toml.load(os.path.join(directory, "quotes.toml"))
         for filename in os.listdir(directory):
             if filename.endswith(".toml"):
                 self.bot.begging["locations"].append(
                     utils.BeggingLocation.from_dict(
-                        self.bot, toml.load(os.path.join(directory, filename))
+                        self.bot,
+                        toml.load(os.path.join(directory, "locations", filename)),
+                        quotes_data,
                     )
                 )
 
         # Load all donators from ./config/begging/donators.toml
         directory = r"config\begging\donators.toml"
-        self.bot.begging["donators"] = utils.begging.Donators.from_dict(
-            toml.load(directory)
-        )
+        self.bot.begging["donators"] = utils.Donators.from_dict(toml.load(directory))
 
     @vbu.Cog.listener(name="on_ready")
     async def _load_cache_on_ready(self):
