@@ -1,6 +1,6 @@
 import random
 
-__all__ = "scramble"
+__all__ = ("scramble",)
 
 
 def _shuffle(string):
