@@ -110,4 +110,12 @@ emoji = "<:PP_BEG:879382346812489809>"  # (string) The emoji that will be used t
             approacher = "local crackhead"  # (string) The person approaching the user in this mini-game.
             context = "Some random crackhead points at you and starts yelling."  # The context of the mini-game.
             success = "io mtae yoju got some crystal dfor me eh? alrigbht cheers hhers {}"  # (string) The success message for the user. E.g. "gameshow host: 'Good job! You win!'"
-            fail = "who are you?? gmet ouet of my hsuoe tyou fucking toryy"  # (string) The failure message for the user. E.g. "gameshow host: 'Sorry, you lose!'"
+            fail = "woh are you?? gmet ouet of my hsuoe tyou fucking tory"  # (string) The failure message for the user. E.g. "gameshow host: 'Sorry, you lose!'"
+
+        # All quotes for the scramble mini-game.
+        [quotes.minigames.scramble]
+
+            approacher = ""
+            context = ""
+            success = ""
+            fail = ""
