@@ -81,7 +81,8 @@
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        # None
+        success = []
+        fail = []
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -89,7 +90,8 @@
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        # None
+        success = []
+        fail = []
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -97,7 +99,8 @@
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        # None
+        success = []
+        fail = []
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -105,7 +108,8 @@
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        # None
+        success = []
+        fail = []
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -113,7 +117,8 @@
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        # None
+        success = []
+        fail = []
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -121,7 +126,8 @@
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        # None
+        success = []
+        fail = []
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -129,7 +135,8 @@
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        # None
+        success = []
+        fail = []
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -137,7 +144,8 @@
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        # None
+        success = []
+        fail = []
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -145,7 +153,8 @@
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        # None
+        success = []
+        fail = []
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -153,7 +162,8 @@
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        # None
+        success = []
+        fail = []
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -161,7 +171,8 @@
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        # None
+        success = []
+        fail = []
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -169,7 +180,8 @@
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        # None
+        success = []
+        fail = []
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -177,7 +189,8 @@
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        # None
+        success = []
+        fail = []
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -185,7 +198,8 @@
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        # None
+        success = []
+        fail = []
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -193,7 +207,8 @@
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        # None
+        success = []
+        fail = []
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -201,7 +216,8 @@
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        # None
+        success = []
+        fail = []
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -209,4 +225,5 @@
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        # None
+        success = []
+        fail = []
