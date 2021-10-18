@@ -16,7 +16,7 @@ class EconomyCommands(vbu.Cog):
         super().__init__(bot)
         self.bot: vbu.Bot
 
-        self.hyperlink = "https://www.youtube.com/watch?v=FP23VU01fz8"
+        self.bot.hyperlink = "https://www.youtube.com/watch?v=FP23VU01fz8"
         if self.bot.is_ready():
             self._load_cache()
 
@@ -194,7 +194,7 @@ class EconomyCommands(vbu.Cog):
                             icon_url=ctx.author.avatar.url,
                         )
                         embed.description = (
-                            f"use [/item-info [item]]({self.hyperlink}) for more information.\n\n"
+                            f"use [/item-info [item]]({self.bot.hyperlink}) for more information.\n\n"
                             + "\n\n".join(output)
                         )
                         embed.set_footer(
@@ -482,48 +482,151 @@ class EconomyCommands(vbu.Cog):
                         embed=embed, components=None, content=None
                     )
 
-                # Update database and build the embed for receiving a generic donation.
-                with vbu.Embed() as embed:
-                    embed.colour = utils.BLUE
-                    donators: utils.Donators = self.bot.begging["donators"]
-                    donator = donators.get_random_donator()
+                # 10% chance of scramble minigame
+                elif random_percentage < 0.2:
+                    with vbu.Embed() as embed:
+                        embed.colour = utils.BLUE
+                        embed.set_author(
+                            name=f"{ctx.author.display_name}'s minigame",
+                            icon_url=ctx.author.avatar.url,
+                        )
+                        embed.title = "Scramble!"
+                        fill_in_the_blank = location.quotes.minigames.fill_in_the_blank
 
-                    # Generate rewards and give them to the user
-                    loot = location.loot_table.get_random_loot(self.bot)
-                    async with utils.Inventory.fetch(
-                        self.bot, db, ctx.author.id, update_values=True
-                    ) as inv:
-                        inv.add_items(*loot)
+                        unscrambled = random.choice(
+                            [
+                                "bitch",
+                                "peepee",
+                                "balls",
+                                "taxes",
+                                "tax evasion",
+                                "pp bot",
+                                "multiplier",
+                                "supercalifragilisticexpialidocious",
+                                "amogus",
+                                "testicles",
+                                "karen",
+                                "schlopp",
+                                "i love balls",
+                                "doin ur mom",
+                                "try harder lmao",
+                                "small cock",
+                            ]
+                        )
 
-                    growth = int(random.randint(1, 50) * cache.pp.multiplier)
-                    cache.pp.size += growth
+                        scrambled = utils.scramble(unscrambled)
 
-                    # If there are any donator success quotes, use them
-                    if donator.quotes.success:
-                        quotes = donator.quotes.success
+                        embed.description = f"{fill_in_the_blank.context}\n\nYour word is [`{scrambled}`]({self.bot.hyperlink})."
+                        embed.set_footer("Respond to this message with the answer")
 
-                    # Otherwise, use the default quotes
-                    else:
-                        quotes = location.quotes.success
-
-                    # Get a random quote and format it with the reward
-                    quote = random.choice(quotes).format(
-                        utils.format_rewards(inches=growth, items=loot)
+                    await ctx.interaction.edit_original_message(
+                        embed=embed, components=None, content=None
                     )
 
-                    # Set the embed's author
-                    embed.set_author(
-                        name=f"{donator.name} \N{bullet} {location.name}",
-                        icon_url=donator.icon_url,
+                    attempts_left = 3
+
+                    def scramble_check(message: discord.Message) -> bool:
+
+                        if (
+                            message.author != ctx.author
+                            or message.channel != ctx.channel
+                        ):
+                            return
+
+                        if message.content.lower != scrambled.lower():
+                            nonlocal attempts_left
+                            attempts_left -= 1
+                            self.bot.loop.create_task(
+                                message.reply(
+                                    f"That's not the correct answer lol. You have **{attempts_left} attempts** left"
+                                )
+                            )
+                            if not attempts_left:
+                                raise asyncio.TimeoutError
+                            return
+
+                        return True
+
+                    while attempts_left:
+                        try:
+                            answer_message = await self.bot.wait_for(
+                                "message",
+                                check=lambda m: m.author == ctx.author
+                                and m.content.upper() == answer,
+                                timeout=15.0,
+                            )
+                        except asyncio.TimeoutError:
+                            with embed:
+                                embed.description = f"You should work on your scrambling skills, the answer was {unscrambled}. You get {utils.format_rewards()}."
+                            return await ctx.interaction.edit_original_message(
+                                embed=embed
+                            )
+
+                    with vbu.Embed() as embed:
+                        embed.colour = utils.PINK
+
+                        # Generate rewards and give them to the user
+                        loot = location.loot_table.get_random_loot(
+                            self.bot, boosted=True
+                        )
+                        async with utils.Inventory.fetch(
+                            self.bot, db, ctx.author.id, update_values=True
+                        ) as inv:
+                            inv.add_items(*loot)
+
+                        growth = int(random.randint(1000, 2000) * cache.pp.multiplier)
+                        cache.pp.size += growth
+
+                        embed.description = f"**GG!** You win {utils.format_rewards(inches=growth, items=loot)}!"
+
+                    # Update the message
+                    return await ctx.interaction.edit_original_message(
+                        embed=embed, components=None, content=None
                     )
 
-                    # Set the embed's description to the quote
-                    embed.description = f"“{quote}”"
+                else:
+                    # Update database and build the embed for receiving a generic donation.
+                    with vbu.Embed() as embed:
+                        embed.colour = utils.BLUE
+                        donators: utils.Donators = self.bot.begging["donators"]
+                        donator = donators.get_random_donator()
 
-                # Update the message
-                await ctx.interaction.edit_original_message(
-                    embed=embed, components=None, content=None
-                )
+                        # Generate rewards and give them to the user
+                        loot = location.loot_table.get_random_loot(self.bot)
+                        async with utils.Inventory.fetch(
+                            self.bot, db, ctx.author.id, update_values=True
+                        ) as inv:
+                            inv.add_items(*loot)
+
+                        growth = int(random.randint(1, 50) * cache.pp.multiplier)
+                        cache.pp.size += growth
+
+                        # If there are any donator success quotes, use them
+                        if donator.quotes.success:
+                            quotes = donator.quotes.success
+
+                        # Otherwise, use the default quotes
+                        else:
+                            quotes = location.quotes.success
+
+                        # Get a random quote and format it with the reward
+                        quote = random.choice(quotes).format(
+                            utils.format_rewards(inches=growth, items=loot)
+                        )
+
+                        # Set the embed's author
+                        embed.set_author(
+                            name=f"{donator.name} \N{bullet} {location.name}",
+                            icon_url=donator.icon_url,
+                        )
+
+                        # Set the embed's description to the quote
+                        embed.description = f"“{quote}”"
+
+                    # Update the message
+                    await ctx.interaction.edit_original_message(
+                        embed=embed, components=None, content=None
+                    )
 
 
 def setup(bot: vbu.Bot):
