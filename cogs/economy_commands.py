@@ -533,7 +533,7 @@ class EconomyCommands(vbu.Cog):
                         ):
                             return
 
-                        if message.content.lower != scrambled.lower():
+                        if message.content.lower != unscrambled.lower():
                             nonlocal attempts_left
                             attempts_left -= 1
                             self.bot.loop.create_task(
@@ -551,13 +551,12 @@ class EconomyCommands(vbu.Cog):
                         try:
                             answer_message = await self.bot.wait_for(
                                 "message",
-                                check=lambda m: m.author == ctx.author
-                                and m.content.upper() == answer,
+                                check=scramble_check,
                                 timeout=15.0,
                             )
                         except asyncio.TimeoutError:
                             with embed:
-                                embed.description = f"You should work on your scrambling skills, the answer was {unscrambled}. You get {utils.format_rewards()}."
+                                embed.description = f"You should work on your scrambling skills, the answer was `{unscrambled}`. You get {utils.format_rewards()}"
                             return await ctx.interaction.edit_original_message(
                                 embed=embed
                             )
