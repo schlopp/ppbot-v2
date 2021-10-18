@@ -177,6 +177,21 @@ class FillInTheBlank:
     success: str
     fail: str
 
+@dataclass
+class Scramble:
+    """
+    Class that represents the fill-in-the-blank mini-game for :class:MiniGames.
+
+    Attributes:
+        approacher (`str`): The person approaching the user in this mini-game.
+        context (`str`): The context of the mini-game.
+        success (`str`): The success message for the user. E.g. "gameshow host: 'Good job! You win!'"
+        fail (`str`): The failure message for the user. E.g. "gameshow host: 'Sorry, you lose!'"
+    """
+
+    approacher: str
+    context: str
+
 
 @dataclass
 class MiniGames:
@@ -185,9 +200,11 @@ class MiniGames:
 
     Attributes:
         fill_in_the_blank (:class:`FillInTheBlank`): The fill-in-the-blank minigame
+        scramble (:class:`Scramble`): The scramble minigame
     """
 
     fill_in_the_blank: FillInTheBlank
+    scramble: Scramble
 
 
 @dataclass
@@ -276,6 +293,9 @@ class BeggingLocation:
                     FillInTheBlank(
                         **location_data["quotes"]["minigames"]["fill_in_the_blank"],
                     ),
+                    Scramble(
+                        **location_data["quotes"]["minigames"]["scramble"],
+                    )
                 ),
             ),
         )
