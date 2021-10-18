@@ -40,3 +40,11 @@ emoji = "🥰"  # (string) The emoji that will be used to represent the location
             context = "A gameshow host approaches you with a question"  # The context of the mini-game.
             success = "Good job! You win!"  # (string) The success message for the user. E.g. "gameshow host: 'Good job! You win!'"
             fail = "Sorry, you lose!"  # (string) The failure message for the user. E.g. "gameshow host: 'Sorry, you lose!'"
+
+        # All quotes for the scramble mini-game.
+        [quotes.minigames.scramble]
+
+            approacher = "scrambled text" # (string) The thing that's scrambled. E.g. "scrambled text"
+            context = "There's been a missprint in the news paper." # (string) The context of the mini-game. E.g. "There's been a missprint in the news paper."
+            success = "Good job! You unscrambled the text!" # (string) The success message for the user. E.g. "Good job! You unscrambled the text!"
+            fail = "Sorry, you failed to unscramble the text." # (string) The failure message for the user. E.g. "Sorry, you failed to unscramble the text"
