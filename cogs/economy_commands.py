@@ -533,7 +533,7 @@ class EconomyCommands(vbu.Cog):
                         ):
                             return
 
-                        if message.content.lower != unscrambled.lower():
+                        if message.content.lower() != unscrambled.lower():
                             nonlocal attempts_left
                             attempts_left -= 1
                             self.bot.loop.create_task(
