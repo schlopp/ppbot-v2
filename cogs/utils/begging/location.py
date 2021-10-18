@@ -177,6 +177,7 @@ class FillInTheBlank:
     success: str
     fail: str
 
+
 @dataclass
 class Scramble:
     """
@@ -297,7 +298,7 @@ class BeggingLocation:
                     ),
                     Scramble(
                         **location_data["quotes"]["minigames"]["scramble"],
-                    )
+                    ),
                 ),
             ),
         )
