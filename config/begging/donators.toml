@@ -19,7 +19,7 @@
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
-    name = "thanos"  # (string) The name of the donator
+    name = "Thanos"  # (string) The name of the donator
     icon_url = "https://media.discordapp.net/attachments/861715293615947868/892549138502254652/2Q.png"  # (string) The URL of the donator's icon. Square size recommended.
 
     # Represents custom quotes for the donator.
@@ -35,7 +35,7 @@
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
-    name = "roblox noob"  # (string) The name of the donator
+    name = "Roblox Noob"  # (string) The name of the donator
     icon_url = "https://media.discordapp.net/attachments/861715293615947868/892551354655051836/SmugJubilantAnemonecrab-size_restricted.gif"  # (string) The URL of the donator's icon. Square size recommended.
 
     # Represents custom quotes for the donator.
@@ -45,7 +45,7 @@
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
-    name = "shrek"  # (string) The name of the donator
+    name = "Shrek"  # (string) The name of the donator
     icon_url = "https://media.discordapp.net/attachments/844989674883383326/892554166675857408/communityIcon_6abire8zs7q41.png"  # (string) The URL of the donator's icon. Square size recommended.
 
     # Represents custom quotes for the donator.
@@ -74,3 +74,139 @@
             "my iq is too high for that",  # (string) The quote.
             "your face isn't orange enough for that",
         ]
+
+# (array) All donators. These will show up as the people donating to the user at `/beg`
+[[donators]]
+    name = "Dick Roberts"
+
+    # Represents custom quotes for the donator.
+    [donators.quotes]
+        # None
+
+# (array) All donators. These will show up as the people donating to the user at `/beg`
+[[donators]]
+    name = "Daniel the Damned"
+
+    # Represents custom quotes for the donator.
+    [donators.quotes]
+        # None
+
+# (array) All donators. These will show up as the people donating to the user at `/beg`
+[[donators]]
+    name = "Bob"
+
+    # Represents custom quotes for the donator.
+    [donators.quotes]
+        # None
+
+# (array) All donators. These will show up as the people donating to the user at `/beg`
+[[donators]]
+    name = "Walter"
+
+    # Represents custom quotes for the donator.
+    [donators.quotes]
+        # None
+
+# (array) All donators. These will show up as the people donating to the user at `/beg`
+[[donators]]
+    name = "Napoleon Bonaparte"
+
+    # Represents custom quotes for the donator.
+    [donators.quotes]
+        # None
+
+# (array) All donators. These will show up as the people donating to the user at `/beg`
+[[donators]]
+    name = "Bob Ross"
+
+    # Represents custom quotes for the donator.
+    [donators.quotes]
+        # None
+
+# (array) All donators. These will show up as the people donating to the user at `/beg`
+[[donators]]
+    name = "Don Vito"
+
+    # Represents custom quotes for the donator.
+    [donators.quotes]
+        # None
+
+# (array) All donators. These will show up as the people donating to the user at `/beg`
+[[donators]]
+    name = "Bill Cosby"
+
+    # Represents custom quotes for the donator.
+    [donators.quotes]
+        # None
+
+# (array) All donators. These will show up as the people donating to the user at `/beg`
+[[donators]]
+    name = "Your Step-sis"
+
+    # Represents custom quotes for the donator.
+    [donators.quotes]
+        # None
+
+# (array) All donators. These will show up as the people donating to the user at `/beg`
+[[donators]]
+    name = "Pp God"
+
+    # Represents custom quotes for the donator.
+    [donators.quotes]
+        # None
+
+# (array) All donators. These will show up as the people donating to the user at `/beg`
+[[donators]]
+    name = "Random Guy"
+
+    # Represents custom quotes for the donator.
+    [donators.quotes]
+        # None
+
+# (array) All donators. These will show up as the people donating to the user at `/beg`
+[[donators]]
+    name = "Genie"
+
+    # Represents custom quotes for the donator.
+    [donators.quotes]
+        # None
+
+# (array) All donators. These will show up as the people donating to the user at `/beg`
+[[donators]]
+    name = "The guy you accidentally made eye contact with at the urinal"
+
+    # Represents custom quotes for the donator.
+    [donators.quotes]
+        # None
+
+# (array) All donators. These will show up as the people donating to the user at `/beg`
+[[donators]]
+    name = "Your Mom"
+
+    # Represents custom quotes for the donator.
+    [donators.quotes]
+        # None
+
+# (array) All donators. These will show up as the people donating to the user at `/beg`
+[[donators]]
+    name = "Your Daughter"
+
+    # Represents custom quotes for the donator.
+    [donators.quotes]
+        # None
+
+# (array) All donators. These will show up as the people donating to the user at `/beg`
+[[donators]]
+    name = "Big Man Tyrone"
+
+    # Represents custom quotes for the donator.
+    [donators.quotes]
+        # None
+
+# (array) All donators. These will show up as the people donating to the user at `/beg`
+[[donators]]
+    name = "Schlöpp"
+
+    # Represents custom quotes for the donator.
+    [donators.quotes]
+        # None
