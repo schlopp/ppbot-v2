@@ -192,8 +192,6 @@ class Scramble:
 
     approacher: str
     context: str
-    success: str
-    fail: str
 
 
 @dataclass

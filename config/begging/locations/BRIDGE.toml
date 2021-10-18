@@ -117,5 +117,3 @@ emoji = "<:PP_BEG:879382346812489809>"  # (string) The emoji that will be used t
 
             approacher = ""
             context = ""
-            success = ""
-            fail = ""
