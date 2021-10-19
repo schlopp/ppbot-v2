@@ -119,8 +119,8 @@ class EconomyCommands(vbu.Cog):
         # Establish a connection to the database
         async with vbu.DatabaseConnection() as db:
 
-            # Iterate through all cached users
-            for user_id, user_cache in self.bot.user_cache.items():
+            # Iterate through all cached users (convert to list to avoid RuntimeError: dictionary changed size during iteration)
+            for user_id, user_cache in list(self.bot.user_cache.items()):
 
                 # Iterate through all of their skills
                 skill: utils.Skill
@@ -156,6 +156,10 @@ class EconomyCommands(vbu.Cog):
                 self.logger.info(
                     f"Updating user cache for {user_id}'s pp: {user_cache!r}... success"
                 )
+
+                if user_id not in self.bot.commands_in_use:
+                    del self.bot.user_cache[user_id]
+
 
     @commands.command(name="inventory", aliases=["inv"])
     @commands.bot_has_permissions(
