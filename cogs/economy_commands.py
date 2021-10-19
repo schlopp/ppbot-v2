@@ -706,7 +706,7 @@ class EconomyCommands(vbu.Cog):
                         # Set the embed's author
                         embed.set_author(
                             name=f"{donator.name} \N{bullet} {location.name}",
-                            icon_url=donator.icon_url or embed.Empty(),
+                            icon_url=donator.icon_url or embed.Empty,
                         )
 
                         # Set the embed's description to the quote
