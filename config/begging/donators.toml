@@ -228,6 +228,7 @@
         success = []
         fail = []
         
+
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
     name = "Pp bot"
