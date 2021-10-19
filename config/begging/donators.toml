@@ -241,7 +241,7 @@
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
     name = "Gooser"
-    icon_url = "https://cdn.discordapp.com/attachments/877214150181400616/900085913642758244/image0.jpg"
+    icon_url = "https://cdn.discordapp.com/attachments/861715293615947868/900099818377080892/communityIcon_wz1p5hz4re871.png"
 
     # Represents custom quotes for the donator.
     [donators.quotes]
