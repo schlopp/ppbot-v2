@@ -400,8 +400,8 @@ class EconomyCommands(vbu.Cog):
                 if locations is None:
                     raise Exception("Invalid location")
 
-                # 10% chance of fill in the blank minigame
-                if (random_percentage := random.random()) < 0.1:
+                # 5% chance of fill in the blank minigame
+                if (random_percentage := random.random()) < 0.05:
                     with vbu.Embed() as embed:
                         embed.colour = utils.BLUE
                         embed.set_author(
@@ -482,8 +482,8 @@ class EconomyCommands(vbu.Cog):
                         embed=embed, components=None, content=None
                     )
 
-                # 10% chance of scramble minigame
-                elif random_percentage < 0.2:
+                # 5% chance of scramble minigame
+                elif random_percentage < 0.1:
                     with vbu.Embed() as embed:
                         embed.colour = utils.BLUE
                         embed.set_author(
