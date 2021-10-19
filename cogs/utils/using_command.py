@@ -10,4 +10,4 @@ class UsingCommand:
         self.ctx.bot.commands_in_use[self.ctx.author.id] = self.ctx
 
     def __exit__(self, *args, **kwargs):
-        self.ctx.bot.commands_in_use[self.ctx.author.id] = None
+        self.ctx.bot.commands_in_use.pop(self.ctx.author.id)
