@@ -227,3 +227,31 @@
     [donators.quotes]
         success = []
         fail = []
+        
+# (array) All donators. These will show up as the people donating to the user at `/beg`
+[[donators]]
+    name = "Pp bot"
+
+    # Represents custom quotes for the donator.
+    [donators.quotes]
+        success = ["I'm so impressed with your pp, have {}"]
+        fail = ["Lmao your pp is kinda small and it can stay that way"]
+
+# (array) All donators. These will show up as the people donating to the user at `/beg`
+[[donators]]
+    name = "Gooser"
+    icon_irl = "https://cdn.discordapp.com/attachments/877214150181400616/900085913642758244/image0.jpg"
+
+    # Represents custom quotes for the donator.
+    [donators.quotes]
+        success = []
+        fail = ["Honk honk small pp"]
+
+# (array) All donators. These will show up as the people donating to the user at `/beg`
+[[donators]]
+    name = "Dad"
+
+    # Represents custom quotes for the donator.
+    [donators.quotes]
+        success = ["I didn't get any milk but I got you {}"]
+        fail = ["I'm off to a different shop, see you in a couple years kid"]
