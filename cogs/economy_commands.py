@@ -554,6 +554,7 @@ class EconomyCommands(vbu.Cog):
                                 check=scramble_check,
                                 timeout=15.0,
                             )
+                            break
                         except asyncio.TimeoutError:
                             with embed:
                                 embed.description = f"You should work on your scrambling skills, the answer was `{unscrambled}`. You get {utils.format_rewards()}"
