@@ -6,15 +6,15 @@
     # Represents custom quotes for the donator.
     [donators.quotes]
         success = [  # (array) The success quotes for the donator.
-            "uhh my fellow americans i have {} for you",  # (string) The quote. Will be formatted with the reward.
-            "my fellow americans here is uhh your reward its {}\nyour mother left it behind when we had uhh sexual relationships",  # (string) The quote. Will be formatted with the reward.
+            "Uhh my fellow americans i have {} for you",  # (string) The quote. Will be formatted with the reward.
+            "My fellow americans here is uhh your reward its {}\nyour mother left it behind when we had uhh sexual relationships",  # (string) The quote. Will be formatted with the reward.
         ]
         fail = [  # (array) The fail quotes for the donator.
-            "uhh my fellow americans uhh your mom is gay",  # (string) The quote.
-            "uhh my fellow americans i have uhh sexual relationships with your mother",  # (string) The quote.
-            "uhh my fellow americans uhh let me be clear uhh i had sexual relationships with uhh your mother",  # (string) The quote.
-            "uhh your mom is uhh gay",  # (string) The quote.
-            "my fellow americans uhh shut the fuck up"  # (string) The quote.
+            "Uhh my fellow americans uhh your mom is gay",  # (string) The quote.
+            "Uhh my fellow americans i have uhh sexual relationships with your mother",  # (string) The quote.
+            "Uhh my fellow americans uhh let me be clear uhh i had sexual relationships with uhh your mother",  # (string) The quote.
+            "Uhh your mom is uhh gay",  # (string) The quote.
+            "My fellow americans uhh shut the fuck up"  # (string) The quote.
         ]
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
@@ -25,12 +25,12 @@
     # Represents custom quotes for the donator.
     [donators.quotes]
         success = [  # (array) The success quotes for the donator.
-            "your reward is {}\nnow fuck off or I'll snap your balls away",  # (string) The quote. Will be formatted with the reward.
+            "Your reward is {}\nnow fuck off or I'll snap your balls away",  # (string) The quote. Will be formatted with the reward.
         ]
         fail = [  # (array) The fail quotes for the donator.
-            "begone before i snap your pp into dust",  # (string) The quote.
-            "i'll snap ur pp out of existence",  # (string) The quote.
-            "nah. **\\*snaps\\***",  # (string) The quote.
+            "Begone before i snap your pp into dust",  # (string) The quote.
+            "I'll snap ur pp out of existence",  # (string) The quote.
+            "Nah. **\\*snaps\\***",  # (string) The quote.
         ]
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
@@ -50,8 +50,8 @@
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        success = []  # (array) The success quotes for the donator.
-        fail = []  # (array) The fail quotes for the donator.
+        success = ["Here's {}, now get the FUCK outta my swamp",]  # (array) The success quotes for the donator.
+        fail = ["Fuck up outta my swamp",]  # (array) The fail quotes for the donator.
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -61,18 +61,16 @@
     # Represents custom quotes for the donator.
     [donators.quotes]
         success = [  # (array) The success quotes for the donator.
-            "you're on the right side of the wall, have some {}",  # (string) The quote. Will be formatted with the reward.
-            "have {} and don't forget to vote for me",  # (string) The quote. Will be formatted with the reward.
-            "as a reward for completing the capitol quest, enjoy {}",
-            "i let one of my hitmen kill joe biden and he dropped {}. i don't need it so you can have it",
+            "You're on the right side of the wall, have some {}",  # (string) The quote. Will be formatted with the reward.
+            "Have {} and don't forget to vote for me",  # (string) The quote. Will be formatted with the reward.
+            "As a reward for completing the capitol quest, enjoy {}",
+            "I let one of my hitmen kill joe biden and he dropped {}. I don't need it so you can have it",
         ]
         fail = [  # (array) The fail quotes for the donator.
-            "america is too great for you!",  # (string) The quote.
-            "america first, something else second, you aren't even on the list",  # (string) The quote.
-            "you're on the wrong side of the wall, so you'll get nada",  # (string) The quote.
-            "my sexy daughter told me not to give you money",  # (string) The quote.
-            "my iq is too high for that",  # (string) The quote.
-            "your face isn't orange enough for that",
+            "America is too great for you!",  # (string) The quote.
+            "You're on the wrong side of the wall bitch, you get nada",  # (string) The quote.
+            "My sexy daughter told me not to give you money",  # (string) The quote.
+            "My IQ is too high for that",  # (string) The quote.
         ]
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
@@ -91,7 +89,7 @@
     # Represents custom quotes for the donator.
     [donators.quotes]
         success = []
-        fail = []
+        fail = ["I will literally step on you with my white vans"]
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -104,11 +102,11 @@
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
-    name = "Walter"
+    name = "Walter White"
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        success = []
+        success = ["Jesse.. here's {}.. Use it to cook meth"]
         fail = []
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
@@ -127,7 +125,7 @@
     # Represents custom quotes for the donator.
     [donators.quotes]
         success = []
-        fail = []
+        fail = ["You are __not__ a happy little accident, you're just an accident"]
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -145,7 +143,9 @@
     # Represents custom quotes for the donator.
     [donators.quotes]
         success = []
-        fail = []
+        fail = [
+            "Dude im a registered sex offender what do you want from me",
+        ]
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -153,8 +153,8 @@
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        success = []
-        fail = []
+        success = ["Can you give me your inches instead? OwO"]
+        fail = [";-; I can't give you any inches right now.. I'm stuck OwO", "S- Step bro o.o what are you doing ._."]
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -162,8 +162,8 @@
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        success = []
-        fail = []
+        success = ["My son, here's {}, as a gift."]
+        fail = ["Begone, mortal", "Beggars don't go to heaven"]
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -176,12 +176,12 @@
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
-    name = "Genie"
+    name = "Genie's lamp"
 
     # Represents custom quotes for the donator.
     [donators.quotes]
-        success = []
-        fail = []
+        success = ["😩 I love the way you rubbed me.. Here's {}"]
+        fail = ["Rub me harder next time 😩"]
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -190,7 +190,7 @@
     # Represents custom quotes for the donator.
     [donators.quotes]
         success = []
-        fail = []
+        fail = ["Eyes on your own pp man"]
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -199,7 +199,7 @@
     # Represents custom quotes for the donator.
     [donators.quotes]
         success = []
-        fail = []
+        fail = ["Motherfucker you want WHAT from me!?", "Sorry darling, I'm saving those for your dad"]
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
@@ -217,7 +217,7 @@
     # Represents custom quotes for the donator.
     [donators.quotes]
         success = []
-        fail = []
+        fail = ["Every 60 seconds in Africa a minute passes"]
 
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
