@@ -115,11 +115,16 @@ emoji = "<:PP_BEG:879382346812489809>"  # (string) The emoji that will be used t
         # All quotes for the scramble mini-game.
         [quotes.minigames.scramble]
 
-            approacher = "scrambled text" # (string) The thing containing the scrambled text.
-            context = "Some rich guy gives you a letter with scrambled text on it. If you unscramble it, you get a big reward." # (string) The context of the mini-game.
+            approacher = "scrambled text"  # (string) The thing containing the scrambled text.
+            context = "Some rich guy gives you a letter with scrambled text on it. If you unscramble it, you get a big reward."  # (string) The context of the mini-game.
 
         # All quotes for the scramble mini-game.
         [quotes.minigames.retype]
 
-            context = "Some rich guys notices you begging and laughs at you. If you make him feel bad for you, you can get some free stuff!" # (string) The context of the mini-game.
-            
+            context = "Some rich guys notices you begging and laughs at you. If you make him feel bad for you, you can get some free stuff!"  # (string) The context of the mini-game.
+            sentences = [  # (array) The sentences to be retyped.
+                "Oh sick, free items",
+                "I'm a big fan of free stuff",
+                "Did someone say free?",
+                "Please give me free stuff, I'm begging you"
+            ]
