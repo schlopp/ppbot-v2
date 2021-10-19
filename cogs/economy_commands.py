@@ -160,7 +160,6 @@ class EconomyCommands(vbu.Cog):
                 if user_id not in self.bot.commands_in_use:
                     del self.bot.user_cache[user_id]
 
-
     @commands.command(name="inventory", aliases=["inv"])
     @commands.bot_has_permissions(
         embed_links=True,
