@@ -14,6 +14,8 @@ __all__ = (
     "LootTableItem",
     "LootTable",
     "FillInTheBlank",
+    "Scramble",
+    "Retype",
     "MiniGames",
     "Quotes",
     "BeggingLocation",
@@ -181,17 +183,29 @@ class FillInTheBlank:
 @dataclass
 class Scramble:
     """
-    Class that represents the fill-in-the-blank mini-game for :class:MiniGames.
+    Class that represents the scramble mini-game for :class:MiniGames.
 
     Attributes:
-        approacher (`str`): The person approaching the user in this mini-game.
+        approacher (`str`): The thing containing the scrambled text.
         context (`str`): The context of the mini-game.
-        success (`str`): The success message for the user. E.g. "gameshow host: 'Good job! You win!'"
-        fail (`str`): The failure message for the user. E.g. "gameshow host: 'Sorry, you lose!'"
     """
 
     approacher: str
     context: str
+
+
+@dataclass
+class Retype:
+    """
+    Class that represents the retype mini-game for :class:MiniGames.
+
+    Attributes:
+        context (`str`): The context of the mini-game.
+        sentences (`list` of `str`): The sentences to retype.
+    """
+
+    context: str
+    sentences: typing.List[str]
 
 
 @dataclass
@@ -202,10 +216,12 @@ class MiniGames:
     Attributes:
         fill_in_the_blank (:class:`FillInTheBlank`): The fill-in-the-blank minigame
         scramble (:class:`Scramble`): The scramble minigame
+        retype (:class:`Retype`): The retype minigame
     """
 
     fill_in_the_blank: FillInTheBlank
     scramble: Scramble
+    retype: Retype
 
 
 @dataclass
@@ -297,6 +313,7 @@ class BeggingLocation:
                     Scramble(
                         **location_data["quotes"]["minigames"]["scramble"],
                     ),
+                    Retype(**location_data["quotes"]["minigames"]["retype"]),
                 ),
             ),
         )

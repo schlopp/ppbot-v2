@@ -19,3 +19,11 @@ def scramble(string):
     """
 
     return " ".join([_shuffle(word) for word in string.split()])
+
+
+def uncopyable(string):
+    """
+    Makes a string uncopyable.
+    """
+
+    return "\u200D".join(string)

@@ -516,7 +516,7 @@ class EconomyCommands(vbu.Cog):
 
                         scrambled = utils.scramble(unscrambled)
 
-                        embed.description = f"{fill_in_the_blank.context}\n\nYour word is [`{scrambled}`]({self.bot.hyperlink})."
+                        embed.description = f"{fill_in_the_blank.context}\n\nYour word is [`{scrambled}`]({self.bot.hyperlink})"
                         embed.set_footer("Respond to this message with the answer")
 
                     await ctx.interaction.edit_original_message(
@@ -578,6 +578,95 @@ class EconomyCommands(vbu.Cog):
                         cache.pp.size += growth
 
                         embed.description = f"**GG!** You win {utils.format_rewards(inches=growth, items=loot)}!"
+
+                    # Update the message
+                    return await ctx.interaction.edit_original_message(
+                        embed=embed, components=None, content=None
+                    )
+
+                # 5% chance of retype event
+                elif random_percentage < 0.15:
+                    with vbu.Embed() as embed:
+                        embed.colour = utils.BLUE
+                        embed.set_author(
+                            name=f"{ctx.author.display_name}'s minigame",
+                            icon_url=ctx.author.avatar.url,
+                        )
+                        embed.title = "Retype!"
+                        retype = location.quotes.minigames.retype
+
+                        sentence = random.choice(retype.sentences)
+                        uncopyable_sentence = utils.uncopyable(sentence)
+
+                        embed.description = f"{fill_in_the_blank.context}\n\nQuickly! Retype this sentence is chat: [`{uncopyable_sentence}`]({self.bot.hyperlink})"
+                        embed.set_footer("Respond to this message with the sentence")
+
+                    await ctx.interaction.edit_original_message(
+                        embed=embed, components=None, content=None
+                    )
+
+                    attempts_left = 3
+
+                    def retype_check(message: discord.Message) -> bool:
+
+                        if (
+                            message.author != ctx.author
+                            or message.channel != ctx.channel
+                        ):
+                            return
+
+                        if message.content.lower() != sentence.lower():
+                            nonlocal attempts_left
+                            attempts_left -= 1
+
+                            if message.content == uncopyable_sentence:
+                                self.bot.loop.create_task(
+                                    message.reply(
+                                        f"Did you really think you could get away with copy-pasting? LMAO, you have **{attempts_left} attempts** left"
+                                    )
+                                )
+                            else:
+                                self.bot.loop.create_task(
+                                    message.reply(
+                                        f"That's not the correct answer lol. You have **{attempts_left} attempts** left"
+                                    )
+                                )
+                            if not attempts_left:
+                                raise asyncio.TimeoutError
+                            return
+
+                        return True
+
+                    while attempts_left:
+                        try:
+                            answer_message = await self.bot.wait_for(
+                                "message",
+                                check=scramble_check,
+                                timeout=30.0,
+                            )
+                            break
+                        except asyncio.TimeoutError:
+                            embed.description = f"Wow, you're a slow typer. You get {utils.format_rewards()}. Cry about it"
+                            return await ctx.interaction.edit_original_message(
+                                embed=embed
+                            )
+
+                    with vbu.Embed() as embed:
+                        embed.colour = utils.PINK
+
+                        # Generate rewards and give them to the user
+                        loot = location.loot_table.get_random_loot(
+                            self.bot, boosted=True
+                        )
+                        async with utils.Inventory.fetch(
+                            self.bot, db, ctx.author.id, update_values=True
+                        ) as inv:
+                            inv.add_items(*loot)
+
+                        growth = int(random.randint(1000, 2000) * cache.pp.multiplier)
+                        cache.pp.size += growth
+
+                        embed.description = f"**GG!** Nice typing skills bro, you win {utils.format_rewards(inches=growth, items=loot)}!"
 
                     # Update the message
                     return await ctx.interaction.edit_original_message(
