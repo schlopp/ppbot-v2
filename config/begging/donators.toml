@@ -231,6 +231,7 @@
 # (array) All donators. These will show up as the people donating to the user at `/beg`
 [[donators]]
     name = "Pp bot"
+    icon_url = "https://cdn.discordapp.com/avatars/735147633076863027/18bbdadf37daa3628a2f52df74d5ff38.png?size=128"
 
     # Represents custom quotes for the donator.
     [donators.quotes]
