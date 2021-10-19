@@ -491,7 +491,7 @@ class EconomyCommands(vbu.Cog):
                             icon_url=ctx.author.avatar.url,
                         )
                         embed.title = "Scramble!"
-                        fill_in_the_blank = location.quotes.minigames.fill_in_the_blank
+                        scramble = location.quotes.minigames.scramble
 
                         unscrambled = random.choice(
                             [
@@ -516,7 +516,7 @@ class EconomyCommands(vbu.Cog):
 
                         scrambled = utils.scramble(unscrambled)
 
-                        embed.description = f"{fill_in_the_blank.context}\n\nYour word is [`{scrambled}`]({self.bot.hyperlink})"
+                        embed.description = f"{scramble.context}\n\n{scramble.approacher}: [`{scrambled}`]({self.bot.hyperlink})"
                         embed.set_footer("Respond to this message with the answer")
 
                     await ctx.interaction.edit_original_message(
