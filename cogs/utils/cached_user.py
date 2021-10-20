@@ -1,4 +1,5 @@
 import typing
+import logging
 from dataclasses import dataclass
 
 from discord.ext import vbu
@@ -23,7 +24,7 @@ class CachedUser:
     user_id: int
     skills: typing.List[Skill]
     pp: Pp
-    settings: dict = {}
+    settings: dict
 
     def __init__(
         self, user_id: int, skills: typing.List[Skill], pp: Pp, settings: dict
@@ -85,15 +86,16 @@ class CachedUser:
 
 
 async def get_user_cache(
-    cog: vbu.Cog, user_id: int, db: typing.Optional[vbu.DatabaseConnection]
+    *, bot: vbu.Bot, user_id: int, db: typing.Optional[vbu.DatabaseConnection], logger: typing.Optional[vbu.Logger] = logging.Logger("utils.CachedUser")
 ) -> CachedUser:
     """
     :coro: Returns user's cached information, if any. Otherwise returns data from the database.
 
     Args:
-        cog (`:class:vbu.Cog`):  The cog.
+        bot (`:class:vbu.Bot`):  The bot.
         user_id (`int`): The user's ID.
         db (:class:`voxelbotutils.DatabaseConnection`): The database connection.
+        logger (:class:`voxelbotutils.Logger` = :class:`Logger("utils.CacherUser")`): The logger.
 
     Returns:
         :class:`UserCache`: The user's cache.
@@ -101,7 +103,7 @@ async def get_user_cache(
 
     # If the user is already cached, return it
     try:
-        return cog.bot.user_cache[user_id]
+        return bot.user_cache[user_id]
 
     # Otherwise, let's create it
     except KeyError:
@@ -133,12 +135,12 @@ async def get_user_cache(
             user_settings = {}
 
         # Now we add this to the user cache
-        cog.bot.user_cache[user_id] = CachedUser(
+        bot.user_cache[user_id] = CachedUser(
             user_id, user_skills, user_pp, user_settings
         )
 
         # we do a little logging. it's called: "We do a little logging"
-        cog.logger.info(f"Creating user cache for {user_id}... success")
+        logger.info(f"Creating user cache for {user_id}... success")
 
         # and return the user cache
-        return cog.bot.user_cache[user_id]
+        return bot.user_cache[user_id]
