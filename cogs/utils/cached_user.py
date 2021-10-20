@@ -86,7 +86,11 @@ class CachedUser:
 
 
 async def get_user_cache(
-    user_id: int, *, db: typing.Optional[vbu.DatabaseConnection], bot: vbu.Bot, logger: typing.Optional[vbu.Logger] = logging.Logger("utils.CachedUser")
+    user_id: int,
+    *,
+    db: typing.Optional[vbu.DatabaseConnection],
+    bot: vbu.Bot,
+    logger: typing.Optional[vbu.Logger] = logging.Logger("utils.CachedUser"),
 ) -> CachedUser:
     """
     :coro: Returns user's cached information, if any. Otherwise returns data from the database.
