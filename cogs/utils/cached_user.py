@@ -132,7 +132,7 @@ async def get_user_cache(
         # Get the user's settings
         try:
             settings_rows = await db(
-                "SELECT * FROM user_settings WHERE user_id = %1", user_id
+                "SELECT * FROM user_settings WHERE user_id = $1", user_id
             )
             user_settings = settings_rows[0]
 
