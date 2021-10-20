@@ -90,7 +90,7 @@ async def get_user_cache(
     *,
     db: typing.Optional[vbu.DatabaseConnection],
     bot: vbu.Bot,
-    logger: typing.Optional[vbu.Logger] = logging.Logger("utils.CachedUser"),
+    debug_logger: typing.Optional[logging.Logger] = logging.Logger("CachedUser", level=logging.DEBUG),
 ) -> CachedUser:
     """
     :coro: Returns user's cached information, if any. Otherwise returns data from the database.
@@ -144,7 +144,7 @@ async def get_user_cache(
         )
 
         # we do a little logging. it's called: "We do a little logging"
-        logger.info(f"Creating user cache for {user_id}... success")
+        debug_logger.debug(f"Creating user cache for {user_id}... success")
 
         # and return the user cache
         return bot.user_cache[user_id]
