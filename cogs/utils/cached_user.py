@@ -77,7 +77,7 @@ class CachedUser:
 
         self.settings[key] = value
         async with vbu.DatabaseConnection() as db:
-            await db.execute(
+            await db(
                 "UPDATE user_settings SET $1 = $2 WHERE user_id = $3",
                 key,
                 value,
