@@ -23,8 +23,11 @@ class CachedUser:
     user_id: int
     skills: typing.List[Skill]
     pp: Pp
+    settings: dict = {}
 
-    def __init__(self, user_id: int, skills: typing.List[Skill], pp: Pp):
+    def __init__(
+        self, user_id: int, skills: typing.List[Skill], pp: Pp, settings: dict
+    ):
         """
         Represents a cached user.
 
@@ -32,11 +35,13 @@ class CachedUser:
             user_id (int): The user's ID.
             skills (`list` of `:class:Pp`):  The user's cached skills.
             pp (`:class:Pp`):  The user's cached pp.
+            settings (`dict`):  The user's cached settings. See `config/database.pgsql` for reference.
         """
 
         self.user_id = user_id
         self.skills = skills
         self.pp = pp
+        self.settings = settings
 
     def get_skill(self, name: str) -> Skill:
         """
@@ -59,6 +64,24 @@ class CachedUser:
             self.skills.append(skill)
             return skill
         return skill
+
+    async def update_settings(self, key, value):
+
+        # Don't open a costly database connection if we don't need to
+        try:
+            if self.settings[key] == value:
+                return
+        except KeyError:
+            pass
+
+        self.settings[key] = value
+        async with vbu.DatabaseConnection() as db:
+            await db.execute(
+                "UPDATE user_settings SET $1 = $2 WHERE user_id = $3",
+                key,
+                value,
+                self.user_id,
+            )
 
 
 async def get_user_cache(
@@ -98,8 +121,21 @@ async def get_user_cache(
         except IndexError:
             user_pp = Pp(user_id)
 
+        # Get the user's settings
+        try:
+            settings_rows = await db(
+                "SELECT * FROM user_settings WHERE user_id = %1", user_id
+            )
+            user_settings = settings_rows[0]
+
+        # No settings
+        except IndexError:
+            user_settings = {}
+
         # Now we add this to the user cache
-        cog.bot.user_cache[user_id] = CachedUser(user_id, user_skills, user_pp)
+        cog.bot.user_cache[user_id] = CachedUser(
+            user_id, user_skills, user_pp, user_settings
+        )
 
         # we do a little logging. it's called: "We do a little logging"
         cog.logger.info(f"Creating user cache for {user_id}... success")
