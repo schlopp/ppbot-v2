@@ -67,6 +67,12 @@ class CachedUser:
         return skill
 
     async def update_settings(self, key, value):
+        
+        # There is no safe, dynamic way to do this. :RIP:
+        # View config/database.pgsql for reference.
+        valid_columns = ["current_begging_location"]
+        if key not in valid_columns:
+            raise KeyError(f"{key} is not a valid column. View config/database.pgsql for reference.")
 
         # Don't open a costly database connection if we don't need to
         try:
@@ -78,8 +84,7 @@ class CachedUser:
         self.settings[key] = value
         async with vbu.DatabaseConnection() as db:
             await db(
-                "UPDATE user_settings SET $1 = $2 WHERE user_id = $3",
-                key,
+                f"UPDATE user_settings SET {key} = $1 WHERE user_id = $2",
                 value,
                 self.user_id,
             )
