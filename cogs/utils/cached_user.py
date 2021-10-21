@@ -67,12 +67,14 @@ class CachedUser:
         return skill
 
     async def update_settings(self, key, value):
-        
+
         # There is no safe, dynamic way to do this. :RIP:
         # View config/database.pgsql for reference.
         valid_columns = ["current_begging_location"]
         if key not in valid_columns:
-            raise KeyError(f"{key} is not a valid column. View config/database.pgsql for reference.")
+            raise KeyError(
+                f"{key} is not a valid column. View config/database.pgsql for reference."
+            )
 
         # Don't open a costly database connection if we don't need to
         try:

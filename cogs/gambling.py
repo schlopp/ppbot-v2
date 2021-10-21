@@ -35,7 +35,10 @@ class GamblingCommands(vbu.Cog):
         with utils.UsingCommand(ctx):
             async with vbu.DatabaseConnection() as db:
                 cache: utils.CachedUser = await utils.get_user_cache(
-                    ctx.author.id, db=db, bot=self.bot, logger=self.logger,
+                    ctx.author.id,
+                    db=db,
+                    bot=self.bot,
+                    logger=self.logger,
                 )
 
                 if amount < 25:

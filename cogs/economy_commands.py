@@ -302,7 +302,10 @@ class EconomyCommands(vbu.Cog):
     async def _show_pp(self, ctx: commands.SlashContext) -> None:
         async with vbu.DatabaseConnection() as db:
             cache: utils.CachedUser = await utils.get_user_cache(
-                    ctx.author.id, db=db, bot=self.bot, logger=self.logger,
+                ctx.author.id,
+                db=db,
+                bot=self.bot,
+                logger=self.logger,
             )
             with vbu.Embed() as embed:
                 embed.colour = utils.BLUE
@@ -341,7 +344,10 @@ class EconomyCommands(vbu.Cog):
             async with vbu.DatabaseConnection() as db:
 
                 cache: utils.CachedUser = await utils.get_user_cache(
-                    ctx.author.id, db=db, bot=self.bot, logger=self.logger,
+                    ctx.author.id,
+                    db=db,
+                    bot=self.bot,
+                    logger=self.logger,
                 )
                 begging = cache.get_skill("BEGGING")
 
