@@ -487,9 +487,7 @@ class EconomyCommands(vbu.Cog):
                         )
 
                         # Set the embed's description to the quote
-                        embed.description = (
-                            f"“{quote}”"
-                        )
+                        embed.description = f"“{quote}”"
 
                     # Update the message
                     return await ctx.interaction.edit_original_message(
