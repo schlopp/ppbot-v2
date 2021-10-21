@@ -443,7 +443,7 @@ class EconomyCommands(vbu.Cog):
                             ]
                         )
 
-                        embed.description = f"{fill_in_the_blank.context}\n\n**{fill_in_the_blank.approacher}:** “{prompt}”"
+                        embed.description = f"{fill_in_the_blank.context}\n\n**{fill_in_the_blank.approacher}:** `{prompt}`"
                         embed.set_footer("Respond to this message with the answer")
                     await ctx.interaction.edit_original_message(
                         embed=embed, components=None, content=None
@@ -464,6 +464,11 @@ class EconomyCommands(vbu.Cog):
                     with vbu.Embed() as embed:
                         embed.colour = utils.PINK
 
+                        # Set the embed's author
+                        embed.set_author(
+                            name=f"{fill_in_the_blank.approacher} \N{bullet} Minigame Completed",
+                        )
+
                         # Generate rewards and give them to the user
                         loot = location.loot_table.get_random_loot(
                             self.bot, boosted=True
@@ -483,7 +488,7 @@ class EconomyCommands(vbu.Cog):
 
                         # Set the embed's description to the quote
                         embed.description = (
-                            f"**{fill_in_the_blank.approacher}:** “{quote}”"
+                            f"“{quote}”"
                         )
 
                     # Update the message
