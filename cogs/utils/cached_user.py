@@ -141,7 +141,7 @@ async def get_user_cache(
             settings_rows = await db(
                 "SELECT * FROM user_settings WHERE user_id = $1", user_id
             )
-            user_settings = dict(settings_rows)
+            user_settings = dict(settings_rows[0])
 
         # No settings
         except IndexError:
@@ -152,7 +152,7 @@ async def get_user_cache(
             settings_rows = await db(
                 "SELECT * FROM user_settings WHERE user_id = $1", user_id
             )
-            user_settings = dict(settings_rows)
+            user_settings = dict(settings_rows[0])
 
         # Now we add this to the user cache
         bot.user_cache[user_id] = CachedUser(
