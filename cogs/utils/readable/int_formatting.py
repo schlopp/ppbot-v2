@@ -118,5 +118,5 @@ def int_to_roman(n: int, *, emoji_mode: typing.Optional[bool] = False) -> str:
         return M[n // 1000] + C[(n % 1000) // 100] + X[(n % 100) // 10] + I[n % 10]
     except IndexError:
         raise ValueError(
-            f'Expected "int" within the range of `0` to `3999`, got `{n}` instead.'
+            f'Expected `n: int` to be within the range of `0` to `3999`, got `{n}` instead.'
         )
