@@ -10,9 +10,11 @@ from discord.ext import vbu
 
 routes = RouteTableDef()
 
-@routes.get('/')
+
+@routes.get("/")
 async def index(request: Request) -> Response:
-    return web.HTTPPermanentRedirect('/commands')
+    return web.HTTPPermanentRedirect("/commands")
+
 
 @routes.get("/commands")
 @template("commands.html.j2")
