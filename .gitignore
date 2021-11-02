@@ -2,3 +2,8 @@ __pycache__/
 config/config.toml
 config/website.toml
 cogs/testing.py
+
+website/static/css/*.css
+website/static/css/*.css.map
+
+_local*
