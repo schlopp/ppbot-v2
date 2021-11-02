@@ -1,4 +1,4 @@
-from aiohttp.web import HTTPFound, Request, Response, RouteTableDef
+from aiohttp.web import HTTPFound, Request, Response, RouteTableDef, json_response
 import aiohttp_session
 from discord.ext import vbu
 
@@ -42,4 +42,6 @@ async def login(request: Request):
     Redirect the user to the bot's Oauth login page.
     """
 
-    return HTTPFound(location=vbu.web.get_discord_login_url(request, "/login_processor"))
+    return HTTPFound(
+        location=vbu.web.get_discord_login_url(request, "/login_processor")
+    )

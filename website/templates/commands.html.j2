@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Commands - pp bot</title>
+        <link rel="stylesheet" href="../static/css/commands.css" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="sidebar">
+                <nav>
+                    <ul>
+                    {% for command in commands %}
+                        <li>
+                            <a href="#{{ command.name }}">
+                                <span class="slashcommand">{{ command.name }}</span>
+                            </a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+            <div class="main">
+                <nav class="main-nav">
+                    <a href="/" class="logo">
+                        <img src="../static/images/logox56.png" alt="pp bot" />
+                    </a>
+                    <ul>
+                        <li><a href="#" class="link">Cum</a></li>
+                        <li><a href="#" class="link">Commands</a></li>
+                        <li><a href="#" class="link">Home</a></li>
+                    </ul>
+                </nav>
+                <div class="main-commands">
+                    <div class="description">
+                        <h1>Commands</h1>
+                        <p>These are all the current pp bot slash-commands!</p>
+                    </div>
+                    <div class="commands">
+                    {% for command in commands %}
+                        <div class="command" id="{{ command.name }}" onclick="toggleFields('{{ command.name }}')">
+                            <span class="slashcommand">{{ command.name }} {{ command.signature }}</span>
+                            {% if command.help %}
+                                <p>{{ command.help }}</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../static/js/commands.js"></script>
+    </body>
+</html>
