@@ -4,7 +4,4 @@
 
 [![Discord Bots](https://top.gg/api/widget/735147633076863027.svg)](https://top.gg/bot/735147633076863027)
 
-## Commands
-
-* `/help`
-  * Shows a list of commands.
+The #1 most addictive, weird, and stupid cock-related discord bot.
