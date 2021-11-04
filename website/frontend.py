@@ -1,3 +1,4 @@
+import os
 import typing
 
 from aiohttp import web
@@ -24,7 +25,12 @@ async def commands(request: Request):
     """
 
     bot: vbu.Bot = request.app["bots"]["bot"]
-    payload = {"commands": list()}
+    payload = {
+        "commands": list(),
+        "css": [
+            f"commands.css?v={os.path.getmtime('website/static/css/commands.css')}"
+        ],
+    }
     commands = bot.commands
     command: vbu.Command
     for command in commands:
