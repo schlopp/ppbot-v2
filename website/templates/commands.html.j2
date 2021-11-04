@@ -5,7 +5,9 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Commands - pp bot</title>
-        <link rel="stylesheet" href="../static/css/commands.css" />
+        {% for filename in css %}
+            <link rel="stylesheet" href="../static/css/{{ filename }}" />
+        {% endfor %}
     </head>
     <body>
         <div class="container">
@@ -45,6 +47,18 @@
                             {% if command.help %}
                                 <p>{{ command.help }}</p>
                             {% endif %}
+                            {% for name, value in command.fields.items() %}
+                                {% if value %}
+                                    <fieldset>
+                                        <legend>{{ name.title() }}</legend>
+                                        <ul>
+                                            {% for item in value %}
+                                                <li>{{ item }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </fieldset>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     {% endfor %}
                     </div>
