@@ -50,6 +50,7 @@
 
     /* other */
     list-style: none;
+    scroll-behavior: smooth;
 }
 
 html,
@@ -64,9 +65,6 @@ body {
     /* typography */
     font-family: "Montserrat", sans-serif;
     color: var(--color-text-primary);
-
-    /* other */
-    scroll-behavior: smooth;
 }
 
 p {
