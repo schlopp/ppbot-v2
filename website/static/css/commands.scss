@@ -21,7 +21,7 @@
 /* ||  SASS */
 @mixin scroll-bar($color) {
     &::-webkit-scrollbar {
-        width: 160px;
+        width: 16px;
     }
 
     &::-webkit-scrollbar-thumb {
