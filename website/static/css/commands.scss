@@ -1,181 +1,297 @@
+/*  Style-guide: https://9elements.com/css-rule-order/ */
+
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Roboto&family=VT323&display=swap");
 
+/* ||  ROOT VARIABLES */
 :root {
+    /* text colours */
     --color-text-primary: #f2f4fb;
     --color-text-secondary: #aeb3bd;
+
+    /* background colours */
     --color-background-primary: #22222d;
     --color-background-secondary: #19191e;
+
+    /* general colours */
+    --color-red: #dd2f2f;
     --color-blue: #2f9ddd;
     --color-green: #2fdd50;
-    --color-red: #dd2f2f;
 }
 
+/* ||  SASS */
 @mixin scroll-bar($color) {
     &::-webkit-scrollbar {
-        width: 16px;
+        width: 160px;
     }
 
     &::-webkit-scrollbar-thumb {
+        /* box model */
         border: 4px solid rgba(0, 0, 0, 0);
-        background-clip: padding-box;
         border-radius: 9999px;
-        background-color: $color;
+
+        /* background */
+        background: $color padding-box;
     }
 }
 
+/* || GENERAL STYLES */
 * {
+    /* SASS inheritance */
     @include scroll-bar(var(--color-background-secondary));
-    padding: 0;
+
+    /* box model */
     margin: 0;
     box-sizing: border-box;
+    padding: 0;
+
+    /* typography */
     text-decoration: none;
-    list-style: none;
     color: inherit;
+
+    /* other */
+    list-style: none;
 }
 
 html,
 body {
-    padding: 0;
+    /* box model */
     margin: 0;
-    background-color: var(--color-background-primary);
-    color: var(--color-text-primary);
+    padding: 0;
+
+    /* background */
+    background: var(--color-background-primary);
+
+    /* typography */
     font-family: "Montserrat", sans-serif;
+    color: var(--color-text-primary);
 }
 
 p {
-    color: var(--color-text-secondary);
+    /* typography */
     font-family: "Roboto", sans-serif;
-    font-weight: 400;
+    color: var(--color-text-secondary);
 }
 
-.slashcommand {
-    font-size: 1.2rem;
-    font-family: "VT323", monospace;
-    background-color: var(--color-background-secondary);
-    border: 1px solid var(--color-red);
-    border-radius: 5px;
-    &::before {
-        content: "/";
-    }
-}
-
+/* || SITE WIDE */
 .container {
+    /* display and visibility */
     display: grid;
-    height: 100vh;
-    width: 100vw;
-    grid-template-columns: 300px 1fr;
     grid-template-rows: 100vh;
+    grid-template-columns: 300px 1fr;
+
+    /* overflow */
     overflow: auto;
+
+    /* box model */
+    width: 100vw;
+    height: 100vh;
+
     .sidebar {
+        /* sass inheritance */
         @include scroll-bar(var(--color-background-primary));
-        background-color: var(--color-background-secondary);
+
+        /* clipping */
         overflow-y: scroll;
+
+        /* box model */
         padding: 2rem;
-        nav {
-            ul {
-                list-style: none;
-                li {
+
+        /* background */
+        background-color: var(--color-background-secondary);
+
+        nav ul li {
+            /* animation */
+            transition: 100ms ease-in-out;
+
+            /* box model */
+            border-radius: 5px;
+
+            /* pseudo-classes and pseudo-elements (nested-rules) */
+            &:hover {
+                /* background */
+                background-color: var(--color-background-primary);
+
+                /* pseudo-classes and pseudo-elements (nested-rules) */
+                a span {
+                    border-color: var(--color-blue);
+                }
+            }
+            a {
+                /* display and visibility */
+                display: block;
+
+                /* pseudo-classes and pseudo-elements (nested-rules) */
+                span {
+                    /* display and visibility */
+                    display: inline-block;
+
+                    /* animation */
                     transition: 100ms ease-in-out;
-                    border-radius: 5px;
-                    a {
-                        display: block;
-                        span {
-                            display: inline-block;
-                            padding: 0.3rem;
-                            margin: 0.5rem;
-                            transition: 100ms ease-in-out;
-                        }
-                    }
-                    &:hover {
-                        background-color: var(--color-background-primary);
-                        a span {
-                            border-color: var(--color-blue);
-                        }
-                    }
+
+                    /* box model */
+                    margin: 0.5rem;
+                    padding: 0.3rem;
                 }
             }
         }
     }
     .main {
-        overflow-y: scroll;
+        /* display and visibility */
         display: grid;
+        grid-template-rows: 56px 1fr;
         row-gap: 2rem;
         grid-template-columns: 1fr;
-        grid-template-rows: 56px 1fr;
+
+        /* clipping */
+        overflow-y: scroll;
+
+        /* box model */
         padding: 1rem 4rem 0 4rem;
+
+        /* pseudo-classes and pseudo-elements (nested-rules) */
         .main-nav {
-            margin: 0 8rem;
+            /* display and visibility */
             display: grid;
-            grid-template-columns: 56px 1fr;
             grid-template-rows: 56px;
             column-gap: 2rem;
-            ul {
-                li {
-                    display: inline;
-                    float: right;
-                    a {
-                        display: block;
-                        padding: 0 2rem;
-                        line-height: 56px;
-                        text-align: center;
-                        transition: 100ms ease-in-out;
-                    }
+            grid-template-columns: 56px 1fr;
+
+            /* box model */
+            margin: 0 8rem;
+
+            /* pseudo-classes and pseudo-elements (nested-rules) */
+            ul li {
+                /* position and layout */
+                float: right;
+
+                /* display and visibility */
+                display: inline;
+
+                /* pseudo-classes and pseudo-elements (nested-rules) */
+                a {
+                    /* display and visibility */
+                    display: block;
+
+                    /* animation */
+                    transition: 100ms ease-in-out;
+
+                    /* box model */
+                    padding: 0 2rem;
+
+                    /* typography */
+                    line-height: 56px;
+                    text-align: center;
                 }
             }
         }
         .main-commands {
+            /* box model */
             height: auto;
+
+            /* pseudo-classes and pseudo-elements (nested-rules) */
             .description {
+                /* typography */
                 line-height: 2rem;
+
+                /* pseudo-classes and pseudo-elements (nested-rules) */
                 &::after {
+                    /* generated content */
                     content: "";
+
+                    /* display and visibility */
                     display: block;
+
+                    /* box model */
+                    margin: 0.5rem 0 1.5rem 0;
+                    border-radius: 0.5rem;
                     width: 100%;
                     height: 0.5rem;
-                    border-radius: 0.5rem;
+
+                    /* background */
                     background-color: var(--color-background-secondary);
-                    margin: 0.5rem 0 1.5rem 0;
                 }
             }
-            .commands {
-                .command {
-                    cursor: pointer;
-                    background-color: var(--color-background-secondary);
-                    margin-bottom: 1rem;
+            .commands .command {
+                /* background */
+                background-color: var(--color-background-secondary);
+                cursor: pointer;
+
+                /* box model */
+                margin-bottom: 1rem;
+                border-radius: 1rem;
+                padding: 1rem;
+
+                /* pseudo-classes and pseudo-elements (nested-rules) */
+                span {
+                    /* display and visibility */
+                    display: inline-block;
+
+                    /* animation */
+                    transition: 100ms ease-in-out;
+
+                    /* box model */
+                    margin: 0.5rem 0;
+                    padding: 0.3rem;
+
+                    /* pseudo-classes and pseudo-elements (nested-rules) */
+                    &:hover {
+                        border-color: var(--color-blue);
+                    }
+                }
+                fieldset {
+                    /* display and visibility */
+                    display: none;
+
+                    /* typography */
+                    font-size: 1rem;
+                    color: var(--color-text-secondary);
+
+                    /* box model */
+                    margin-top: 0.5rem;
+                    border: 4px solid var(--color-background-primary);
+                    border-radius: 4px;
                     padding: 1rem;
-                    border-radius: 1rem;
-                    span {
-                        display: inline-block;
-                        padding: 0.3rem;
-                        margin: 0.5rem 0;
-                        transition: 100ms ease-in-out;
-                        &:hover {
-                            border-color: var(--color-blue);
-                        }
-                    }
-                    fieldset {
-                        display: none;
+
+                    /* pseudo-classes and pseudo-elements (nested-rules) */
+                    legend {
+                        /* box model */
+                        margin-left: 1rem;
+                        padding: 0 0.5rem;
+
+                        /* typography */
                         font-size: 1rem;
-                        margin-top: 0.5rem;
-                        padding: 1rem;
-                        border: 4px solid var(--color-background-primary);
-                        border-radius: 4px;
-                        color: var(--color-text-secondary);
-                        legend {
-                            margin-left: 1rem;
-                            padding: 0 0.5rem;
-                            font-size: 1rem;
-                            font-family: "Montserrat", sans-serif;
-                            color: var(--color-text-primary);
-                        }
+                        font-family: "Montserrat", sans-serif;
+                        color: var(--color-text-primary);
                     }
-                    .visible {
-                        border: 1px solid var(--color-red);
-                        padding: calc(1rem - 1px);
-                        display: block;
-                    }
+                }
+                .visible {
+                    /* display and visibility */
+                    display: block;
+
+                    /* box model */
+                    border: 1px solid var(--color-red);
+                    padding: calc(1rem - 1px);
                 }
             }
         }
+    }
+}
+
+/* || UTILITIES */
+.slashcommand {
+    /* box model */
+    border: 1px solid var(--color-red);
+    border-radius: 5px;
+
+    /* background */
+    background-color: var(--color-background-secondary);
+
+    /* typography */
+    font-size: 1.2rem;
+    font-family: "VT323", monospace;
+
+    /* pseudo-classes and pseudo-elements (nested-rules) */
+    &::before {
+        content: "/";
     }
 }
