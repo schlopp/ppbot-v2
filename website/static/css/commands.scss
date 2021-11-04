@@ -64,6 +64,9 @@ body {
     /* typography */
     font-family: "Montserrat", sans-serif;
     color: var(--color-text-primary);
+
+    /* other */
+    scroll-behavior: smooth;
 }
 
 p {
