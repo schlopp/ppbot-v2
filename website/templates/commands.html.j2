@@ -47,17 +47,19 @@
                             {% if command.help %}
                                 <p>{{ command.help }}</p>
                             {% endif %}
-                            {% for name, value in command.fields.items() %}
-                                {% if value %}
-                                    <fieldset>
-                                        <legend>{{ name.title() }}</legend>
+                            {% for field in command.fields %}
+                                <fieldset>
+                                    <legend>{{ field.name }}</legend>
+                                    {% if field.type == "list" %}
                                         <ul>
-                                            {% for item in value %}
+                                            {% for item in field.value %}
                                                 <li>{{ item }}</li>
                                             {% endfor %}
                                         </ul>
-                                    </fieldset>
-                                {% endif %}
+                                    {% elif field.type == "str" %}
+                                        <p>{{ field.value }}</p>
+                                    {% endif %}
+                                </fieldset>
                             {% endfor %}
                         </div>
                     {% endfor %}
