@@ -40,15 +40,23 @@ async def commands(request: Request):
             "name": command.name,
             "help": command.help,
             "signature": command.signature,
-            "fields": {
-                "help": command.param_descriptions.items()
-                if command.param_descriptions
-                else None,
-                "parent": command.full_parent_name
-                if command.full_parent_name
-                else None,
-            },
+            "fields": [],
         }
+        if command.param_descriptions:
+            command_payload["fields"]["help"] = {
+                "name": "Help",
+                "value": command.param_descriptions,
+                "type": command.param_descriptions.__class__.__name__,
+            }
+        if command.full_parent_name:
+            command_payload["fields"].append(
+                {
+                    "name": "Parent",
+                    "value": command.full_parent_name,
+                    "type": command.full_parent_name.__class__.__name__,
+                }
+            )
+
         payload["commands"].append(command_payload)
     return payload
 
