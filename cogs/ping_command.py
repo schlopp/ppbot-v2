@@ -2,8 +2,8 @@ from discord.ext import commands, vbu
 
 
 class PingCommand(vbu.Cog):
-    @commands.command()
-    async def ping(self, ctx: vbu.Context):
+    @commands.command(name="ping", add_slash_command=True)
+    async def _ping_command(self, ctx: vbu.Context):
         """
         An example ping command.
         """

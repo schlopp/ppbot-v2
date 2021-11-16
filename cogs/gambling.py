@@ -16,7 +16,7 @@ class GamblingCommands(vbu.Cog):
         super().__init__(bot)
         self.bot: vbu.Bot
 
-    @commands.command(name="blackjack")
+    @commands.command(name="blackjack", add_slash_command=True)
     @commands.bot_has_permissions(
         embed_links=True,
         read_messages=True,
