@@ -167,7 +167,7 @@ class EconomyCommands(vbu.Cog):
                 if user_id not in self.bot.commands_in_use:
                     self.bot.user_cache.pop(user_id)
 
-    @commands.command(name="inventory", aliases=["inv"])
+    @commands.command(name="inventory", add_slash_command=True)
     @commands.bot_has_permissions(
         embed_links=True,
         read_messages=True,
@@ -291,7 +291,7 @@ class EconomyCommands(vbu.Cog):
                 )
                 await paginator.start(ctx, timeout=10)
 
-    @commands.command(name="show")
+    @commands.command(name="show", add_slash_command=True)
     @commands.bot_has_permissions(
         embed_links=True,
         read_messages=True,
