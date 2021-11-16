@@ -2,6 +2,7 @@ import asyncio
 import os
 import random
 import typing
+from discord.ext.commands.core import cooldown
 
 import toml
 
@@ -96,6 +97,12 @@ class EconomyCommands(vbu.Cog):
         self.bot.begging["donators"] = utils.Donators.from_dict(
             toml.load(os.path.join(directory, "donators.toml"))
         )
+
+        # Create seggsy cache for expensive autocomplete
+        try:
+            self.bot.autocomplete_cache.clear()
+        except AttributeError:
+            self.bot.autocomplete_cache = {}
 
     @vbu.Cog.listener(name="on_ready")
     async def _load_cache_on_ready(self):
@@ -320,7 +327,15 @@ class EconomyCommands(vbu.Cog):
                 )
             await ctx.interaction.response.send_message(embed=embed)
 
-    @commands.command(name="beg")
+    @commands.command(
+        name="beg",
+        add_slash_command=True,
+        cooldown_after_parsing=True,
+        param_descriptions={
+            "location": "The place you're begging at",
+        },
+        autocomplete_params=["location"],
+    )
     @commands.bot_has_permissions(
         embed_links=True,
         read_messages=True,
@@ -335,9 +350,11 @@ class EconomyCommands(vbu.Cog):
     @utils.is_slash_command()
     @utils.is_not_busy()
     @vbu.checks.bot_is_ready()
-    async def _beg_command(self, ctx: commands.SlashContext) -> None:
+    async def _beg_command(
+        self, ctx: commands.SlashContext, location: typing.Optional[str] = None
+    ) -> typing.Any:
         """
-        Beg for inches, earn items, and get a large pp in the process!
+        Beg for some sweet sweet inches lmao
         """
 
         with utils.UsingCommand(ctx):
@@ -607,10 +624,11 @@ class EconomyCommands(vbu.Cog):
                         embed.title = "Retype!"
                         retype = location.quotes.minigames.retype
 
+                        # Get a random sentence
                         sentence = random.choice(retype.sentences)
                         uncopyable_sentence = utils.uncopyable(sentence)
 
-                        embed.description = f"{fill_in_the_blank.context}\n\nQuickly! Retype this sentence is chat: [`{uncopyable_sentence}`]({self.bot.hyperlink})"
+                        embed.description = f"{retype.context}\n\nQuickly! Retype this sentence is chat: [`{uncopyable_sentence}`]({self.bot.hyperlink})"
                         embed.set_footer("Respond to this message with the sentence")
 
                     await ctx.interaction.edit_original_message(
@@ -651,9 +669,9 @@ class EconomyCommands(vbu.Cog):
 
                     while attempts_left:
                         try:
-                            answer_message = await self.bot.wait_for(
+                            await self.bot.wait_for(
                                 "message",
-                                check=scramble_check,
+                                check=retype_check,
                                 timeout=30.0,
                             )
                             break
@@ -728,6 +746,36 @@ class EconomyCommands(vbu.Cog):
                     await ctx.interaction.edit_original_message(
                         embed=embed, components=None, content=None
                     )
+
+    @_beg_command.autocomplete
+    async def _beg_autocomplete(
+        self, ctx: commands.SlashContext, interaction: discord.Interaction
+    ) -> typing.Any:
+        """
+        Autocomplete coroutine, responsible for sending the list of locations
+        """
+
+        try:
+            locations = self.bot.autocomplete_cache[ctx]
+        except KeyError:
+            async with vbu.DatabaseConnection() as db:
+                cache: utils.CachedUser = await utils.get_user_cache(
+                    ctx.author.id,
+                    db=db,
+                    bot=self.bot,
+                    logger=self.logger,
+                )
+                begging = cache.get_skill("BEGGING")
+                locations = utils.BeggingLocations(
+                    begging.level, *self.bot.begging["locations"]
+                )
+                self.bot.autocomplete_cache[ctx] = locations
+
+        search = interaction.values[0] if interaction.values else ""
+        result = [
+            l.name for l in locations if l.name.lower().startswith(search.lower())
+        ]
+        await interaction.response.send_autocomplete(result)
 
 
 def setup(bot: vbu.Bot):
