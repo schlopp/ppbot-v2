@@ -98,12 +98,6 @@ class EconomyCommands(vbu.Cog):
             toml.load(os.path.join(directory, "donators.toml"))
         )
 
-        # Create seggsy cache for expensive autocomplete
-        try:
-            self.bot.autocomplete_cache.clear()
-        except AttributeError:
-            self.bot.autocomplete_cache = {}
-
     @vbu.Cog.listener(name="on_ready")
     async def _load_cache_on_ready(self):
         """
@@ -377,6 +371,7 @@ class EconomyCommands(vbu.Cog):
                 )
                 content = "\n".join(
                     (
+                        f"This is a test, you picked {location}",
                         f"**Where are you begging?**",
                         f"Level up `BEGGING` unlock new locations!",
                         f"**Current level:** {utils.int_to_roman(begging.level)}",
@@ -756,8 +751,6 @@ class EconomyCommands(vbu.Cog):
         """
 
         try:
-            locations = self.bot.autocomplete_cache[ctx]
-        except KeyError:
             async with vbu.DatabaseConnection() as db:
                 cache: utils.CachedUser = await utils.get_user_cache(
                     ctx.author.id,
@@ -769,13 +762,15 @@ class EconomyCommands(vbu.Cog):
                 locations = utils.BeggingLocations(
                     begging.level, *self.bot.begging["locations"]
                 )
-                self.bot.autocomplete_cache[ctx] = locations
-
-        search = interaction.values[0] if interaction.values else ""
-        result = [
-            l.name for l in locations if l.name.lower().startswith(search.lower())
-        ]
-        await interaction.response.send_autocomplete(result)
+                result = [
+                    discord.ApplicationCommandOptionChoice(
+                        f"Level {l.level}: {l.name}  -  {l.description}", l.id
+                    )
+                    for l in locations.locations
+                ]
+                return await interaction.response.send_autocomplete(result)
+        except Exception:
+            raise  # Fuck you, python.
 
 
 def setup(bot: vbu.Bot):
