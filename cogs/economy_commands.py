@@ -768,7 +768,7 @@ class EconomyCommands(vbu.Cog):
                     for l in locations.locations
                 ]
                 return await interaction.response.send_autocomplete(result)
-        except Exception as e:
+        except Exception:
             self.logger.exception("Autocomplete raised exception")  # Fuck you, python.
 
 
