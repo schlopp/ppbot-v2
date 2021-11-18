@@ -2,7 +2,6 @@ import asyncio
 import os
 import random
 import typing
-from discord.ext.commands.core import cooldown
 
 import toml
 
@@ -769,8 +768,8 @@ class EconomyCommands(vbu.Cog):
                     for l in locations.locations
                 ]
                 return await interaction.response.send_autocomplete(result)
-        except Exception:
-            raise  # Fuck you, python.
+        except Exception as e:
+            self.logger.exception("Autocomplete raised exception")  # Fuck you, python.
 
 
 def setup(bot: vbu.Bot):
