@@ -414,16 +414,33 @@ class BeggingLocations:
             options=[i.to_select_option() for i in self.locations],
             placeholder="Pick a location to beg at.",
         )
-
-    def get_location_from_interaction(
-        self, payload: discord.Interaction
-    ) -> typing.Union[BeggingLocation, None]:
+    
+    def get_location_from_id(self, location_id: str) -> typing.Union[BeggingLocation, None]:
         """
-        Get a location from a :class:`discord.Interaction`.
+        Get a location from an ID.
+
+        Params:
+            location_id (`str`): The ID of the location.
 
         Returns:
             (:class:`BeggingLocation`): The location received found.
             or (`None`): Only if no location is found.
         """
 
-        return next((x for x in self.locations if x.id == payload.values[0]))
+        return next((x for x in self.locations if x.id == location_id), None)
+
+    def get_location_from_interaction(
+        self, interaction: discord.Interaction
+    ) -> typing.Union[BeggingLocation, None]:
+        """
+        Get a location from a :class:`discord.Interaction`.
+
+        Params:
+            interaction (:class:`discord.Interaction`): The interaction to get the location from.
+
+        Returns:
+            (:class:`BeggingLocation`): The location received found.
+            or (`None`): Only if no location is found.
+        """
+
+        return self.get_location_from_id(interaction.values[0])
