@@ -443,4 +443,4 @@ class BeggingLocations:
             or (`None`): Only if no location is found.
         """
 
-        return self.get_location_from_id(interaction.values[0])
+        return self.get_location_from_id(interaction.values[0]) if interaction.values else None
