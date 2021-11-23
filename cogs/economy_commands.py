@@ -365,60 +365,81 @@ class EconomyCommands(vbu.Cog):
                     begging.level, *self.bot.begging["locations"]
                 )
 
-                components = discord.ui.MessageComponents(
-                    discord.ui.ActionRow(locations.to_select_menu())
-                )
-                content = "\n".join(
-                    (
-                        f"This is a test, you picked {location}",
-                        f"**Where are you begging?**",
-                        f"Level up `BEGGING` unlock new locations!",
-                        f"**Current level:** {utils.int_to_roman(begging.level)}",
+                # No location chosen in autocomplete
+                if location is None:
+
+                    components = discord.ui.MessageComponents(
+                        discord.ui.ActionRow(locations.to_select_menu())
                     )
-                )
 
-                await ctx.interaction.response.send_message(
-                    content, components=components
-                )
-
-                try:
-                    original_message = await ctx.interaction.original_message()
-
-                    def check(
-                        interaction: discord.Interaction,
-                    ) -> typing.Union[bool, None]:
-                        # Check if the interaction is used the original context interaction message.
-                        if interaction.message.id != original_message.id:
-                            return
-                        if interaction.user != ctx.author:
-                            self.bot.loop.create_task(
-                                interaction.response.send_message(
-                                    content="Bro this is not meant for you LMAO",
-                                    ephemeral=True,
-                                )
+                    with vbu.Embed() as embed:
+                        embed.colour = utils.colours.BLUE
+                        embed.set_author(
+                            name=random.choice(
+                                [
+                                    "Where you begging at?",
+                                    "Where are you begging?",
+                                    "Where you begging?",
+                                ]
                             )
-                            return
-                        return True
+                        )
+                        embed.description = "\n".join(
+                            "Btw, level the `Begging` skill to unlock new locations",
+                            f"Current level: {utils.int_to_roman(begging.level)}",
+                        )
 
-                    # Wait for a response
-                    payload: discord.Interaction = await self.bot.wait_for(
-                        "component_interaction",
-                        check=check,
-                        timeout=15.0,
-                    )
-                except asyncio.TimeoutError:
-                    return await ctx.interaction.edit_original_message(
-                        content=content
-                        + "\n\n\\🟥 You took WAY too long to respond `waited 15.0s`",
-                        components=components.disable_components(),
+                    await ctx.interaction.response.send_message(
+                        embed=embed, components=components
                     )
 
-                # Get the selected location
-                location: utils.BeggingLocation = (
-                    locations.get_location_from_interaction(payload)
-                )
-                if locations is None:
-                    raise Exception("Invalid location")
+                    try:
+                        original_message = await ctx.interaction.original_message()
+
+                        def check(
+                            interaction: discord.Interaction,
+                        ) -> typing.Union[bool, None]:
+                            # Check if the interaction is used the original context interaction message.
+                            if interaction.message.id != original_message.id:
+                                return
+                            if interaction.user != ctx.author:
+                                self.bot.loop.create_task(
+                                    interaction.response.send_message(
+                                        content="Bro this is not meant for you LMAO",
+                                        embed=None,
+                                        ephemeral=True,
+                                    )
+                                )
+                                return
+                            return True
+
+                        # Wait for a response
+                        payload: discord.Interaction = await self.bot.wait_for(
+                            "component_interaction",
+                            check=check,
+                            timeout=15.0,
+                        )
+                    except asyncio.TimeoutError:
+                        with embed:
+                            embed.description = (
+                                "**You took too long to respond, type faster bro**\n\n"
+                                + embed.description
+                            )
+                        return await ctx.interaction.edit_original_message(
+                            embed=embed,
+                            components=components.disable_components(),
+                        )
+
+                    # Get the selected location
+                    location: utils.BeggingLocation = (
+                        locations.get_location_from_interaction(payload)
+                    )
+
+                else:
+                    location = locations.get_location_from_id(location)
+                    if location is None:
+                        return await ctx.interaction.response.send_message(
+                            "You have to pick one of the options lmao", ephemeral=True
+                        )
 
                 # 5% chance of fill in the blank minigame
                 if (random_percentage := random.random()) < 0.05:
@@ -457,11 +478,11 @@ class EconomyCommands(vbu.Cog):
                         embed.description = f"{fill_in_the_blank.context}\n\n**{fill_in_the_blank.approacher}:** `{prompt}`"
                         embed.set_footer("Respond to this message with the answer")
                     await ctx.interaction.edit_original_message(
-                        embed=embed, components=None, content=None
+                        embed=embed, components=None
                     )
 
                     try:
-                        answer_message = await self.bot.wait_for(
+                        await self.bot.wait_for(
                             "message",
                             check=lambda m: m.author == ctx.author
                             and m.content.upper() == answer,
@@ -502,7 +523,8 @@ class EconomyCommands(vbu.Cog):
 
                     # Update the message
                     return await ctx.interaction.edit_original_message(
-                        embed=embed, components=None, content=None
+                        embed=embed,
+                        components=None,
                     )
 
                 # 5% chance of scramble minigame
@@ -543,7 +565,8 @@ class EconomyCommands(vbu.Cog):
                         embed.set_footer("Respond to this message with the answer")
 
                     await ctx.interaction.edit_original_message(
-                        embed=embed, components=None, content=None
+                        embed=embed,
+                        components=None,
                     )
 
                     attempts_left = 3
@@ -572,7 +595,7 @@ class EconomyCommands(vbu.Cog):
 
                     while attempts_left:
                         try:
-                            answer_message = await self.bot.wait_for(
+                            await self.bot.wait_for(
                                 "message",
                                 check=scramble_check,
                                 timeout=15.0,
@@ -604,7 +627,8 @@ class EconomyCommands(vbu.Cog):
 
                     # Update the message
                     return await ctx.interaction.edit_original_message(
-                        embed=embed, components=None, content=None
+                        embed=embed,
+                        components=None,
                     )
 
                 # 5% chance of retype event
@@ -626,7 +650,8 @@ class EconomyCommands(vbu.Cog):
                         embed.set_footer("Respond to this message with the sentence")
 
                     await ctx.interaction.edit_original_message(
-                        embed=embed, components=None, content=None
+                        embed=embed,
+                        components=None,
                     )
 
                     attempts_left = 3
@@ -694,7 +719,8 @@ class EconomyCommands(vbu.Cog):
 
                     # Update the message
                     return await ctx.interaction.edit_original_message(
-                        embed=embed, components=None, content=None
+                        embed=embed,
+                        components=None,
                     )
 
                 else:
@@ -738,7 +764,8 @@ class EconomyCommands(vbu.Cog):
 
                     # Update the message
                     await ctx.interaction.edit_original_message(
-                        embed=embed, components=None, content=None
+                        embed=embed,
+                        components=None,
                     )
 
     @_beg_command.autocomplete
@@ -761,11 +788,23 @@ class EconomyCommands(vbu.Cog):
                 locations = utils.BeggingLocations(
                     begging.level, *self.bot.begging["locations"]
                 )
+
+                try:
+                    value: str = interaction.data["options"][0]["value"]
+
+                # Somehow no options were passed, so just default to an empty string
+                except (AttributeError, IndexError, KeyError):
+                    value: str = ""
+
                 result = [
                     discord.ApplicationCommandOptionChoice(
                         f"Level {l.level}: {l.name}  -  {l.description}", l.id
                     )
                     for l in locations.locations
+                    if value.lower()
+                    in "".join(
+                        {l.name, l.description, l.id, str(l.emoji), str(l.level)}
+                    ).lower()
                 ]
                 return await interaction.response.send_autocomplete(result)
         except Exception:
