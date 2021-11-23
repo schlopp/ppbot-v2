@@ -414,8 +414,10 @@ class BeggingLocations:
             options=[i.to_select_option() for i in self.locations],
             placeholder="Pick a location to beg at.",
         )
-    
-    def get_location_from_id(self, location_id: str) -> typing.Union[BeggingLocation, None]:
+
+    def get_location_from_id(
+        self, location_id: str
+    ) -> typing.Union[BeggingLocation, None]:
         """
         Get a location from an ID.
 
@@ -443,4 +445,8 @@ class BeggingLocations:
             or (`None`): Only if no location is found.
         """
 
-        return self.get_location_from_id(interaction.values[0]) if interaction.values else None
+        return (
+            self.get_location_from_id(interaction.values[0])
+            if interaction.values
+            else None
+        )
