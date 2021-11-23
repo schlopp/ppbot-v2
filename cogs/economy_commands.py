@@ -360,12 +360,13 @@ class EconomyCommands(vbu.Cog):
                     logger=self.logger,
                 )
                 begging = cache.get_skill("BEGGING")
+                location = location or cache.settings.get("current_begging_location")
 
                 locations = utils.BeggingLocations(
                     begging.level, *self.bot.begging["locations"]
                 )
 
-                # No location chosen in autocomplete
+                # No location chosen in autocomplete and no default location set
                 if location is None:
 
                     components = discord.ui.MessageComponents(
@@ -424,7 +425,8 @@ class EconomyCommands(vbu.Cog):
                                 "**You took too long to respond, type faster bro**\n\n"
                                 + embed.description
                             )
-                        return await ctx.interaction.edit_original_message(
+                        return await utils.responses.send_or_edit_response(
+                            ctx.interaction,
                             embed=embed,
                             components=components.disable_components(),
                         )
@@ -440,6 +442,8 @@ class EconomyCommands(vbu.Cog):
                         return await ctx.interaction.response.send_message(
                             "You have to pick one of the options lmao", ephemeral=True
                         )
+
+                await cache.update_settings("current_begging_location", location.id)
 
                 # 5% chance of fill in the blank minigame
                 if (random_percentage := random.random()) < 0.05:
@@ -477,8 +481,8 @@ class EconomyCommands(vbu.Cog):
 
                         embed.description = f"{fill_in_the_blank.context}\n\n**{fill_in_the_blank.approacher}:** `{prompt}`"
                         embed.set_footer("Respond to this message with the answer")
-                    await ctx.interaction.edit_original_message(
-                        embed=embed, components=None
+                    await utils.responses.send_or_edit_response(
+                        ctx.interaction, embed=embed, components=None
                     )
 
                     try:
@@ -491,7 +495,9 @@ class EconomyCommands(vbu.Cog):
                     except asyncio.TimeoutError:
                         with embed:
                             embed.description = f"bruh, the answer was {answer}, but you took WAY too long to respond. You get {utils.format_rewards()}.\n\n**{fill_in_the_blank.approacher}:** {fill_in_the_blank.fail}"
-                        return await ctx.interaction.edit_original_message(embed=embed)
+                        return await utils.responses.send_or_edit_response(
+                            ctx.interaction, embed=embed
+                        )
 
                     with vbu.Embed() as embed:
                         embed.colour = utils.PINK
@@ -522,7 +528,8 @@ class EconomyCommands(vbu.Cog):
                         embed.description = f"“{quote}”"
 
                     # Update the message
-                    return await ctx.interaction.edit_original_message(
+                    return await utils.responses.send_or_edit_response(
+                        ctx.interaction,
                         embed=embed,
                         components=None,
                     )
@@ -564,7 +571,8 @@ class EconomyCommands(vbu.Cog):
                         embed.description = f"{scramble.context}\n\n{scramble.approacher}: [`{scrambled}`]({self.bot.hyperlink})"
                         embed.set_footer("Respond to this message with the answer")
 
-                    await ctx.interaction.edit_original_message(
+                    await utils.responses.send_or_edit_response(
+                        ctx.interaction,
                         embed=embed,
                         components=None,
                     )
@@ -604,8 +612,8 @@ class EconomyCommands(vbu.Cog):
                         except asyncio.TimeoutError:
                             with embed:
                                 embed.description = f"You should work on your scrambling skills, the answer was `{unscrambled}`. You get {utils.format_rewards()}"
-                            return await ctx.interaction.edit_original_message(
-                                embed=embed
+                            return await utils.responses.send_or_edit_response(
+                                ctx.interaction, embed=embed
                             )
 
                     with vbu.Embed() as embed:
@@ -626,7 +634,8 @@ class EconomyCommands(vbu.Cog):
                         embed.description = f"**GG!** You win {utils.format_rewards(inches=growth, items=loot)}!"
 
                     # Update the message
-                    return await ctx.interaction.edit_original_message(
+                    return await utils.responses.send_or_edit_response(
+                        ctx.interaction,
                         embed=embed,
                         components=None,
                     )
@@ -649,7 +658,8 @@ class EconomyCommands(vbu.Cog):
                         embed.description = f"{retype.context}\n\nQuickly! Retype this sentence is chat: [`{uncopyable_sentence}`]({self.bot.hyperlink})"
                         embed.set_footer("Respond to this message with the sentence")
 
-                    await ctx.interaction.edit_original_message(
+                    await utils.responses.send_or_edit_response(
+                        ctx.interaction,
                         embed=embed,
                         components=None,
                     )
@@ -696,8 +706,8 @@ class EconomyCommands(vbu.Cog):
                             break
                         except asyncio.TimeoutError:
                             embed.description = f"Wow, you're a slow typer. You get {utils.format_rewards()}. Cry about it"
-                            return await ctx.interaction.edit_original_message(
-                                embed=embed
+                            return await utils.responses.send_or_edit_response(
+                                ctx.interaction, embed=embed
                             )
 
                     with vbu.Embed() as embed:
@@ -718,7 +728,8 @@ class EconomyCommands(vbu.Cog):
                         embed.description = f"**GG!** Nice typing skills bro, you win {utils.format_rewards(inches=growth, items=loot)}!"
 
                     # Update the message
-                    return await ctx.interaction.edit_original_message(
+                    return await utils.responses.send_or_edit_response(
+                        ctx.interaction,
                         embed=embed,
                         components=None,
                     )
@@ -763,7 +774,8 @@ class EconomyCommands(vbu.Cog):
                         embed.description = f"“{quote}”"
 
                     # Update the message
-                    await ctx.interaction.edit_original_message(
+                    await utils.responses.send_or_edit_response(
+                        ctx.interaction,
                         embed=embed,
                         components=None,
                     )
