@@ -43,7 +43,7 @@ async def commands(request: Request):
             "fields": [],
         }
         if command.param_descriptions:
-            command_payload["fields"]["help"] = {
+            command_payload["help"] = {
                 "name": "Help",
                 "value": command.param_descriptions,
                 "type": command.param_descriptions.__class__.__name__,
@@ -63,7 +63,7 @@ async def commands(request: Request):
 
 @routes.get("/schlopp")
 @template("schlopp.html")
-async def schlopp(request):
+async def schlopp(request: Request):
     """
     Handles the schlopp page.
     """
