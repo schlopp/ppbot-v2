@@ -1,6 +1,6 @@
 import random
-import typing
 import textwrap
+import typing
 from dataclasses import dataclass
 
 import discord
@@ -8,7 +8,6 @@ from discord.ext import vbu
 
 from .. import LootableItem
 from ..readable import int_formatting
-
 
 __all__ = (
     "LootTableItem",

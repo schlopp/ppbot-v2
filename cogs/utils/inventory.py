@@ -5,7 +5,6 @@ from discord.ext import vbu
 
 from . import LootableItem
 
-
 __all__ = ("Inventory",)
 
 

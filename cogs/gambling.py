@@ -3,9 +3,8 @@ import os
 import random
 import typing
 
-import toml
-
 import discord
+import toml
 from discord.ext import commands, tasks, vbu
 
 from . import utils

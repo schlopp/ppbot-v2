@@ -1,7 +1,6 @@
-from dataclasses import dataclass
-import typing
 import random
-
+import typing
+from dataclasses import dataclass
 
 __all__ = (
     "DonatorQuotes",

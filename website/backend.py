@@ -1,7 +1,7 @@
-from aiohttp.web import HTTPFound, Request, Response, RouteTableDef, json_response
 import aiohttp_session
+from aiohttp.web import (HTTPFound, Request, Response, RouteTableDef,
+                         json_response)
 from discord.ext import vbu
-
 
 routes = RouteTableDef()
 

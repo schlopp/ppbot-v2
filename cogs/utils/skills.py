@@ -3,7 +3,6 @@ from dataclasses import dataclass
 
 from discord.ext import vbu
 
-
 __all__ = (
     "get_level_by_exp",
     "Skill",

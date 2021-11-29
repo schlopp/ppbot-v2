@@ -8,7 +8,6 @@ import typing
 
 from .. import LootableItem
 
-
 __all__ = ("format_rewards",)
 
 

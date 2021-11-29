@@ -1,2 +1,2 @@
-from .cards import *
 from .blackjack import *
+from .cards import *

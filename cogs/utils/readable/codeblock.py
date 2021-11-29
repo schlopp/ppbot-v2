@@ -3,7 +3,6 @@ from io import StringIO
 
 import discord
 
-
 __all__ = ("codeblock",)
 
 ZERO_WIDTH_SPACE = "\u200B"

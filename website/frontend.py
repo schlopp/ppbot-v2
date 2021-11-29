@@ -1,13 +1,12 @@
 import os
 import typing
 
+import aiohttp_session
+import discord
 from aiohttp import web
 from aiohttp.web import HTTPFound, Request, Response, RouteTableDef
-import aiohttp_session
 from aiohttp_jinja2 import template
-import discord
 from discord.ext import vbu
-
 
 routes = RouteTableDef()
 

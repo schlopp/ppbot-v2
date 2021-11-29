@@ -1,11 +1,10 @@
-import typing
 import logging
+import typing
 from dataclasses import dataclass
 
 from discord.ext import vbu
 
 from . import Pp, Skill
-
 
 __all__ = ("CachedUser", "get_user_cache")
 

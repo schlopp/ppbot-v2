@@ -1,6 +1,6 @@
 import typing
-import discord
 
+import discord
 
 __all__ = ("send_or_edit_response",)
 

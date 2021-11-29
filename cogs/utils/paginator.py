@@ -1,11 +1,10 @@
-import typing
 import asyncio
 import inspect
 import itertools
+import typing
 
 import discord
 from discord.ext import commands, vbu
-
 
 __all__ = (
     "Filter",
