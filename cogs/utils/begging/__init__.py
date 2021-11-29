@@ -1,2 +1,2 @@
-from .donator import *
 from .location import *
+from .donator import *
