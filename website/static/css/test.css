@@ -1,0 +1,302 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Roboto+Mono:wght@100;200;300;400;500;600;700&family=Roboto:wght@100;300;400;500&display=swap");
+:root {
+  --color-background: black;
+  --color-background-text: #3500d4;
+  --color-shadow: #240090;
+  --color-text: white;
+  --color-text-secondary: #b4a9d4;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-decoration: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  color: var(--color-text);
+}
+
+html,
+body,
+.container {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  background-color: var(--color-background);
+}
+
+@-webkit-keyframes background-animation {
+  from {
+    background-position: 0, right 0px bottom 0px;
+  }
+  to {
+    background-position: 0, right 199px bottom 199px;
+  }
+}
+
+@keyframes background-animation {
+  from {
+    background-position: 0, right 0px bottom 0px;
+  }
+  to {
+    background-position: 0, right 199px bottom 199px;
+  }
+}
+.container {
+  background-image: url(../images/shadedEdges.png), url(../images/backgroundOutline.png);
+  background-size: 100% 100%, auto;
+  background-repeat: no-repeat, repeat;
+  background-position: 0, right 0px;
+  -webkit-animation: background-animation 8s linear infinite;
+          animation: background-animation 8s linear infinite;
+  overflow-y: scroll;
+}
+.container::-webkit-scrollbar {
+  border-radius: 10px;
+  height: 10px;
+  width: 8px;
+}
+.container::-webkit-scrollbar-thumb {
+  background: var(--color-text);
+  border-radius: 10px;
+}
+.container::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+#about {
+  position: fixed;
+  font-family: "Roboto Mono", monospace;
+  right: 10px;
+  top: 10px;
+}
+
+@-webkit-keyframes dotted-line-animation {
+  from {
+    background-position: bottom 0px;
+  }
+  to {
+    background-position: top;
+  }
+}
+
+@keyframes dotted-line-animation {
+  from {
+    background-position: bottom 0px;
+  }
+  to {
+    background-position: top;
+  }
+}
+.hero {
+  position: relative;
+  height: 500px;
+  width: 600px;
+  background-image: url(../images/beautifulDuck.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin: clamp(0px, 10%, 100px) auto;
+  font-family: "Roboto Mono", monospace;
+  text-align: left;
+  overflow: visible;
+  border-radius: 5px 5px 0px 5px;
+  box-shadow: var(--color-shadow) 0px 0px 20px;
+  background-color: var(--color-background-text);
+}
+.hero h1 {
+  position: absolute;
+  left: 1rem;
+  bottom: 2rem;
+  font-size: 3rem;
+}
+.hero p {
+  color: var(--color-text-secondary);
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  font-size: 1rem;
+}
+.hero .triangle {
+  position: absolute;
+  width: 0;
+  height: 0;
+  bottom: -100px;
+  right: 0;
+  border-top: 100px solid var(--color-background-text);
+  border-left: 100px solid transparent;
+}
+.hero .links {
+  overflow: visible;
+  position: absolute;
+  list-style: none;
+  height: 2.5rem;
+  width: 200px;
+  bottom: -60px;
+  left: -15px;
+  display: inline-block;
+  padding: 10px;
+  background-color: var(--color-background-text);
+  font-family: "Roboto Mono", monospace;
+  box-shadow: var(--color-shadow) 0px 0px 20px;
+}
+.hero .links a {
+  display: inline-block;
+  transition: 50ms ease-in-out;
+}
+.hero .links a:hover {
+  transform: translateY(-1px);
+  color: var(--color-text-secondary);
+}
+.hero .links-triangle-left {
+  position: absolute;
+  width: 0;
+  height: 0;
+  bottom: -60px;
+  left: calc(-15px - 1rem);
+  border-top: 2.5rem solid var(--color-background-text);
+  border-left: 1rem solid transparent;
+}
+.hero .links-triangle-right {
+  position: absolute;
+  width: 0;
+  height: 0;
+  bottom: -60px;
+  left: 185px;
+  border-top: 2.5rem solid transparent;
+  border-left: 1rem solid var(--color-background-text);
+}
+.hero .dotted-line {
+  position: absolute;
+  width: 100%;
+  height: 5px;
+  background-image: url(../images/miniDot.png);
+  background-repeat: repeat;
+  bottom: calc(-65px + 2.5rem);
+  left: 200px;
+  -webkit-animation: dotted-line-animation 10s linear infinite;
+          animation: dotted-line-animation 10s linear infinite;
+}
+
+#active-projects {
+  font-size: 5rem;
+  font-weight: 300;
+  font-family: "Roboto Mono", monospace;
+  margin: 20% 0 10rem 0;
+  padding: 0;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  -moz-column-gap: 100px;
+       column-gap: 100px;
+  overflow: visible;
+}
+
+#project-ppbot {
+  position: relative;
+  margin: 0 75px 200px 50px;
+  height: 500px;
+  background-color: var(--color-background-text);
+  background-image: url(../images/newFrog.png);
+  background-size: 40%;
+  background-repeat: no-repeat;
+  background-position: 50% 200px;
+  overflow: visible;
+  box-shadow: var(--color-shadow) 0px 0px 20px;
+}
+#project-ppbot h3 {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  font-size: 3rem;
+  font-family: "Roboto Mono", monospace;
+  color: var(--color-text);
+}
+#project-ppbot p {
+  position: absolute;
+  left: 1rem;
+  top: 5rem;
+  font-size: 1rem;
+  font-family: "Roboto Mono", monospace;
+  color: var(--color-text-secondary);
+}
+#project-ppbot ul {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  list-style: none;
+  display: block;
+  font-family: "Roboto Mono", monospace;
+}
+#project-ppbot ul a {
+  display: block;
+  transition: 50ms ease-in-out;
+}
+#project-ppbot ul a:hover {
+  transform: translateY(-1px);
+  color: var(--color-text-secondary);
+}
+#project-ppbot ul a:hover:before {
+  content: ">";
+}
+#project-ppbot .top-left-plus {
+  position: absolute;
+  left: -18px;
+  top: -18px;
+  width: 8px;
+  height: 8px;
+  background-image: url(../images/miniCross.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+#project-ppbot .top-right-plus {
+  position: absolute;
+  right: -18px;
+  top: -18px;
+  width: 8px;
+  height: 8px;
+  background-image: url(../images/miniCross.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+#project-ppbot .bottom-left-plus {
+  position: absolute;
+  left: -18px;
+  bottom: -18px;
+  width: 8px;
+  height: 8px;
+  background-image: url(../images/miniCross.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+#project-ppbot .bottom-right-plus {
+  position: absolute;
+  right: -18px;
+  bottom: -18px;
+  width: 8px;
+  height: 8px;
+  background-image: url(../images/miniCross.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+#project-ppbot .dotted-line {
+  position: absolute;
+  width: calc(100% - 100px);
+  height: 5px;
+  background-image: url(../images/miniDot.png);
+  background-repeat: repeat;
+  bottom: 1rem;
+  left: 100px;
+  -webkit-animation: dotted-line-animation 10s linear infinite;
+          animation: dotted-line-animation 10s linear infinite;
+}/*# sourceMappingURL=test.css.map */

@@ -1,0 +1,347 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Roboto+Mono:wght@100;200;300;400;500;600;700&family=Roboto:wght@100;300;400;500&display=swap");
+:root {
+  --color-background: black;
+  --color-primary: #3500d4;
+  --color-secondary: #240090;
+  --color-text-primary: white;
+  --color-text-secondary: #b4a9d4;
+  --color-highlighted: #ff00ff;
+}
+
+.blank {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.center {
+  text-align: center;
+  align-items: center;
+  align-self: center;
+  align-content: center;
+}
+
+.whitespace-margin {
+  margin: 10rem 0;
+}
+
+@-webkit-keyframes dotted-line-animation-left-right {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 20px 0;
+  }
+}
+
+@keyframes dotted-line-animation-left-right {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 20px 0;
+  }
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-text-primary);
+}
+
+h1 {
+  font-weight: 200;
+  font-size: clamp(2rem, 5vw, 5rem);
+}
+
+h2 {
+  font-size: clamp(1.75rem, 5vw, 4rem);
+}
+
+h3 {
+  font-size: clamp(1.5rem, 5vw, 3rem);
+}
+
+h4 {
+  font-size: clamp(1.25rem, 5vw, 2rem);
+}
+
+h5 {
+  font-size: clamp(1.25rem, 5vw, 1.5rem);
+}
+
+h6 {
+  font-size: clamp(1rem, 5vw, 1.25rem);
+}
+
+b {
+  color: var(--color-highlighted);
+}
+
+div,
+p {
+  font-size: clamp(0.8rem, 5vw, 1rem);
+  color: var(--color-text-secondary);
+}
+
+.content-block, .project, .hero {
+  box-shadow: var(--color-primary) 0px 0px 10px;
+  background-color: var(--color-primary);
+  color: var(--color-text-secondary);
+  font-family: "Roboto Mono", monospace;
+  border-radius: 5px 5px 0px 5px;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  cursor: url(../images/customCursor.png), auto;
+  box-sizing: border-box;
+  text-decoration: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  color: var(--color-text-primary);
+}
+
+a,
+link,
+button,
+a *,
+link *,
+button * {
+  cursor: url(../images/customCursorPointer.png) 6 0, auto;
+}
+
+.default, html,
+body {
+  background-color: var(--color-background);
+  font-family: "Roboto Mono", monospace;
+  padding: 0.04px;
+  /* ? CSS hack to stop margin collapsing */
+}
+.default::-webkit-scrollbar, html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  border-radius: 10px;
+  height: 10px;
+  width: 8px;
+}
+.default::-webkit-scrollbar-thumb, html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+  background: var(--color-highlighted);
+  border-radius: 10px;
+}
+.default::-webkit-scrollbar-track, html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+@-webkit-keyframes background-grid-animation {
+  from {
+    background-position: 0, right 0px bottom 0px;
+  }
+  to {
+    background-position: 0, right 199px bottom 199px;
+  }
+}
+
+@keyframes background-grid-animation {
+  from {
+    background-position: 0, right 0px bottom 0px;
+  }
+  to {
+    background-position: 0, right 199px bottom 199px;
+  }
+}
+@-webkit-keyframes background-left-to-right-animation {
+  from {
+    background-position: bottom 0;
+  }
+  to {
+    background-position: top;
+  }
+}
+@keyframes background-left-to-right-animation {
+  from {
+    background-position: bottom 0;
+  }
+  to {
+    background-position: top;
+  }
+}
+@-webkit-keyframes background-right-to-left-animation {
+  from {
+    background-position: top;
+  }
+  to {
+    background-position: bottom 0;
+  }
+}
+@keyframes background-right-to-left-animation {
+  from {
+    background-position: top;
+  }
+  to {
+    background-position: bottom 0;
+  }
+}
+#particles-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.container {
+  background: url(../images/moreShadedEdges.png), url(../images/backgroundOutline.png), no-repeat, repeat;
+  background-size: 100% 100%, auto;
+  -webkit-animation: background-grid-animation 8s linear infinite;
+          animation: background-grid-animation 8s linear infinite;
+}
+
+#about {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+}
+
+.hero {
+  position: relative;
+  height: 500px;
+  width: clamp(0px, 60vw, 600px);
+  margin: clamp(0px, 10%, 100px) auto;
+  background-image: url(../images/beautifulDuck.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  transition: all 100ms ease-in-out;
+}
+.hero .content {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  transition: all 500ms ease-in-out;
+}
+.hero .hidden-content {
+  opacity: 0;
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  transition: all 500ms ease-in-out;
+}
+.hero .hero-triangle {
+  filter: drop-shadow(var(--color-primary) 0px 0px 5px);
+  position: absolute;
+  width: 100px;
+  bottom: -100px;
+  right: 0;
+  transition: all 100ms ease-in-out;
+  overflow: hidden;
+}
+.hero .hero-triangle path {
+  fill: var(--color-primary);
+  transition: all 100ms ease-in-out;
+}
+.hero .links {
+  box-shadow: var(--color-highlighted) 0px 0px 10px;
+  position: absolute;
+  list-style: none;
+  height: 2.5rem;
+  width: 200px;
+  bottom: -60px;
+  left: -15px;
+  display: inline-block;
+  padding: 10px;
+  background-color: var(--color-highlighted);
+}
+.hero .links .links-triangle-left {
+  filter: drop-shadow(var(--color-highlighted) 0px 0px 5px);
+  position: absolute;
+  top: 0;
+  width: 2.5rem;
+  left: -2.5rem;
+}
+.hero .links .links-triangle-left path {
+  fill: var(--color-highlighted);
+}
+.hero .links .links-triangle-right {
+  filter: drop-shadow(var(--color-highlighted) 0px 0px 5px);
+  position: absolute;
+  top: 0;
+  width: 2.5rem;
+  right: -2.5rem;
+}
+.hero .links .links-triangle-right path {
+  fill: var(--color-highlighted);
+}
+.hero .links ul a {
+  display: inline-block;
+  transition: 100ms;
+}
+.hero .links ul a:hover {
+  transform: translateY(-2px);
+  text-shadow: 0px 0px 4px var(--color-secondary);
+}
+.hero .links ul a:hover::before {
+  content: ">";
+}
+.hero .links ul a:hover::after {
+  content: "<";
+}
+.hero .dotted-line {
+  -webkit-animation: linear dotted-line-animation-left-right 1s infinite;
+          animation: linear dotted-line-animation-left-right 1s infinite;
+  position: absolute;
+  width: clamp(0px, 40vw, 500px);
+  height: 5px;
+  background: url(../images/miniDot.png) repeat;
+  bottom: calc(-65px + 2.5rem);
+  left: 200px;
+  overflow: hidden;
+}
+@media (max-width: 600px) {
+  .hero .dotted-line {
+    display: none;
+  }
+}
+.hero:hover {
+  box-shadow: var(--color-secondary) 0px 0px 10px;
+  background-color: var(--color-secondary);
+}
+.hero:hover .hero-triangle {
+  filter: drop-shadow(var(--color-secondary) 0px 0px 5px);
+}
+.hero:hover .hero-triangle path {
+  fill: var(--color-secondary);
+}
+.hero:hover .content {
+  bottom: calc(500px - 5rem);
+}
+.hero:hover .hidden-content {
+  opacity: 100;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  -moz-column-gap: 100px;
+       column-gap: 100px;
+}
+
+@media (max-width: 900px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
+}
+.project {
+  margin: clamp(10px, 10%, 50px);
+  padding: 1rem;
+  border-radius: 0;
+  position: relative;
+}/*# sourceMappingURL=newtest.css.map */
