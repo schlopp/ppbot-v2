@@ -1,12 +1,10 @@
 import os
 import typing
 
-import aiohttp_session
-import discord
 from aiohttp import web
-from aiohttp.web import HTTPFound, Request, Response, RouteTableDef
+from aiohttp.web import Request, Response, RouteTableDef
 from aiohttp_jinja2 import template
-from discord.ext import vbu
+from discord.ext import vbu  # type: ignore
 
 routes = RouteTableDef()
 
@@ -24,29 +22,44 @@ async def commands(request: Request):
     """
 
     bot: vbu.Bot = request.app["bots"]["bot"]
-    payload = {
-        "commands": list(),
+
+    # Some type annotations
+    class _CommandPayload(typing.TypedDict):
+        name: str
+        help: typing.Optional[str]
+        signature: typing.Optional[str]
+        fields: typing.List[typing.Dict[str, typing.Any]]
+
+    class _Payload(typing.TypedDict):
+        commands: typing.List[_CommandPayload]
+        css: typing.List[str]
+
+    payload: _Payload = {
+        "commands": [],
         "css": [
             f"commands.css?v={os.path.getmtime('website/static/css/commands.css')}"
         ],
     }
-    commands = bot.commands
-    command: vbu.Command
-    for command in commands:
+
+    for command in bot.commands:
         if any([check.__qualname__.startswith("is_owner") for check in command.checks]):
             continue
-        command_payload = {
+
+        command_payload: _CommandPayload = {
             "name": command.name,
             "help": command.help,
             "signature": command.signature,
             "fields": [],
         }
+
         if command.param_descriptions:
-            command_payload["help"] = {
-                "name": "Help",
-                "value": command.param_descriptions,
-                "type": command.param_descriptions.__class__.__name__,
-            }
+            command_payload["fields"].append(
+                {
+                    "name": "Help",
+                    "value": command.param_descriptions,
+                    "type": command.param_descriptions.__class__.__name__,
+                }
+            )
         if command.full_parent_name:
             command_payload["fields"].append(
                 {

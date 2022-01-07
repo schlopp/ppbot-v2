@@ -1,0 +1,64 @@
+
+level = 0  # (int) The level of the location. This will determine if a user is allowed to use the location. Example: A user with Begging level 0 can't use a level 1 location.
+id = "EXAMPLE_LOCATION"  # (UPPER_SNAKE_CASE) The ID of the location.
+name = "Example Location"  # (string) The name of the location. This will appeal as the label in a select menu.
+description = "This is an example location"  # (string) The description of the location. This will appear as the description in a select menu.
+emoji = "🥰"  # (string) The emoji that will be used to represent the location. Can also be custom disco emoji, E.g. "<custom_emoji:123456789>"
+
+[[loot_table]]
+    id = "EXAMPLE_LOOT_TABLE"  # (UPPER_SNAKE_CASE) The ID of an item in the loot table. Must be unique for all items in the [[locations.loot_table]] array.
+    drop_rate = 0.5  # (float) The drop rate of the item. This is the chance that the item will be dropped. This example shows a 50% chance of dropping the item.
+    min = 0  # (int) The minimum amount of the item that can be dropped.
+    max = 5  # (int) The maximum number of this item that can be dropped from this location.
+
+# The quotes for the location.
+[quotes]
+
+    # (array) The default success quotes for the location. {0} is a placeholder for whatever reward the user receives.
+    success = [
+        "Sure, here's {0}. Have a good day!",  # how a user might see this: "Sure, here's 4 **Rotten Wood**s. Have a good day!"
+        "oh, good timing! I have {0} for you",
+        "Here you go, {0}",
+        "Eh, you can have {0}, I don't need that stuff anyways",
+    ]
+
+    # (array) The default failure quotes for the location.
+    fail = [
+        "I'm sorry, I can't do that",
+        "I don't have any inches to give you",
+        "I'm broke, sorry",
+        "I'm not sure I can do that",
+    ]
+
+    # The mini-games for the user to complete.
+    [quotes.minigames]
+
+        # All quotes for the fill-in-the-blank mini-game.
+        [quotes.minigames.fill_in_the_blank]
+
+            approacher = "gameshow host"  # (string) The person approaching the user in this mini-game.
+            context = "A gameshow host approaches you with a question"  # The context of the mini-game.
+            success = "Good job! You win!"  # (string) The success message for the user. E.g. "gameshow host: 'Good job! You win!'"
+            fail = "Sorry, you lose!"  # (string) The failure message for the user. E.g. "gameshow host: 'Sorry, you lose!'"
+            prompts = [  # (array of tuples of two strings) The prompts for the user to answer. Formatted with the second string as the answer.
+                ["I love {}", "YOU"],  # -> "`I love `[`_ _ _`](HYPERLINK)"
+                ["I hate {} so much", "YOUR MOM"],  # -> "`I love `[`_ _ _ _   _ _ _`](HYPERLINK)` so much`"
+                ["I like {}", "MYSELF"],  # -> "`I love `[`_ _ _ _ _ _`](HYPERLINK)"
+            ]
+
+
+        [quotes.minigames.scramble]
+
+            approacher = "scrambled text"  # (string) The thing containing the scrambled text.
+            context = "There's been a missprint in the news paper."  # (string) The context of the mini-game.
+
+        # All quotes for the scramble mini-game.
+        [quotes.minigames.retype]
+
+            context = "Oh look, free stuff!"  # (string) The context of the mini-game.
+            sentences = [  # (array) The sentences to be retyped.
+                "Oh sick, free items",
+                "I'm a big fan of free stuff",
+                "Did someone say free?",
+                "Please give me free stuff, I'm begging you"
+            ]

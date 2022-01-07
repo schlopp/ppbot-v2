@@ -1,6 +1,6 @@
-import aiohttp_session
+import aiohttp_session  # type: ignore
 from aiohttp.web import HTTPFound, Request, Response, RouteTableDef, json_response
-from discord.ext import vbu
+from discord.ext import vbu  # type: ignore
 
 routes = RouteTableDef()
 

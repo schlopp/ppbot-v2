@@ -1,1 +1,1 @@
-vbu run-bot .
+vbu run-bot src

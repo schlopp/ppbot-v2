@@ -1,0 +1,76 @@
+# [array] The default success quotes. {} is a placeholder for whatever reward the user receives.
+success = [
+    "Aight kuh here's {}",  # how a user might see this: "Sure, here's 4 **Rotten Wood**s. Have a good day!"
+    "Take {}, and eat it, you little dumpster boy",
+    "OK buddy here's {}",
+    "Ugh beggars are so annoying. Here's {}, now stop wasting my time",
+    "Eh, you can have {}, I don't need that stuff anyways",
+]
+
+# [array] The default failure quotes for the location.
+fail = [
+    "Nah 🅱️",
+    "Gtfo beggar",
+    "Nah I'm broke",
+    "Ew dont talk to me",
+    "I'm not giving you anything, you look weird",
+    "Lmao poor",
+    "Eeeewwww don't touch me I'm too good for you",
+    "Ew poor",
+    "Don't touch my pp",
+    "My wife has a bigger pp than you",
+    "Broke ass bitch",
+    "Cringe poor",
+    "Beg harder",
+    "Poor people make me scared",
+    "Don't touch me poor person",
+    "Get a job",
+    "I'm offended",
+    "No u",
+    "I dont speak poor",
+    "You should take a shower",
+    "I love my wife... I love my wife... I love my wife..",
+    "Drink some water",
+    "Begone beggar",
+    "No.",
+    "No wtf?",
+    "Try being a little 'cooler' next time",
+    "Lmao pussy-nerd beg harder next time",
+]
+
+# The mini-games for the user to complete.
+[minigames]
+
+    # Dialogue for the fill-in-the-blank mini-game.
+    [minigames.fill_in_the_blank]
+        # [array of arrays of 2 strings] The name of the mini-game.
+        prompts = [
+            [
+                "`Whoever threw that paper, your mom's a `{}`!`",
+                "HOE",
+            ],
+            [
+                "`I have the power of `{}` on my side!`",
+                "GOD AND ANIME",
+            ],
+            [
+                "`*dodges bullets like in The `{}`*`",
+                "MATRIX",
+            ],
+            [
+                "`You'll never `{}` me alive! *doot*`",
+                "TAKE"
+            ],
+            [
+                "`Doin' your `{}",
+                "MOM"
+            ],
+            [
+                "`Shut yo skin tone `{}` bone google chrome no home flip phone disowned ice cream cone garden gnome extra chromosome metronome dimmadome head ass tf up`",
+                "CHICKEN",
+            ],
+            [
+                "`WHY ARE YOU BUYING CLOTHES AT THE `{}` STORE?`",
+                "SOUP"
+            ],
+        ]
