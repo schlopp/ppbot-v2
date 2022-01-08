@@ -28,7 +28,6 @@ class DonatorQuotes:
 
     >>> "You got {} for begging!"
     "You got **2x :alien: Alien** for begging!"
-
     """
 
     success: typing.List[str]
