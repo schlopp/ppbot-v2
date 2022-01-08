@@ -9,32 +9,30 @@ __all__ = (
 )
 
 
+@dataclass
 class DonatorQuotes:
     """
-    Represents the quotes that can be said by a donator.
+    A dataclass containing all the quotes that can be said by a donator.
 
-    Attributes:
-        name (`str`): The name of the donator.
-        success (`list` of `str`): A list of quotes used when a user get's a reward. This will be formatted with the user's reward.
-            E.g:
-            "You got {}!" > "You got a <emoji:123456789> **Example Item**!"
-            "Sure, here's {}. Have a nice day" > "Sure, here's <emoji:123456789> **Example Item**. Have a nice day"
-        fail (`list` of `str`): A list of quotes used when a user doesn't get a reward.
+    Attributes
+    ----------
+    success : list[str]
+        A list of quotes used when a user get's a reward. This will be formatted with the user's reward.
+    failure : list[str]
+        A list of quotes used when a user doesn't get a reward.
+
+    Examples
+    --------
+
+    How the `success` attribute is formatted:
+
+    >>> "You got {} for begging!"
+    "You got **2x :alien: Alien** for begging!"
+
     """
 
-    def __init__(self, *, success: typing.List[str], fail: typing.List[str]):
-        """
-        Represents the quotes that can be said by a donator.
-
-        Args:
-            success (`list` of `str`): A list of quotes used when a user get's a reward. This will be formatted with the user's reward.
-                E.g:
-                "You got {}!" > "You got a <emoji:123456789> **Example Item**!"
-                "Sure, here's {}. Have a nice day" > "Sure, here's <emoji:123456789> **Example Item**. Have a nice day"
-            fail (`list` of `str`): A list of quotes used when a user doesn't get a reward.
-        """
-        self.success = success
-        self.fail = fail
+    success: typing.List[str]
+    fail: typing.List[str]
 
 
 class Donator:
