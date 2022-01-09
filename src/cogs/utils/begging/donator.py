@@ -16,9 +16,9 @@ class DonatorQuotes:
 
     Attributes
     ----------
-    success : list[str]
+    success : list of str
         A list of quotes used when a user get's a reward. This will be formatted with the user's reward.
-    failure : list[str]
+    failure : list of str
         A list of quotes used when a user doesn't get a reward.
 
     Examples
@@ -34,49 +34,30 @@ class DonatorQuotes:
     fail: typing.List[str]
 
 
+@dataclass
 class Donator:
     """
+    A dataclass representing a "Donator". This is a person/character with it's own name, icon (optional) and quotes.
     Represents a "donator". This is a person/character with it's own name, icon_url, and quotes.
 
-    Attributes:
-        name (`str`): The name of the donator.
-        icon_url (`str`): The URL of the donator's icon. Square size recommended.
-        quotes (`DonatorQuotes`): The quotes that can be said by the donator.
+    Attributes
+    ----------
+    name : str
+        The name of the donator.
+    quotes : DonatorQuotes
+        The quotes that can be said by the donator.
+    icon_url : str, optional
+        The URL of the donator's icon. Should be a picture representing them. Square size recommended.
     """
 
-    def __init__(
-        self, name: str, *, icon_url: typing.Optional[str] = None, quotes: DonatorQuotes
-    ):
-        """
-        Represents a "donator". This is a person/character with it's own name, icon_url, and quotes.
+    name: str
+    quotes: DonatorQuotes
+    icon_url: typing.Optional[str] = None
 
-        Attributes:
-            name (`str`): The name of the donator.
-            icon_url (`str`): The URL of the donator's icon. Square size recommended.
-            quotes (`DonatorQuotes`): The quotes that can be said by the donator.
-        """
-
-        self.name = name
-        self.icon_url = icon_url
-        self.quotes = quotes
-
-    @classmethod
-    def from_dict(cls, data: dict):
-        """
-        Creates a `Donator` from a dictionary.
-
-        Args:
-            data (`dict`): A dictionary containing the data to create the `Donator` from.
-
-        Returns:
-            `Donator`: The `Donator` created from the dictionary.
-        """
-
-        return cls(
-            data["name"],
-            icon_url=data.get("icon_url", None),
-            quotes=DonatorQuotes(**data["quotes"]),
-        )
+    class _DonatorDict(typing.TypedDict):
+        name: str
+        quotes: DonatorQuotes
+        icon_url: typing.Optional[str]
 
 
 @dataclass
@@ -100,21 +81,6 @@ class Donators:
 
         self.donators = list(donators)
 
-    @classmethod
-    def from_dict(cls, data: dict):
-        """
-        Creates a `Donators` from a dictionary.
-
-        Args:
-            data (`dict`): A dictionary containing the data to create the `Donators` from.
-
-        Returns:
-            `Donators`: The `Donators` created from the dictionary.
-        """
-
-        return cls(
-            *[Donator.from_dict(donator) for donator in data["donators"]],
-        )
 
     def get_donator(self, name: str) -> typing.Union[Donator, None]:
         """
