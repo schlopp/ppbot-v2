@@ -9,6 +9,11 @@ __all__ = (
 )
 
 
+class _DonatorQuotesDict(typing.TypedDict):
+    success: typing.List[str]
+    fail: typing.List[str]
+
+
 @dataclass
 class DonatorQuotes:
     """
@@ -33,6 +38,16 @@ class DonatorQuotes:
     success: typing.List[str]
     fail: typing.List[str]
 
+    @classmethod
+    def from_dict(cls, data: _DonatorQuotesDict) -> "DonatorQuotes":
+        return cls(**data)
+
+
+class _DonatorDict(typing.TypedDict):
+    name: str
+    quotes: _DonatorQuotesDict
+    icon_url: typing.Optional[str]
+
 
 @dataclass
 class Donator:
@@ -54,55 +69,73 @@ class Donator:
     quotes: DonatorQuotes
     icon_url: typing.Optional[str] = None
 
-    class _DonatorDict(typing.TypedDict):
-        name: str
-        quotes: DonatorQuotes
-        icon_url: typing.Optional[str]
+    @classmethod
+    def from_dict(cls, data: _DonatorDict) -> "Donator":
+        return cls(
+            name=data["name"],
+            quotes=DonatorQuotes.from_dict(data["quotes"]),
+            icon_url=data["icon_url"],
+        )
+
+
+class _DonatorsDict(typing.TypedDict):
+    donators: typing.List[_DonatorDict]
 
 
 @dataclass
 class Donators:
     """
-    Represents a list of `Donator`s.
+    A dataclass containing a list of `Donator`s, and some helper functions.
 
-    Attributes:
-        donators (`list` of `Donator`): The list of `Donator`s.
+    Attributes
+    ----------
+    donators : list of Donator
+        The list of Donators.
     """
 
     donators: typing.List[Donator]
 
     def __init__(self, *donators: Donator):
-        """
-        Represents a list of `Donator`s.
-
-        Args:
-            donators (`list` of `Donator`): The list of `Donator`s.
-        """
-
         self.donators = list(donators)
 
+    @classmethod
+    def from_dict(cls, data: _DonatorsDict) -> "Donators":
+        return cls(*[Donator.from_dict(x) for x in data["donators"]])
 
-    def get_donator(self, name: str) -> typing.Union[Donator, None]:
+    def get_donator(self, name: str) -> typing.Optional[Donator]:
         """
         Gets a `Donator` from the list of `Donator`s.
 
-        Args:
-            name (`str`): The name of the `Donator` to get.
+        Parameters
+        ----------
+        name : str
+            The name of the `Donator` you're trying to retrieve.
 
-        Returns:
-            `Donator`: The `Donator` with the given name.
-            or `None`: if no `Donator` with the given name exists.
+        Returns
+        -------
+        Donator
+            The `Donator` with the given name.
+        None
+            If no `Donator` object with the given name exists within `self.donators`.
         """
 
         return next((x for x in self.donators if x.name == name))
 
-    def get_random_donator(self) -> typing.Union[Donator, None]:
+    def get_random_donator(self) -> typing.Optional[Donator]:
         """
         Gets a random `Donator` from the list of `Donator`s.
 
-        Returns:
-            `Donator`: A random `Donator`.
-            or `None`: if there are no `Donator`s in the list.
+        Parameters
+        ----------
+        name : str
+            The name of the `Donator` you're trying to retrieve.
+
+        Returns
+        -------
+        Donator
+            The random `Donator` object chosen.
+        None
+            If `self.donators` is empty.
         """
 
         return random.choice(self.donators) if self.donators else None
